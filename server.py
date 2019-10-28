@@ -6,7 +6,7 @@ app = Flask(__name__)
 
 @app.route("/")
 def home_page():
-    return "Heroku works, but my commits?"
+    return "Testing commits?"
 
 
 if __name__ == "__main__":
