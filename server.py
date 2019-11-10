@@ -6,7 +6,7 @@ app = Flask(__name__)
 
 @app.route("/")
 def home_page():
-    return "Testing commits?"
+    return "Testing commits? Still Running ?"
 
 
 if __name__ == "__main__":
