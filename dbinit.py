@@ -21,7 +21,9 @@ def initialize(url):
     with dbapi2.connect(url) as connection:
         cursor = connection.cursor()
         for statement in INIT_STATEMENTS:
-            cursor.execute(statement)
+            try:
+                cursor.execute(statement)
+            except Exception as e: print(e) #TODO I know, I know I should not have do this
         cursor.close()
 
 
