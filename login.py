@@ -23,7 +23,7 @@ def login_func():
                             where (username = %s or email = %s)""", (username, username))
         passTuple= cursor.fetchone()
         if passTuple == None:
-            redirect(url_for('loginB.login_func')) #TODO username wrong
+            return redirect(url_for('loginB.login_func')) #TODO username wrong
         passwdHash = passTuple[0]
         print("paswd = ", passwdHash)
         print("entered = ", phash)
