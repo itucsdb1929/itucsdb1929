@@ -13,7 +13,7 @@ INIT_STATEMENTS = [
         password char (32) not null,
         email varchar (50) null
     )""",
-    """insert into users values ('admin', 'c93ccd78b2076528346216b3b2f701e6')""",
+    """insert into users (username, password) values ('admin', 'c93ccd78b2076528346216b3b2f701e6')""",
 ]
 
 
