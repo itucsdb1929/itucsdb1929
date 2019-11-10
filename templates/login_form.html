@@ -50,7 +50,7 @@
       
          <h1>Please Login</h1>
       <div class = "form-group">
-      <form name = "login" action= "{{url_for('login')}}" method="post">
+      <form name = "login" action= "{{url_for('loginB.login_func')}}" method="post">
         <input type="text" placeholder="Username" name="username" value="{{
           request.form.username }}">
          <input type="password" placeholder="Password" name="password" value="{{

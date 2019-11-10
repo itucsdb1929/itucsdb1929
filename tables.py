@@ -1,28 +1,23 @@
-from flask import Flask, render_template, Blueprint
+from flask import Flask, render_template, Blueprint, session, redirect, url_for
 import os
 import sys
 
 import psycopg2 as dbapi2
 
-def initialize(url):
-    connection =  dbapi2.connect(url)
-    cursor = connection.cursor()
-    return (connection, cursor)
-    
-
-#def testFonk():
-    #url = os.getenv("DATABASE_URL")
-    #if url is None:
-   #     print("Usage: DATABASE_URL=url python dbinit.py", file=sys.stderr)
-  #      sys.exit(1)
- #   return initialize(url)
+import db
 
 tables = Blueprint('tables', __name__,
                         template_folder='templates')
 
 @tables.route("/tables")
 def home_page():
-    connection, cursor = testFonk()
+
+    if not session.get('logged_in'):
+        return redirect(url_for('loginB.login_func'))
+    else:
+        print (session.get('username'))
+    # connection, cursor = testFonk()
+    cursor = db.get_cursor()
     cursor.execute("select * from dummy")
     a = cursor.fetchall()    
     returnStr = "deneme<br>"
@@ -30,6 +25,5 @@ def home_page():
         for i in x:
             returnStr += str(i)
         returnStr +="<br>"
-    connection.close()
-    cursor.close()
+
     return returnStr
