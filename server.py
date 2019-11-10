@@ -1,7 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, session
 from tables import tables
 from home import home
-from login import login
 import os
 import sys
 
@@ -45,4 +44,4 @@ def login():
     return render_template('login_form.html')
 
 if __name__ == "__main__":
-    app.run()
+    app.run(host='0.0.0.0', port=5000)
