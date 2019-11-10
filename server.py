@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, render_template
 
 import os
 import sys
@@ -39,7 +39,7 @@ def home_page():
     connection.close()
     cursor.close()
     return returnStr
-
+    #return render_template('base.html')
 
 if __name__ == "__main__":
     app.run()
