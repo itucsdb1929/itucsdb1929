@@ -30,15 +30,24 @@
         <li class="nav-item">
           <a class="nav-link" href="/login">Login</a>
         </li>
+
+        {% if session['logged_in'] %}
         <li class="nav-item">
-          <a class="nav-link" href="">My Cities</a>
+          <a class="nav-link" href="#">My Cities</a>
         </li>
+        {% endif %}
+
+        {% if session['logged_in'] %}
         <li class="nav-item">
           <a class="nav-link" href="#">Leaderboard</a>
         </li>
+        {% endif %}
+
+        {% if session['logged_in'] %}
         <li class="nav-item">
           <a class="nav-link" href="#">Open Map</a>
         </li>
+        {% endif %}
 
         {% if session['logged_in'] %}
         <li class="nav-item">
