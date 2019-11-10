@@ -23,17 +23,17 @@ def login_func():
                             where (username = %s or email = %s)""", (username, username))
         passTuple= cursor.fetchone()
         if passTuple == None:
-            return redirect(url_for('loginB.login_func')) #TODO username wrong
+            return "usernameNotFound" #redirect(url_for('loginB.login_func')) #TODO username wrong
         passwdHash = passTuple[0]
         print("paswd = ", passwdHash)
         print("entered = ", phash)
         if passwdHash != phash:
-            return redirect(url_for('loginB.login_func')) #TODO password wrong
+            return "password is wrong" #redirect(url_for('loginB.login_func')) #TODO password wrong
         
         session['username'] = request.form.get('username')
         session['password'] = phash
         session['logged_in'] = True
-        return redirect(url_for('loginB.logged_func'))
+        return "logged in" #redirect(url_for('loginB.logged_func'))
 
     return render_template('login_form.html')
 
