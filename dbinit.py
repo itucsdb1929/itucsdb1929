@@ -7,6 +7,13 @@ import psycopg2 as dbapi2
 INIT_STATEMENTS = [
     "CREATE TABLE IF NOT EXISTS DUMMY (NUM INTEGER)",
     "INSERT INTO DUMMY VALUES (50)",
+
+    """CREATE TABLE IF NOT EXISTS users(
+        username varchar (50) primary key not null,
+        password char (32) not null,
+        email varchar (50) null
+    )""",
+    """insert into users values ('admin', 'c93ccd78b2076528346216b3b2f701e6')""",
 ]
 
 
