@@ -1,6 +1,7 @@
-from flask import Flask, render_template, request, redirect, url_for, session, Blueprint
+from flask import Flask, render_template, request, redirect, url_for, session, Blueprint, flash
 from hashlib import md5
 import db
+
 loginB = Blueprint('loginB', __name__,
                         template_folder='templates')
 
@@ -15,7 +16,6 @@ def logged_func():
 def login_func():
     if session.get('logged_in'):
         return redirect(url_for('loginB.logged_func'))
-    print(request.method)
     if request.method == 'POST':
         username = request.form.get('username')
         phash = md5(request.form.get('password').encode('utf-8')).hexdigest()
@@ -24,18 +24,19 @@ def login_func():
                             where (username = %s or email = %s)""", (username, username))
         passTuple= cursor.fetchone()
         if passTuple == None:
-            return redirect(url_for('loginB.login_func')) #TODO username wrong
+            return render_template('login_form.html', error='Invalid username!')
+            #return redirect(url_for('loginB.login_func')) #TODO username wrong
         passwdHash = passTuple[0]
         #print("paswd = ", passwdHash)
         #print("entered = ", phash)
         if passwdHash != phash:
-            return redirect(url_for('loginB.login_func')) #TODO password wrong
+            return render_template('login_form.html', error = 'Invalid password!')
+            #return redirect(url_for('loginB.login_func')) #TODO password wrong
         
         session['username'] = request.form.get('username')
         session['password'] = phash
         session['logged_in'] = True
         return redirect(url_for('loginB.logged_func'))
-
     return render_template('login_form.html')
 
 
