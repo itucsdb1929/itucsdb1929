@@ -8,10 +8,11 @@ INIT_STATEMENTS = [
     "CREATE TABLE IF NOT EXISTS DUMMY (NUM INTEGER)",
     "INSERT INTO DUMMY VALUES (50)",
 
-    """CREATE TABLE IF NOT EXISTS users(
-        username varchar (50) primary key not null,
-        password char (32) not null,
-        email varchar (50) null
+    """CREATE TABLE if not exists public.users (
+	username varchar(50) NOT NULL,
+	password char(32) NOT NULL,
+	email varchar(50) NULL,
+	CONSTRAINT users_pk PRIMARY KEY (username)
     )""",
     """insert into users (username, password) values ('admin', 'c93ccd78b2076528346216b3b2f701e6')""",
 ]
