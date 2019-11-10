@@ -10,13 +10,12 @@ def initialize(url):
     return (connection, cursor)
     
 
-
-def testFonk():
-    url = os.getenv("DATABASE_URL")
-    if url is None:
-        print("Usage: DATABASE_URL=url python dbinit.py", file=sys.stderr)
-        sys.exit(1)
-    return initialize(url)
+#def testFonk():
+    #url = os.getenv("DATABASE_URL")
+    #if url is None:
+   #     print("Usage: DATABASE_URL=url python dbinit.py", file=sys.stderr)
+  #      sys.exit(1)
+ #   return initialize(url)
 
 tables = Blueprint('tables', __name__,
                         template_folder='templates')
