@@ -6,6 +6,7 @@ loginB = Blueprint('loginB', __name__,
 
 @loginB.route("/logged", methods = ['GET'])
 def logged_func():
+    print(session.get('logged_in'))
     if not session.get('logged_in'):
         return redirect(url_for('loginB.login_func'))
     return render_template('logged.html', username = session['username'], password = session['password'])
@@ -14,7 +15,7 @@ def logged_func():
 def login_func():
     if session.get('logged_in'):
         return redirect(url_for('loginB.logged_func'))
-
+    print(request.method)
     if request.method == 'POST':
         username = request.form.get('username')
         phash = md5(request.form.get('password').encode('utf-8')).hexdigest()
@@ -25,8 +26,8 @@ def login_func():
         if passTuple == None:
             return redirect(url_for('loginB.login_func')) #TODO username wrong
         passwdHash = passTuple[0]
-        print("paswd = ", passwdHash)
-        print("entered = ", phash)
+        #print("paswd = ", passwdHash)
+        #print("entered = ", phash)
         if passwdHash != phash:
             return redirect(url_for('loginB.login_func')) #TODO password wrong
         

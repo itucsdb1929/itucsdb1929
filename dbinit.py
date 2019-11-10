@@ -3,6 +3,7 @@ import sys
 
 import psycopg2 as dbapi2
 
+LOCAL = False
 
 INIT_STATEMENTS = [
     "CREATE TABLE IF NOT EXISTS DUMMY (NUM INTEGER)",
@@ -29,7 +30,13 @@ def initialize(url):
 
 
 if __name__ == "__main__":
-    url = os.getenv("DATABASE_URL")
+    
+    if LOCAL:
+        url = connect_str = "dbname='testpython' user='matt' host='localhost' " + \
+                  "password='test1234'"
+    else:
+        url = os.getenv("DATABASE_URL")
+
     if url is None:
         print("Usage: DATABASE_URL=url python dbinit.py", file=sys.stderr)
         sys.exit(1)
