@@ -28,6 +28,7 @@ INIT_STATEMENTS = [
         on update cascade,
         CONSTRAINT friends_pk PRIMARY KEY (username, friend)
     )""",
+
     """CREATE TABLE if not exists public.friendrequests (
         sender varchar(50) not null,
         friend varchar(50) not null,
@@ -39,6 +40,14 @@ INIT_STATEMENTS = [
         on update cascade,
         CONSTRAINT frequest_pk PRIMARY KEY (sender, friend)
     )""",
+
+    """
+    CREATE TABLE if not exists CITY(
+    city_major varchar(50) NOT NULL,
+    CITY_NAME varchar(50) PRIMARY KEY,
+    CITY_LOCATION varchar(50) NOT NULL UNIQUE
+    )
+    """,
 ]
 
 
@@ -53,7 +62,7 @@ def initialize(url):
 
 
 if __name__ == "__main__":
-    
+
     if LOCAL:
         url = connect_str = "dbname='testpython' user='matt' host='localhost' " + \
                   "password='test1234'"

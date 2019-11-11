@@ -11,14 +11,15 @@ import psycopg2 as dbapi2
 import atexit
 
 import update
-# from update import POOL_TIME
-# fro
+
 app = Flask(__name__)
 app.register_blueprint(tables)
 app.register_blueprint(home)
 app.register_blueprint(loginB)
 app.register_blueprint(signup)
 app.register_blueprint(friends)
+app.register_blueprint(my_cities)
+app.register_blueprint(our_team)
 app.secret_key = b'_383#y2L"F4Q8z]/'
 # cok gizli
 
@@ -37,19 +38,14 @@ app.secret_key = b'_383#y2L"F4Q8z]/'
 #     return returnStr
 #     #return render_template('base.html')
 
-@app.route("/secret")
-def our_team():
-    return render_template('our_team.html')
-
 
 
 if __name__ == "__main__":
-
-
 
     update.gameThread = threading.Timer(update.POOL_TIME, update.update, ())
     update.gameThread.start()
 
     
     app.run(host='0.0.0.0', port=5000)
+
 
