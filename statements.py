@@ -43,3 +43,28 @@ INIT_STATEMENTS = [
     )
     """,
 ]
+
+def insert_user(cursor,username, password, email):
+    cursor.execute("""
+    INSERT INTO users VALUES(
+    %s,
+    %s,
+    %s
+    )
+    """,(username, password, email))
+
+
+def insert_city(cursor,city_major, city_name, city_location):
+    cursor.execute("""
+    INSERT INTO CITY VALUES(
+    %s,
+    %s,
+    %s
+    )
+    """,(city_major, city_name, city_location))
+
+
+def friend_request(cursor, sender, receiver):
+    cursor.execute("""insert into friendrequests
+                    (sender, friend) values
+                    (%s, %s)""", (sender, receiver))
