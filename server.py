@@ -3,6 +3,7 @@ from tables import tables
 from home import home
 from login import loginB
 from signup import signup
+from friends import friends
 import os
 import sys
 
@@ -14,6 +15,7 @@ app.register_blueprint(tables)
 app.register_blueprint(home)
 app.register_blueprint(loginB)
 app.register_blueprint(signup)
+app.register_blueprint(friends)
 app.secret_key = b'_383#y2L"F4Q8z]/'
 # cok gizli
 

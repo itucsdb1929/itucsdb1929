@@ -10,7 +10,19 @@ def logged_func():
     print(session.get('logged_in'))
     if not session.get('logged_in'):
         return redirect(url_for('loginB.login_func'))
-    return render_template('logged.html', username = session['username'], password = session['password'])
+    
+    cursor = db.get_cursor()
+    connection = db.get_connection()
+
+    cursor.execute("""select friend, accepted from friends
+                        where (username = %s) """, (session['username'],))
+
+    friends = cursor.fetchall()
+
+    return render_template('logged.html', 
+                    username = session['username'],
+                    password = session['password'], 
+                    friends = friends)
 
 @loginB.route("/login", methods = ['GET', 'POST'])
 def login_func():

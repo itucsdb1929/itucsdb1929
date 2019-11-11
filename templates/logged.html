@@ -61,6 +61,20 @@
   <div class = "text-center">
   <h1 class="mt-4">Welcome!</h1>
   <h1 class="mt-4">You are {{username}} and your password is {{password}}</h1>
+  <form name = "login" action= "{{url_for('friends.add')}}" method="post">
+    <div class="form-label-group">
+      <input type="text" name="username" id="inputEmail" class="form-control" placeholder="Friend username" value="" required autofocus>
+      <label for="inputEmail">Username {{error}}</label>
+    </div>
+    <input class="btn btn-default" type="submit" value="Add friend">
+  </form>
+  <ul>
+  {% for friend in friends%}
+  <li>
+    {{friend[0]}} {{friend[1]}}
+  </li>
+  {% endfor %}
+  </ul>
   </div>
 </div>
 <!-- /.container -->
