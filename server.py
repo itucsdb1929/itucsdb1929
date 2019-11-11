@@ -40,7 +40,7 @@ def test_job():
 
 scheduler = BackgroundScheduler()
 job = scheduler.add_job(test_job, 'interval', seconds=5)
-scheduler.start()
+#scheduler.start()
 
 
 # @app.route("/")
