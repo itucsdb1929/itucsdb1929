@@ -6,6 +6,7 @@ from signup import signup
 from friends import friends
 from my_cities import my_cities
 from our_team import our_team
+from leaderboard import leaderboard
 import os
 import sys
 import threading
@@ -25,6 +26,7 @@ app.register_blueprint(signup)
 app.register_blueprint(friends)
 app.register_blueprint(my_cities)
 app.register_blueprint(our_team)
+app.register_blueprint(leaderboard)
 app.secret_key = b'_383#y2L"F4Q8z]/'
 # cok gizli
 
@@ -59,9 +61,4 @@ scheduler.start()
 
 
 if __name__ == "__main__":
-
-    update.gameThread = threading.Timer(update.POOL_TIME, update.update, ())
-    update.gameThread.start()
-
-    
     app.run(host='0.0.0.0', port=5000)
