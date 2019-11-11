@@ -13,7 +13,7 @@
     </style>
 
     <body>
-        <nav class="navbar navbar-expand-lg navbar-light bg-light shadow fixed-top">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light shadow">
   <div class="container">
         <img class = "img-responsive" src="https://i.postimg.cc/7YPpx5gW/reallogo.png" style = "height:30%">
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
@@ -36,7 +36,7 @@
 
         {% if session['logged_in'] %}
         <li class="nav-item">
-          <a class="nav-link" href="#">My Cities</a>
+          <a class="nav-link" href="/my_cities">My Cities</a>
         </li>
         {% endif %}
 
@@ -57,6 +57,9 @@
           <a class="nav-link" href="/logout">Logout</a>
         </li>
         {% endif %}
+        <li class ="nav-item">
+            <a class="nav-link" href="/our_team">Our Team</a>
+        </li>
     </div>
   </div>
 </nav>
@@ -67,9 +70,6 @@
 <!-- Page Content -->
 
         <div id="container">
-            <hr>
-            <hr>
-            <hr>
             {% block page_content %} {% endblock %}
         </div>
 <!-- /.container -->
