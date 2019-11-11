@@ -1,5 +1,5 @@
 <!doctype html>
-<html>
+<html>    
     <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -21,33 +21,56 @@
         </button>
     <div class="collapse navbar-collapse" id="navbarResponsive">
       <ul class="navbar-nav ml-auto">
+        {% if homeActive %}
         <li class="nav-item active">
+        {% else %}
+        <li class = "nav-item">
+        {% endif %}
           <a class="nav-link" href="/">Home
-                <span class="sr-only">(current)</span>
               </a>
        {% if not session['logged_in'] %}
-        <li class="nav-item">
+        {% if loginActive %}
+        <li class="nav-item active">
+        {% else %}
+        <li class = "nav-item">
+        {% endif %}
           <a class="nav-link" href="/login">Login</a>
         </li>
-        <li class ="nav-item">
+        {% if signupActive %}
+        <li class="nav-item active">
+        {% else %}
+        <li class = "nav-item">
+        {% endif %}            
             <a class="nav-link" href="/signup">Signup</a>
         </li>
         {% endif %}
 
         {% if session['logged_in'] %}
-        <li class="nav-item">
+        {% if citiesActive %}
+        <li class="nav-item active">
+        {% else %}
+        <li class = "nav-item">
+        {% endif %}            
           <a class="nav-link" href="/my_cities">My Cities</a>
         </li>
         {% endif %}
 
         {% if session['logged_in'] %}
-        <li class="nav-item">
+        {% if leaderboardActive %}
+        <li class="nav-item active">
+        {% else %}
+        <li class = "nav-item">
+        {% endif %}            
           <a class="nav-link" href="#">Leaderboard</a>
         </li>
         {% endif %}
 
         {% if session['logged_in'] %}
-        <li class="nav-item">
+        {% if mapActive %}
+        <li class="nav-item active">
+        {% else %}
+        <li class = "nav-item">
+        {% endif %}            
           <a class="nav-link" href="#">Open Map</a>
         </li>
         {% endif %}
@@ -57,7 +80,11 @@
           <a class="nav-link" href="/logout">Logout</a>
         </li>
         {% endif %}
-        <li class ="nav-item">
+        {% if ourteamActive %}
+        <li class="nav-item active">
+        {% else %}
+        <li class = "nav-item">
+        {% endif %}            
             <a class="nav-link" href="/our_team">Our Team</a>
         </li>
     </div>
