@@ -5,6 +5,7 @@ import threading
 
 dataBaseLock = threading.Lock()
 
+val = 1
 
 LOCAL = False
 
