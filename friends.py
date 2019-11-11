@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, session, Blueprint, flash
 from hashlib import md5
 import db
-
+from statements import friend_request
 friends = Blueprint('friends', __name__,
                         template_folder='templates')
 
@@ -27,15 +27,13 @@ def add():
 
         passTuple= cursor.fetchone()
         if passTuple == None:
-            return render_template('logged.html', error='user not found') 
+            return render_template('logged.html', error='user not found')
 
         try:
-            cursor.execute("""insert into friendrequests
-                            (sender, friend) values 
-                            (%s, %s)""", (session['username'], username))
+            friend_request(cursor, session['username'], username)
         except:
-            return render_template('logged.html', error='error') 
-        finally:   
+            return render_template('logged.html', error='error')
+        finally:
             connection.commit()
             return render_template('logged.html', error='friend request sent')
 
@@ -50,18 +48,18 @@ def accept():
 
         cursor.execute("""select count(*) from public.friendrequests
             WHERE sender=%s AND friend=%s""", (session['username'], username))
-        
+
         if(cursor.fetchone() == None):
             return render_template('logged.html', error="error") #no such request
 
 
         cursor.execute("""DELETE FROM public.friendrequests
                 WHERE sender=%s AND friend=%s""",(username, session['username']))
-                
-        cursor.execute("""insert into friends 
+
+        cursor.execute("""insert into friends
                 (username, friend) values (%s, %s)""", (session['username'], username))
         cursor.execute("""insert into friends
-                    (username, friend) values 
+                    (username, friend) values
                     (%s, %s)""", (username, session['username']))
 
         connection.commit()

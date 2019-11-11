@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, session, Blueprint, flash
 from hashlib import md5
 import db
-
+from statements import insert_user
 signup = Blueprint('signup', __name__,
                         template_folder='templates')
 
@@ -31,9 +31,9 @@ def signup_func():
 
             passTuple= cursor.fetchone()
             if passTuple != None:
-                return render_template('signup_form.html', error='username is already taken') 
+                return render_template('signup_form.html', error='username is already taken')
 
-            
+
             cursor.execute("""select password from users
                                 where (email = %s )""", (email,))
 
@@ -43,13 +43,10 @@ def signup_func():
 
 
             phash = md5(request.form.get('password').encode('utf-8')).hexdigest()
-
-            cursor.execute("""insert into users (username, password, email) values (%s, %s, %s)""", (username, phash, email))
-            connection.commit()      
+            insert_user(cursor,username, phash, email)
+            connection.commit()
             session['username'] = username
             session['password'] = phash
             session['logged_in'] = True
             return redirect(url_for('loginB.logged_func'))
         return render_template('signup_form.html')
-
-
