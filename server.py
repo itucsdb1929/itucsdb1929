@@ -4,13 +4,13 @@ from home import home
 from login import loginB
 from signup import signup
 from friends import friends
-from my_cities import my_cities
-from our_team import our_team
 import os
 import sys
-
+import threading
 import psycopg2 as dbapi2
+import atexit
 
+import update
 
 app = Flask(__name__)
 app.register_blueprint(tables)
@@ -27,7 +27,7 @@ app.secret_key = b'_383#y2L"F4Q8z]/'
 # def home_page():
 #     connection, cursor = testFonk()
 #     cursor.execute("select * from dummy")
-#     a = cursor.fetchall()
+#     a = cursor.fetchall()    
 #     returnStr = "deneme<br>"
 #     for x in a:
 #         for i in x:
@@ -38,6 +38,14 @@ app.secret_key = b'_383#y2L"F4Q8z]/'
 #     return returnStr
 #     #return render_template('base.html')
 
+
+
 if __name__ == "__main__":
-    print("hello")
+
+    update.gameThread = threading.Timer(update.POOL_TIME, update.update, ())
+    update.gameThread.start()
+
+    
     app.run(host='0.0.0.0', port=5000)
+
+

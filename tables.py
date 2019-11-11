@@ -11,19 +11,19 @@ tables = Blueprint('tables', __name__,
 
 @tables.route("/tables")
 def home_page():
+    with db.dataBaseLock:
+        if not session.get('logged_in'):
+            return redirect(url_for('loginB.login_func'))
+        else:
+            print (session.get('username'))
+        # connection, cursor = testFonk()
+        cursor = db.get_cursor()
+        cursor.execute("select * from dummy")
+        a = cursor.fetchall()    
+        returnStr = "deneme<br>"
+        for x in a:
+            for i in x:
+                returnStr += str(i)
+            returnStr +="<br>"
 
-    if not session.get('logged_in'):
-        return redirect(url_for('loginB.login_func'))
-    else:
-        print (session.get('username'))
-    # connection, cursor = testFonk()
-    cursor = db.get_cursor()
-    cursor.execute("select * from dummy")
-    a = cursor.fetchall()    
-    returnStr = "deneme<br>"
-    for x in a:
-        for i in x:
-            returnStr += str(i)
-        returnStr +="<br>"
-
-    return returnStr
+        return returnStr
