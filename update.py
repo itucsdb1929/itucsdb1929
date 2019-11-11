@@ -8,13 +8,13 @@ val = 1
 
 def update():
     # print('someGameStuffDone\n')
+    with db.dataBaseLock:
+        cursor = db.get_cursor()
+        connection = db.get_connection()
 
-    cursor = db.get_cursor()
-    connection = db.get_connection()
+        cursor.execute("""INSERT INTO DUMMY VALUES (%s)""", (val,))
 
-    cursor.execute("""INSERT INTO DUMMY VALUES (%s)""", (val,))
-
-    connection.commit()
+        connection.commit()
     global val
     val = val + 1
     gameThread = threading.Timer(POOL_TIME, update, ())
