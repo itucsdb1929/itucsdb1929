@@ -15,6 +15,7 @@ def update():
         cursor.execute("""INSERT INTO DUMMY VALUES (%s)""", (val,))
 
         connection.commit()
+
     global val
     val = val + 1
     gameThread = threading.Timer(POOL_TIME, update, ())
