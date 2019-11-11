@@ -4,6 +4,8 @@ from home import home
 from login import loginB
 from signup import signup
 from friends import friends
+from my_cities import my_cities
+from our_team import our_team
 import os
 import sys
 import threading
