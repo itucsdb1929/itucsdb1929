@@ -128,7 +128,7 @@
             <div class="col-md-9 col-lg-8 mx-auto">
               <h3 class="login-heading mb-4">
                 {% if error is defined %}
-                {{error}}
+                <div class="alert alert-danger" role="alert">{{error}}</div>
                 {% else %}
                 Register to the game!
                 {% endif %}
