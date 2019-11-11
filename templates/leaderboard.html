@@ -1,0 +1,43 @@
+{% extends "layout.html" %}
+{% set leaderboardActive = 1 %}
+{% block title %} Leaderboard {% endblock title %}
+{% block style %} 
+
+.zoom {
+  transition: transform .2s; /* Animation */
+  margin: 0 auto;
+}
+
+.zoom:hover {
+  transform: scale(1.1); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
+}
+
+{% endblock style %}
+
+
+{% block page_content %} 
+
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">First</th>
+      <th scope="col">Email</th>
+      <th scope="col">Number of Cities</th>
+      
+    </tr>
+  </thead>
+  <tbody>
+    {% for idx in range(0, len) %}
+    <tr class = "zoom">
+      <th scope="row">{{idx}}</th>
+      <td>{{lst[idx][0]}}</td>
+      <td>{{lst[idx][1]}}</td>
+      <td>0</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+
+ {% endblock page_content %}
