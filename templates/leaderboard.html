@@ -15,12 +15,18 @@
 .me {
   background-color: #c8e6c9;
 }
+.sz {
+  max-width:90%;
+  max-height:90%;
+}
 
 {% endblock style %}
 
 
 {% block page_content %} 
 
+<div class = "row">
+<div class="col-md-8 col-sm-8">
 <table class="table">
   <thead>
     <tr>
@@ -68,6 +74,14 @@
     {% endfor %}
   </tbody>
 </table>
+</div>
+
+
+<div class="col-md-4 col-sm-4">
+<img class = "sz" src="https://media3.giphy.com/media/1jgLDGD1Bn27e/giphy.gif">
+</div>
+
+</div>
 
 
  {% endblock page_content %}
