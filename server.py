@@ -11,8 +11,11 @@ import sys
 import threading
 import psycopg2 as dbapi2
 import atexit
+import db
 
 import update
+
+from apscheduler.schedulers.background import BackgroundScheduler
 
 app = Flask(__name__)
 app.register_blueprint(tables)
@@ -24,6 +27,19 @@ app.register_blueprint(my_cities)
 app.register_blueprint(our_team)
 app.secret_key = b'_383#y2L"F4Q8z]/'
 # cok gizli
+
+
+def test_job():
+    with db.dataBaseLock:
+        cursor = db.get_cursor()
+        connection = db.get_connection()
+        cursor.execute("""INSERT INTO DUMMY VALUES (%s)""", ('10',))
+        connection.commit()
+
+scheduler = BackgroundScheduler()
+job = scheduler.add_job(test_job, 'interval', seconds=5)
+scheduler.start()
+
 
 # @app.route("/")
 # def home_page():
