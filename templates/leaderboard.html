@@ -2,7 +2,7 @@
 {% set leaderboardActive = 1 %}
 {% block title %} Leaderboard {% endblock title %}
 {% block style %} 
-
+@import url('https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css');
 .zoom {
   transition: transform .2s; /* Animation */
   margin: 0 auto;
@@ -10,6 +10,10 @@
 
 .zoom:hover {
   transform: scale(1.1); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
+}
+
+.me {
+  background-color: #c8e6c9;
 }
 
 {% endblock style %}
@@ -24,16 +28,31 @@
       <th scope="col">First</th>
       <th scope="col">Email</th>
       <th scope="col">Number of Cities</th>
+      <th scope="col">Options</th>
       
     </tr>
   </thead>
   <tbody>
     {% for idx in range(0, len) %}
-    <tr class = "zoom">
+      {% if lst[idx][0] == usr %}
+      <tr class="me">
+      {% else %}
+      <tr>
+      {% endif %}
       <th scope="row">{{idx}}</th>
       <td>{{lst[idx][0]}}</td>
       <td>{{lst[idx][1]}}</td>
       <td>0</td>
+      <td class="td-actions">
+        {% if lst[idx][0] == usr %}
+        <button type="button" rel="tooltip" class="btn btn-info btn-round btn-just-icon btn-sm btn-block" data-original-title="" title="" disabled>
+              <i class="fa fa-gamepad"></i>
+        </button>
+        {% else %}
+        <button type="button" rel="tooltip" class="btn btn-info btn-round btn-just-icon btn-sm btn-block" data-original-title="" title="">
+              Add friend
+        </button>
+        {% endif %}
     </tr>
     {% endfor %}
   </tbody>

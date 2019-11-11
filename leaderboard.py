@@ -11,4 +11,5 @@ def test():
         connection = db.get_connection()
         cursor.execute("""select username, email from users""")
         lst = cursor.fetchall()
-        return render_template('leaderboard.html', lst=lst, len = len(lst))
+        usr = session['username']
+        return render_template('leaderboard.html', lst=lst, len = len(lst), usr = usr)
