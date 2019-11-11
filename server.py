@@ -6,10 +6,13 @@ from signup import signup
 from friends import friends
 import os
 import sys
-
+import threading
 import psycopg2 as dbapi2
+import atexit
 
-
+import update
+# from update import POOL_TIME
+# fro
 app = Flask(__name__)
 app.register_blueprint(tables)
 app.register_blueprint(home)
@@ -38,5 +41,15 @@ app.secret_key = b'_383#y2L"F4Q8z]/'
 def our_team():
     return render_template('our_team.html')
 
+
+
 if __name__ == "__main__":
+
+
+
+    update.gameThread = threading.Timer(update.POOL_TIME, update.update, ())
+    update.gameThread.start()
+
+    
     app.run(host='0.0.0.0', port=5000)
+

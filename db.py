@@ -1,6 +1,10 @@
 import psycopg2 as dbapi2
 import os
 import sys
+import threading
+
+dataBaseLock = threading.Lock()
+
 
 LOCAL = False
 
