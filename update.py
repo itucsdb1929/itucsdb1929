@@ -7,7 +7,7 @@ POOL_TIME = 5 #Seconds
 
 
 def update():
-    # print('someGameStuffDone\n')
+    print('someGameStuffDone\n')
     with db.dataBaseLock:
         cursor = db.get_cursor()
         connection = db.get_connection()
