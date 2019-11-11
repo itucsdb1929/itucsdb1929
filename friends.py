@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, session, Blueprint, flash
 from hashlib import md5
 import db
-from statements import friend_request
+from statements import friend_request, insert_friend
 friends = Blueprint('friends', __name__,
                         template_folder='templates')
 
@@ -28,6 +28,10 @@ def add():
         passTuple= cursor.fetchone()
         if passTuple == None:
             return render_template('logged.html', error='user not found')
+        cursor.execute("""select friend from friends where(friend=%s)""",(username,))
+        is_friend = cursor.fetchone()
+        if is_friend is not None:
+            return render_template('logged.html', error='Already friend')
 
         try:
             friend_request(cursor, session['username'], username)
@@ -52,15 +56,8 @@ def accept():
         if(cursor.fetchone() == None):
             return render_template('logged.html', error="error") #no such request
 
-
-        cursor.execute("""DELETE FROM public.friendrequests
-                WHERE sender=%s AND friend=%s""",(username, session['username']))
-
-        cursor.execute("""insert into friends
-                (username, friend) values (%s, %s)""", (session['username'], username))
-        cursor.execute("""insert into friends
-                    (username, friend) values
-                    (%s, %s)""", (username, session['username']))
+        if username:
+            insert_friend(cursor, session['username'], username)
 
         connection.commit()
 

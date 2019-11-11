@@ -68,3 +68,18 @@ def friend_request(cursor, sender, receiver):
     cursor.execute("""insert into friendrequests
                     (sender, friend) values
                     (%s, %s)""", (sender, receiver))
+
+
+def insert_friend(cursor, user1, user2):
+    cursor.execute(
+    """DELETE FROM public.friendrequests
+            WHERE sender=%s AND friend=%s""",(user2, user1)
+    )
+    cursor.execute(
+    """insert into friends
+            (username, friend) values (%s, %s)""", (user1, user2))
+
+    cursor.execute(
+    """insert into friends
+            (username, friend) values (%s, %s)""", (user2, user1))
+        
