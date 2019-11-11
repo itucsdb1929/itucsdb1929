@@ -13,9 +13,9 @@ INIT_STATEMENTS = [
 	username varchar(50) NOT NULL,
 	password char(32) NOT NULL,
 	email varchar(50) NULL,
-	CONSTRAINT users_pk PRIMARY KEY (username)
+	CONSTRAINT users_pk PRIMARY KEY (username),
+    isAdmin bool default false
     )""",
-    """insert into users (username, password) values ('admin', 'c93ccd78b2076528346216b3b2f701e6')""",
 ]
 
 

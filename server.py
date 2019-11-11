@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for, session
 from tables import tables
 from home import home
 from login import loginB
-
+from signup import signup
 import os
 import sys
 
@@ -13,6 +13,7 @@ app = Flask(__name__)
 app.register_blueprint(tables)
 app.register_blueprint(home)
 app.register_blueprint(loginB)
+app.register_blueprint(signup)
 app.secret_key = b'_383#y2L"F4Q8z]/'
 # cok gizli
 

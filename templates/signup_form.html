@@ -171,12 +171,6 @@
         </li>
         {% endif %}
 
-        {% if not session['logged_in'] %}
-        <li class="nav-item">
-          <a class="nav-link" href="/signup">signup</a>
-        </li>
-        {% endif %}
-
       </ul>
     </div>
   </div>
@@ -205,22 +199,30 @@
                 {% endif %}
               </h3>
               <div class = "form-group">
-              <form name = "login" action= "{{url_for('loginB.login_func')}}" method="post">
+              <form name = "signup" action= "{{url_for('signup.signup_func')}}" method="post">
                 <div class="form-label-group">
-                  <input type="text" name="username" id="inputEmail" class="form-control" placeholder="Username" value="" required autofocus>
-                  <label for="inputEmail">Username</label>
+                  <input type="text" name="username" id="inputUsername" class="form-control" placeholder="Username" value="{{
+          request.form.username }}" required autofocus>
+                  <label for="inputUsername">Username</label>
                 </div>
 
                 <div class="form-label-group">
-                  <input type="password" name="password" id="inputPassword" class="form-control" placeholder="Password" value="" required>
+                  <input type="password" name="password" id="inputPassword" class="form-control" placeholder="Password" value="{{
+          request.form.password }}" required>
                   <label for="inputPassword">Password</label>
+                </div>
+
+                <div class="form-label-group">
+                  <input type="text" name="email" id="inputEmail" class="form-control" placeholder="Email" value="{{
+          request.form.email }}" required>
+                  <label for="inputEmail">Email</label>
                 </div>
 
                 <div class="custom-control custom-checkbox mb-3">
                   <input type="checkbox" class="custom-control-input" id="customCheck1">
                   <label class="custom-control-label" for="customCheck1">Remember password</label>
                 </div>
-                <input class="btn btn-default" type="submit" value="Login">
+                <input class="btn btn-default" type="submit" value="Sign Up">
                 <div class="text-center">
                   <a class="small" href="#">Forgot password?</a></div>
               </form>
