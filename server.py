@@ -34,6 +34,9 @@ app.secret_key = b'_383#y2L"F4Q8z]/'
 #     return returnStr
 #     #return render_template('base.html')
 
+@app.route("/secret")
+def our_team():
+    return render_template('our_team.html')
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=5000)
