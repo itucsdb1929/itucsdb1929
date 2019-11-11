@@ -68,10 +68,21 @@
     </div>
     <input class="btn btn-default" type="submit" value="Add friend">
   </form>
+  request list
+  <ul>
+  {% for friend in friendRequests%}
+  <li>
+    {{friend[0]}}
+    <a href={{url_for('friends.accept',username=friend[0])}}>accept</a>
+  </li>
+  {% endfor %}
+  </ul>
+
+  Frineds list
   <ul>
   {% for friend in friends%}
   <li>
-    {{friend[0]}} {{friend[1]}}
+    {{friend[0]}}
   </li>
   {% endfor %}
   </ul>

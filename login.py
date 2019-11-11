@@ -14,15 +14,23 @@ def logged_func():
     cursor = db.get_cursor()
     connection = db.get_connection()
 
-    cursor.execute("""select friend, accepted from friends
+    cursor.execute("""select friend from friends
                         where (username = %s) """, (session['username'],))
 
     friends = cursor.fetchall()
 
+    cursor.execute("""select sender from friendrequests
+                        where (friend = %s) """, (session['username'],))
+    
+    friendRequests = cursor.fetchall()
+
+    print("rewuest", friendRequests)
+
     return render_template('logged.html', 
                     username = session['username'],
                     password = session['password'], 
-                    friends = friends)
+                    friends = friends,
+                    friendRequests = friendRequests)
 
 @loginB.route("/login", methods = ['GET', 'POST'])
 def login_func():

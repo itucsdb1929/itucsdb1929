@@ -20,7 +20,6 @@ INIT_STATEMENTS = [
     """CREATE TABLE if not exists public.friends (
         username varchar(50) not null,
         friend varchar(50) not null,
-        accepted bool default false not null,
         foreign key (username) references public.users(username)
         on delete cascade
         on update cascade,
@@ -28,6 +27,17 @@ INIT_STATEMENTS = [
         on delete cascade
         on update cascade,
         CONSTRAINT friends_pk PRIMARY KEY (username, friend)
+    )""",
+    """CREATE TABLE if not exists public.friendrequests (
+        sender varchar(50) not null,
+        friend varchar(50) not null,
+        foreign key (sender) references public.users(username)
+        on delete cascade
+        on update cascade,
+        FOREIGN key (friend) references public.users(username)
+        on delete cascade
+        on update cascade,
+        CONSTRAINT frequest_pk PRIMARY KEY (sender, friend)
     )""",
 ]
 
