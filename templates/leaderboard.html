@@ -48,6 +48,14 @@
         <button type="button" rel="tooltip" class="btn btn-info btn-round btn-just-icon btn-sm btn-block" data-original-title="" title="" disabled>
               <i class="fa fa-gamepad"></i>
         </button>
+        {% elif lst[idx][0] in friends %} 
+        <button type="button" rel="tooltip" class="btn btn-info btn-round btn-just-icon btn-sm btn-block" data-original-title="" title="" disabled>
+              Already friend
+        </button>
+        {%elif lst[idx][0] in requested %}
+        <button type="button" rel="tooltip" class="btn btn-info btn-round btn-just-icon btn-sm btn-block" data-original-title="" title="" disabled>
+              Friend Request Waiting
+        </button>
         {% else %}
         <form action="/friendAdd" method="post">
             <input type="hidden" name="username" value={{lst[idx][0]}} />
