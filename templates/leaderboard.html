@@ -49,9 +49,12 @@
               <i class="fa fa-gamepad"></i>
         </button>
         {% else %}
-        <button type="button" rel="tooltip" class="btn btn-info btn-round btn-just-icon btn-sm btn-block" data-original-title="" title="">
+        <form action="/friendAdd" method="post">
+            <input type="hidden" name="username" value={{lst[idx][0]}} />
+            <button type="submit" rel="tooltip" class="btn btn-info btn-round btn-just-icon btn-sm btn-block" data-original-title="" title="">
               Add friend
         </button>
+        </form>
         {% endif %}
     </tr>
     {% endfor %}

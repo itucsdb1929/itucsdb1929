@@ -10,7 +10,6 @@ friends = Blueprint('friends', __name__,
 def add():
     if not session.get('logged_in'):
         return redirect(url_for('loginB.login_func'))
-
     with db.dataBaseLock:
         cursor = db.get_cursor()
         connection = db.get_connection()
