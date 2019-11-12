@@ -27,11 +27,13 @@ def logged_func():
 
         print("rewuest", friendRequests)
 
-        return render_template('logged.html', 
-                        username = session['username'],
-                        password = session['password'], 
-                        friends = friends,
-                        friendRequests = friendRequests)
+        return redirect(url_for('profile.profileFuncMe'))
+
+        #return render_template('logged.html', 
+                  #      username = session['username'],
+                   #     password = session['password'], 
+                    #    friends = friends,
+                     #   friendRequests = friendRequests)
 
 
 @loginB.route("/login", methods = ['GET', 'POST'])
