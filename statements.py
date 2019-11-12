@@ -13,20 +13,28 @@ NEW_STATEMENTS = {
                 username varchar(50) NOT NULL,
                 friend varchar(50) NOT NULL,
                 CONSTRAINT friends_pk PRIMARY KEY (username,friend),
-                CONSTRAINT friends_fk FOREIGN KEY (username) REFERENCES public.users(username) ON DELETE CASCADE ON UPDATE CASCADE,
-                CONSTRAINT friends_fk_1 FOREIGN KEY (friend) REFERENCES public.users(username) ON DELETE CASCADE ON UPDATE CASCADE
+                FOREIGN KEY (username) REFERENCES public.users(username) 
+                    ON DELETE CASCADE 
+                    ON UPDATE CASCADE,
+                FOREIGN KEY (friend) REFERENCES public.users(username) 
+                    ON DELETE CASCADE 
+                    ON UPDATE CASCADE
         )""",
     "createFriendRequestsTable" : 
         """CREATE TABLE IF NOT EXISTS public.friendrequests (
                 sender varchar(50) NOT NULL,
                 friend varchar(50) NOT NULL,
                 CONSTRAINT friendrequests_pk PRIMARY KEY (sender,friend),
-                CONSTRAINT friendrequests_fk FOREIGN KEY (sender) REFERENCES public.users(username) ON DELETE CASCADE ON UPDATE CASCADE,
-                CONSTRAINT friendrequests_fk_1 FOREIGN KEY (friend) REFERENCES public.users(username) ON DELETE CASCADE ON UPDATE CASCADE
+                FOREIGN KEY (sender) REFERENCES public.users(username) 
+                    ON DELETE CASCADE 
+                    ON UPDATE CASCADE,
+                FOREIGN KEY (friend) REFERENCES public.users(username) 
+                    ON DELETE CASCADE 
+                    ON UPDATE CASCADE
         )""",
     "createSourceTypesTable" : 
         """CREATE TABLE IF NOT EXISTS public.sourcetypes (
-                stype varchar(20) NOT NULL,
+                stype varchar(50) NOT NULL,
                 CONSTRAINT sourcetypes_pk PRIMARY KEY (stype)
         )""",
     "createCitiesTable" : 
@@ -38,56 +46,134 @@ NEW_STATEMENTS = {
                 buildinglimit bigint NOT NULL,
                 buildingcount bigint NOT NULL,
                 CONSTRAINT cities_pk PRIMARY KEY (cityname),
-                CONSTRAINT cities_fk FOREIGN KEY (username) REFERENCES public.users(username) ON DELETE CASCADE ON UPDATE CASCADE
+                FOREIGN KEY (username) REFERENCES public.users(username) 
+                    ON DELETE CASCADE 
+                    ON UPDATE CASCADE
         )""",
     "createSourcesTable" :
         """CREATE TABLE IF NOT EXISTS public.sources (
                 cityname varchar(50) NOT NULL,
-                stype varchar(20) NOT NULL,
+                stype varchar(50) NOT NULL,
                 count bigint NOT NULL,
                 CONSTRAINT sources_pk PRIMARY KEY (cityname,stype),
-                CONSTRAINT sources_fk FOREIGN KEY (cityname) REFERENCES public.cities(cityname) ON DELETE CASCADE ON UPDATE CASCADE,
-                CONSTRAINT sources_fk_1 FOREIGN KEY (stype) REFERENCES public.sourcetypes(stype) ON DELETE CASCADE ON UPDATE CASCADE
+                FOREIGN KEY (cityname) REFERENCES public.cities(cityname) 
+                    ON DELETE CASCADE 
+                    ON UPDATE CASCADE,
+                FOREIGN KEY (stype) REFERENCES public.sourcetypes(stype) 
+                    ON DELETE CASCADE 
+                    ON UPDATE CASCADE
         )""",
     "createBaseProductionsTable" :
         """CREATE TABLE IF NOT EXISTS public.baseproductions (
                 cityname varchar(50) NOT NULL,
-                stype varchar(20) NOT NULL,
+                stype varchar(50) NOT NULL,
                 baseproduction bigint NOT NULL,
                 CONSTRAINT baseproductions_pk PRIMARY KEY (cityname,stype),
-                CONSTRAINT baseproductions_fk FOREIGN KEY (cityname) REFERENCES public.cities(cityname) ON DELETE CASCADE ON UPDATE CASCADE,
-                CONSTRAINT baseproductions_fk_1 FOREIGN KEY (stype) REFERENCES public.sourcetypes(stype) ON DELETE CASCADE ON UPDATE CASCADE
+                FOREIGN KEY (cityname) REFERENCES public.cities(cityname) 
+                    ON DELETE CASCADE 
+                    ON UPDATE CASCADE,
+                FOREIGN KEY (stype) REFERENCES public.sourcetypes(stype) 
+                    ON DELETE CASCADE 
+                    ON UPDATE CASCADE
         )""",
     "createBaseLimitsTable" :
         """CREATE TABLE IF NOT EXISTS public.baselimits (
                 cityname varchar(50) NOT NULL,
-                stype varchar(20) NOT NULL,
+                stype varchar(50) NOT NULL,
                 baselimit bigint NOT NULL,
                 CONSTRAINT baselimits_pk PRIMARY KEY (cityname,stype),
-                CONSTRAINT baselimits_fk FOREIGN KEY (cityname) REFERENCES public.cities(cityname) ON DELETE CASCADE ON UPDATE CASCADE,
-                CONSTRAINT baselimits_fk_1 FOREIGN KEY (stype) REFERENCES public.sourcetypes(stype) ON DELETE CASCADE ON UPDATE CASCADE
+                FOREIGN KEY (cityname) REFERENCES public.cities(cityname) 
+                    ON DELETE CASCADE 
+                    ON UPDATE CASCADE,
+                FOREIGN KEY (stype) REFERENCES public.sourcetypes(stype) 
+                    ON DELETE CASCADE 
+                    ON UPDATE CASCADE
         )""",
     "createProductionsTable" :
         """CREATE TABLE IF NOT EXISTS public.productions (
                 cityname varchar(50) NOT NULL,
-                stype varchar(20) NOT NULL,
+                stype varchar(50) NOT NULL,
                 production bigint NOT NULL,
                 CONSTRAINT productions_pk PRIMARY KEY (cityname,stype),
-                CONSTRAINT productions_fk FOREIGN KEY (cityname) REFERENCES public.cities(cityname) ON DELETE CASCADE ON UPDATE CASCADE,
-                CONSTRAINT productions_fk_1 FOREIGN KEY (stype) REFERENCES public.sourcetypes(stype) ON DELETE CASCADE ON UPDATE CASCADE
+                FOREIGN KEY (cityname) REFERENCES public.cities(cityname) 
+                    ON DELETE CASCADE 
+                    ON UPDATE CASCADE,
+                FOREIGN KEY (stype) REFERENCES public.sourcetypes(stype) 
+                    ON DELETE CASCADE 
+                    ON UPDATE CASCADE
         )""",
     "createLimitsTable" :
         """CREATE TABLE IF NOT EXISTS public.limits (
                 cityname varchar(50) NOT NULL,
-                stype varchar(20) NOT NULL,
-                limit bigint NOT NULL,
+                stype varchar(50) NOT NULL,
+                sourcelimit bigint NOT NULL,
                 CONSTRAINT limits_pk PRIMARY KEY (cityname,stype),
-                CONSTRAINT limits_fk FOREIGN KEY (cityname) REFERENCES public.cities(cityname) ON DELETE CASCADE ON UPDATE CASCADE,
-                CONSTRAINT blimits_fk_1 FOREIGN KEY (stype) REFERENCES public.sourcetypes(stype) ON DELETE CASCADE ON UPDATE CASCADE
+                FOREIGN KEY (cityname) REFERENCES public.cities(cityname) 
+                    ON DELETE CASCADE 
+                    ON UPDATE CASCADE,
+                FOREIGN KEY (stype) REFERENCES public.sourcetypes(stype) 
+                    ON DELETE CASCADE 
+                    ON UPDATE CASCADE
+        )""",
+    "createEffectTypesTable" : 
+        """CREATE TABLE IF NOT EXISTS public.effecttypes (
+                etype varchar(50) NOT NULL,
+                CONSTRAINT effecttypes_pk PRIMARY KEY (etype)
+        )""",
+    "createBuildingTypesTable" : 
+        """CREATE TABLE IF NOT EXISTS public.buildingtypes (
+                buildingname varchar(50) NOT NULL,
+                buildtime bigint NOT NULL,
+                CONSTRAINT buildingtypes_pk PRIMARY KEY (buildingname)
+        )""",
+    "createBuildingEffectsTable" :
+        """CREATE TABLE IF NOT EXISTS public.buildingeffects (
+                buildingname varchar(50) NOT NULL,
+                stype varchar(50) NOT NULL,
+                etype varchar(50) NOT NULL,
+                value bigint NOT NULL,
+                CONSTRAINT buildingeffects_pk PRIMARY KEY (buildingname,stype,etype),
+                FOREIGN KEY (buildingname) REFERENCES public.buildingtypes(buildingname) 
+                    ON DELETE CASCADE 
+                    ON UPDATE CASCADE,
+                FOREIGN KEY (stype) REFERENCES public.sourcetypes(stype) 
+                    ON DELETE CASCADE 
+                    ON UPDATE CASCADE,
+                FOREIGN KEY (etype) REFERENCES public.effecttypes(etype) 
+                    ON DELETE CASCADE 
+                    ON UPDATE CASCADE
+        )""",
+    "createBuildingCostsTable" :
+        """CREATE TABLE IF NOT EXISTS public.buildingcosts (
+                buildingname varchar(50) NOT NULL,
+                costsource varchar(50) NOT NULL,
+                cost bigint NOT NULL,
+                CONSTRAINT buildingcosts_pk PRIMARY KEY (buildingname,costsource),
+                FOREIGN KEY (buildingname) REFERENCES public.buildingtypes(buildingname) 
+                    ON DELETE CASCADE 
+                    ON UPDATE CASCADE,
+                FOREIGN KEY (costsource) REFERENCES public.sourcetypes(stype) 
+                    ON DELETE CASCADE 
+                    ON UPDATE CASCADE
         )""",
 }
 
-
+INIT_STATEMENTS_ORDER = [
+    "createUserTable",
+    "createFriendsTable",
+    "createFriendRequestsTable",
+    "createSourceTypesTable",
+    "createCitiesTable",
+    "createSourcesTable",
+    "createBaseProductionsTable",
+    "createBaseLimitsTable",
+    "createProductionsTable",
+    "createLimitsTable",
+    "createEffectTypesTable",
+    "createBuildingTypesTable",
+    "createBuildingEffectsTable",
+    "createBuildingCostsTable",
+]
 
 INIT_STATEMENTS = [
     "CREATE TABLE IF NOT EXISTS DUMMY (NUM INTEGER)",
