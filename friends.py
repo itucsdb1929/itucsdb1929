@@ -41,12 +41,12 @@ def add():
             return render_template('logged.html', error='friend request sent')
 
 
-@friends.route("/friendAdd/", methods = ['GET'])
+@friends.route("/friendAccept", methods = ['POST'])
 def accept():
     with db.dataBaseLock:
         cursor = db.get_cursor()
         connection = db.get_connection()
-        username = request.args.get('username')
+        username = request.form.get('username')
         print("accept ", username)
 
         cursor.execute("""select count(*) from public.friendrequests
@@ -60,4 +60,4 @@ def accept():
 
         connection.commit()
 
-        return redirect(url_for('loginB.logged_func'))
+        return redirect(url_for('profile.profileFuncMe'))
