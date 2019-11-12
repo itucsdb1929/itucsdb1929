@@ -5,7 +5,7 @@ leaderboard = Blueprint('leaderboard', __name__,
                         template_folder='templates')
 
 @leaderboard.route("/leaderboard")
-def test():
+def leaderboardFunction():
     with db.dataBaseLock:
         cursor = db.get_cursor()
         connection = db.get_connection()

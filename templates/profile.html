@@ -1,0 +1,161 @@
+{% extends "layout.html" %}
+{% set profileActive = 1 %}
+{% block title %} Profile {% endblock title %}
+{% block style %}
+
+.profile-image {
+    width: 40%;
+}
+.profile-image2 {
+    width: 50%;
+}
+
+.space { margin:0; padding:0; height:30px; }
+{% endblock style %}
+
+
+{% block page_content %}
+
+<div class = "space"></div>
+
+<ul class="nav nav-tabs" id="myTab" role="tablist">
+  <li class="nav-item">
+    <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Home</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Friends</a>
+  </li>
+  {% if username == viewer %}
+  <li class="nav-item">
+    <a class="nav-link" id="messages-tab" data-toggle="tab" href="#messages" role="tab" aria-controls="messages" aria-selected="false">
+    Friend Requests</a>
+  </li>
+  {% endif %}
+  <li class="nav-item">
+    <a class="nav-link" id="settings-tab" data-toggle="tab" href="#settings" role="tab" aria-controls="settings" aria-selected="false">Settings</a>
+  </li>
+</ul>
+
+<div class="space"></div>
+
+<div class="tab-content">
+  <div class="tab-pane active" id="home" role="tabpanel" aria-labelledby="home-tab">
+    <div class = "row mx-md-n5">
+
+    <div class="well well-sm">
+        
+        <div class = "col border px-md-5">
+            <div class = "text-center">
+                <img src="https://sketchmob.com/wp-content/uploads/2017/09/11189_173340de-347x347.jpg" class="rounded profile-image" alt="...">
+            </div>
+            <br>
+            <ul class="list-group">
+                <li class="list-group-item"><span class = "font-weight-bold">Username:</span> {{username}}</li>
+                <li class="list-group-item"><span class = "font-weight-bold">Email:</span> {{email}}</li>        
+                <li class="list-group-item"><span class = "font-weight-bold">Last login:</span> Now</li>
+                <li class="list-group-item"><span class = "font-weight-bold">Clan:</span> None</li>
+            </ul>
+            <br>
+        </div>
+
+    </div>
+
+        <div class="col px-md-5">
+            <img src="https://i.postimg.cc/fRFHxgdm/pngguru-com.png">
+        </div>
+    </div>
+
+</div>
+
+  <div class="tab-pane" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+       <div class = "row">
+
+        
+        <div class = "col border">
+            <div class="text-center">
+                <img src="https://studybreaks.com/wp-content/uploads/2018/05/sora-yori-mo-tooi-basho-0322.jpg" class="rounded profile-image2" alt="...">
+            </div>
+
+<table class="table table-hover" >
+  <thead>
+    <tr>
+      <th scope="col">
+    <div class = "text-center">
+      Friends
+  </div>
+  </th>
+    </tr>
+
+  </thead>
+  <tbody>
+    {% for idx in friends %}
+      <tr>
+      <td>{{idx[0]}}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+</div>
+
+
+        <div class="col">
+            <img src="https://i.postimg.cc/fRFHxgdm/pngguru-com.png">
+        </div>
+    </div>
+
+
+  </div>
+
+    {% if username == viewer %}
+  <div class="tab-pane" id="messages" role="tabpanel" aria-labelledby="messages-tab">
+       <div class = "row">
+
+        
+        <div class = "col border">
+            <div class="text-center">
+                <img src="https://studybreaks.com/wp-content/uploads/2018/05/sora-yori-mo-tooi-basho-0322.jpg" class="rounded profile-image2" alt="...">
+            </div>
+
+<table class="table table-hover" >
+  <thead>
+    <tr>
+      <th scope="col">
+      Friend Requests
+        </th>
+    <th scope="col">Options</th>
+    </tr>
+
+  </thead>
+  <tbody>
+    {% for idx in friendRequests %}
+      <tr>
+      <td>{{idx[0]}}</td>
+      <td> 
+            <form action="/friendAccept" method="post">
+            <input type="hidden" name="username" value={{idx[0]}} />
+            <button type="submit" rel="tooltip" class="btn btn-info btn-round btn-just-icon btn-sm btn-block" data-original-title="" title="">
+              Accept
+            </button>
+
+      </td>
+
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+</div>
+
+
+        <div class="col">
+            <img src="https://i.postimg.cc/fRFHxgdm/pngguru-com.png">
+        </div>
+    </div>
+{% endif %}
+
+
+  </div>
+  <div class="tab-pane" id="settings" role="tabpanel" aria-labelledby="settings-tab">...</div>
+</div>
+
+
+{% endblock page_content %}
