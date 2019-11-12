@@ -27,8 +27,8 @@ def add():
         passTuple= cursor.fetchone()
         if passTuple == None:
             return render_template('logged.html', error='user not found')
-        cursor.execute("""select username,friend from friends where(friend=%s and username=%s)""",
-                        (username,session['username']))
+        cursor.execute("""select username,friend from friends where(username=%s and friend=%s)""",
+                        (session['username'], friend))
         is_friend = cursor.fetchone()
         if is_friend is not None:
             return render_template('logged.html', error='Already friend')
