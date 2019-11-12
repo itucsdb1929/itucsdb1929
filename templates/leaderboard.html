@@ -3,25 +3,40 @@
 {% block title %} Leaderboard {% endblock title %}
 {% block style %} 
 @import url('https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css');
-.zoom {
-  transition: transform .2s; /* Animation */
-  margin: 0 auto;
-}
-
-.zoom:hover {
-  transform: scale(1.1); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
-}
 
 .me {
-  background-color: #c8e6c9;
+  background-color: rgb(210, 210, 210);
+  transform: scale(1.02);
 }
+
+.leaderboard {
+    box-shadow: 10px 10px 5px #aaaaaa;
+    border: 1px solid #BFBFBF;
+    background-color: #ffffff;
+    background: rgb(255, 255, 255); /* Fallback for older browsers without RGBA-support */
+    background: rgba(240, 240, 240, 0.85);
+    margin: 10px;
+    margin-left: 30px;
+    margin-right: 30px;
+}
+
+body {
+  background-image: url('https://img4.goodfon.com/wallpaper/nbig/e/94/anime-girl-war-weapon-gun-rifle-assault-rifle-snow-tank-ak-a.jpg');
+  background-filter: brightness(70%);
+}
+
+
+.space { margin:0; padding:0; height:30px; }
 
 {% endblock style %}
 
 
 {% block page_content %} 
 
-<table class="table shadow-lg" >
+<div class="space"></div>
+
+<div class = "leaderboard">
+<table class="table table-hover" >
   <thead>
     <tr>
       <th scope="col">#</th>
@@ -39,7 +54,11 @@
       {% else %}
       <tr>
       {% endif %}
-      <th scope="row">{{idx}}</th>
+      <th scope="row">{{idx}}
+        {% if lst[idx][0] == usr %}
+          <i class="fa fa-hand-o-right"></i>
+        {% endif %}
+      </th>
       <td>{{lst[idx][0]}}</td>
       <td>{{lst[idx][1]}}</td>
       <td>0</td>
@@ -50,7 +69,7 @@
         </button>
         {% elif lst[idx][0] in friends %} 
         <button type="button" rel="tooltip" class="btn btn-info btn-round btn-just-icon btn-sm btn-block" data-original-title="" title="" disabled>
-              Already friend
+              Already friend <i class="fa fa-check-square"></i>
         </button>
         {%elif lst[idx][0] in requested %}
         <button type="button" rel="tooltip" class="btn btn-info btn-round btn-just-icon btn-sm btn-block" data-original-title="" title="" disabled>
@@ -63,11 +82,13 @@
               Add friend
         </button>
         </form>
+        </td>
         {% endif %}
     </tr>
     {% endfor %}
   </tbody>
 </table>
+</div>
 
 
  {% endblock page_content %}
