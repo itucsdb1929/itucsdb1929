@@ -46,16 +46,6 @@
         {% endif %}
 
         {% if session['logged_in'] %}
-        {% if citiesActive %}
-        <li class="nav-item active">
-        {% else %}
-        <li class = "nav-item">
-        {% endif %}            
-          <a class="nav-link" href="/my_cities">My Cities</a>
-        </li>
-        {% endif %}
-
-        {% if session['logged_in'] %}
         {% if leaderboardActive %}
         <li class="nav-item active">
         {% else %}
@@ -66,12 +56,23 @@
         {% endif %}
 
         {% if session['logged_in'] %}
-        {% if mapActive %}
+        {% if profileActive %}
         <li class="nav-item active">
         {% else %}
         <li class = "nav-item">
         {% endif %}            
-          <a class="nav-link" href="#">Open Map</a>
+          <a class="nav-link" href="/profile">Profile</a>
+        </li>
+        {% endif %}
+
+        
+        {% if session['logged_in'] %}
+        {% if citiesActive %}
+        <li class="nav-item active">
+        {% else %}
+        <li class = "nav-item">
+        {% endif %}            
+          <a class="nav-link" href="/my_cities">My Cities</a>
         </li>
         {% endif %}
 
