@@ -39,7 +39,8 @@ def add():
             return render_template('logged.html', error='error')
         finally:
             connection.commit()
-            return render_template('logged.html', error='friend request sent')
+            return render_template('leaderboard.html')
+            #return render_template('logged.html', error='friend request sent')
 
 
 @friends.route("/friendAccept", methods = ['POST'])
