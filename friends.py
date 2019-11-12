@@ -28,7 +28,7 @@ def add():
         if passTuple == None:
             return render_template('logged.html', error='user not found')
         cursor.execute("""select username,friend from friends where(username=%s and friend=%s)""",
-                        (session['username'], friend))
+                        (session['username'], username))
         is_friend = cursor.fetchone()
         if is_friend is not None:
             return render_template('logged.html', error='Already friend')
@@ -50,16 +50,21 @@ def accept():
         connection = db.get_connection()
         username = request.form.get('username')
         print("accept ", username)
-
         cursor.execute("""select count(*) from public.friendrequests
             WHERE sender=%s AND friend=%s""", (session['username'], username))
 
         if(cursor.fetchone() == None):
             return render_template('logged.html', error="error") #no such request
 
-        if username:
-            insert_friend(cursor, session['username'], username)
-
+        cursor.execute("""
+        select username from friends where(username=%s and friend=%s)
+         """,(session['username'],username))
+        if(cursor.fetchone == None):
+            if username:
+                insert_friend(cursor, session['username'], username)
+        else:
+            cursor.execute("""DELETE FROM public.friendrequests
+                    WHERE sender=%s AND friend=%s""",(username, session['username']))
         connection.commit()
 
         return redirect(url_for('profile.profileFuncMe'))

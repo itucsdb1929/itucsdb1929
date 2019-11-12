@@ -25,5 +25,4 @@ def leaderboardFunction():
         friendRequests = cursor.fetchall()
         for it in friendRequests:
             requested.append(it[0])
-        return render_template('leaderboard.html', lst=lst, len = len(lst),
-                                usr = usr, friends=friends, requested=requested)
+        return render_template('leaderboard.html', lst=lst, len = len(lst), usr = usr, friends=friends, requested=requested)
