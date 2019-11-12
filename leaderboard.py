@@ -21,8 +21,9 @@ def leaderboardFunction():
             friends.append(it[0])
         cursor.execute("""select friend from friendrequests
                             where (sender = %s) """, (session['username'],))
-        
+
         friendRequests = cursor.fetchall()
         for it in friendRequests:
             requested.append(it[0])
-        return render_template('leaderboard.html', lst=lst, len = len(lst), usr = usr, friends=friends, requested=requested)
+        return render_template('leaderboard.html', lst=lst, len = len(lst),
+                                usr = usr, friends=friends, requested=requested)
