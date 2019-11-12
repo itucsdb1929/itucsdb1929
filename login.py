@@ -61,7 +61,8 @@ def login_func():
             session['username'] = request.form.get('username')
             session['password'] = phash
             session['logged_in'] = True
-            return redirect(url_for('loginB.logged_func'))
+            return redirect(url_for('profile.profileFuncMe'))
+            #return redirect(url_for('loginB.logged_func'))
         return render_template('login_form.html')
 
 
