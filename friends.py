@@ -39,7 +39,7 @@ def add():
             return render_template('logged.html', error='error')
         finally:
             connection.commit()
-            return render_template('base.html')
+            return redirect(url_for('leaderboard.leaderboardFunction'))
             #return render_template('logged.html', error='friend request sent')
 
 
