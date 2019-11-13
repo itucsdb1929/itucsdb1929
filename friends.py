@@ -59,7 +59,7 @@ def accept():
         cursor.execute("""
         select username from friends where(username=%s and friend=%s)
          """,(session['username'],username))
-        if(cursor.fetchone == None):
+        if(cursor.fetchone() == None):
             if username:
                 insert_friend(cursor, session['username'], username)
         else:
