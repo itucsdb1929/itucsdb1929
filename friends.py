@@ -16,7 +16,7 @@ def add():
         username = request.form.get('username')
         if username == session['username']:
             return render_template('logged.html', error='it is you')
-        print("username", username)
+        #print("username", username)
         if len(username) < 5:
             return render_template('logged.html', error='username is too short (min 5 char)')
 
@@ -27,8 +27,8 @@ def add():
         passTuple= cursor.fetchone()
         if passTuple == None:
             return render_template('logged.html', error='user not found')
-        cursor.execute("""select username,friend from friends where(friend=%s and username=%s)""",
-                        (username,session['username']))
+        cursor.execute("""select username,friend from friends where(username=%s and friend=%s)""",
+                        (session['username'], username))
         is_friend = cursor.fetchone()
         if is_friend is not None:
             return render_template('logged.html', error='Already friend')
@@ -49,17 +49,23 @@ def accept():
         cursor = db.get_cursor()
         connection = db.get_connection()
         username = request.form.get('username')
-        print("accept ", username)
-
+        #print("accept ", username)
         cursor.execute("""select count(*) from public.friendrequests
             WHERE sender=%s AND friend=%s""", (session['username'], username))
 
         if(cursor.fetchone() == None):
             return render_template('logged.html', error="error") #no such request
 
-        if username:
-            insert_friend(cursor, session['username'], username)
-
+        cursor.execute("""
+        select username from friends where(username=%s and friend=%s)
+         """,(session['username'],username))
+        if(cursor.fetchone() == None):
+            print("asdas")
+            if username:
+                insert_friend(cursor, session['username'], username)
+        else:
+            cursor.execute("""DELETE FROM public.friendrequests
+                    WHERE sender=%s AND friend=%s""",(username, session['username']))
         connection.commit()
 
         return redirect(url_for('profile.profileFuncMe'))
