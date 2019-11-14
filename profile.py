@@ -10,7 +10,7 @@ def profileFuncMe():
 
 @profile.route("/profile/<userName>")
 def profileFunc(userName):
-    print(userName)
+    session['url'] = url_for('profile.profileFuncMe')
     cursor = db.get_cursor()
     connection = db.get_connection()
     cursor.execute("""select friend from friends

@@ -105,6 +105,20 @@ body {
         </button>
         </form>
       </div>
+      {% elif lst[idx][0] in comingRequests %}
+      <div class="btn-group">
+        <form action="/friendAccept" method="post">
+            <input type="hidden" name="username" value={{lst[idx][0]}} />
+            <button type="submit" rel="tooltip" class="btn btn-info btn-round btn-just-icon btn-sm btn-block" data-original-title="" title="">
+              Accept
+            </button>
+          </form>
+            <form action={{url_for('profile.profileFunc', userName=lst[idx][0])}} method="get">
+            <button type="submit" rel="tooltip" class="btn btn-info btn-round btn-just-icon btn-sm btn-block" data-original-title="" title="">
+              Profile
+        </button>
+        </form>
+      </div>
         {% else %}
         <div class="btn-group">
 
