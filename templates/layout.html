@@ -78,6 +78,16 @@
         {% endif %}
 
         {% if session['logged_in'] %}
+        {% if mapActive %}
+        <li class="nav-item active">
+        {% else %}
+        <li class = "nav-item">
+        {% endif %}            
+          <a class="nav-link" href="/map">Map</a>
+        </li>
+        {% endif %}
+
+        {% if session['logged_in'] %}
         <li class="nav-item">
           <a class="nav-link" href="/logout">Logout</a>
         </li>
