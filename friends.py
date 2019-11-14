@@ -42,6 +42,23 @@ def add():
             return redirect(url_for('leaderboard.leaderboardFunction'))
             #return render_template('logged.html', error='friend request sent')
 
+@friends.route("/friendDelete", methods = ['POST'])
+def deleteFriend():
+    if not session.get('logged_in'):
+        return redirect(url_for('loginB.login_func'))
+    with db.dataBaseLock:
+        cursor = db.get_cursor()
+        connection = db.get_connection()
+        username = request.form.get('username')
+        cursor.execute("""select username,friend from friends where(username=%s and friend=%s)""",
+                        (session['username'], username))
+        is_friend = cursor.fetchone()
+        if is_friend is None:
+            print('Friend delete no friend')
+            return render_template('logged.html', error='User not friend')
+        cursor.execute("""delete from friends where (username=%s and friend=%s)""", (session['username'], username))
+        cursor.execute(""" delete from friends where(username=%s and friend=%s)""", (username, session['username']))
+        return redirect(session['url'])
 
 @friends.route("/friendAccept", methods = ['POST'])
 def accept():

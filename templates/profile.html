@@ -81,9 +81,10 @@
     <tr>
       <th scope="col">
     <div class = "text-center">
-      Friends
+      Lololo
   </div>
   </th>
+  <th> Options </th>
     </tr>
 
   </thead>
@@ -91,6 +92,16 @@
     {% for idx in friends %}
       <tr>
       <td>{{idx[0]}}</td>
+      {% if username == viewer %}
+      <td>
+      <form action="/friendDelete" method="post">
+            <input type="hidden" name="username" value={{idx[0]}} />
+            <button type="submit" rel="tooltip" class="btn btn-info btn-round btn-just-icon btn-sm btn-block" data-original-title="" title="">
+              Delete
+            </button>
+        </form>
+      </td>
+      {% endif %}
     </tr>
     {% endfor %}
   </tbody>
@@ -134,7 +145,7 @@
             <button type="submit" rel="tooltip" class="btn btn-info btn-round btn-just-icon btn-sm btn-block" data-original-title="" title="">
               Accept
             </button>
-
+          </form>
       </td>
 
     </tr>
