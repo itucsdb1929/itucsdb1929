@@ -67,5 +67,7 @@ def accept():
             cursor.execute("""DELETE FROM public.friendrequests
                     WHERE sender=%s AND friend=%s""",(username, session['username']))
         connection.commit()
-
-        return redirect(url_for('profile.profileFuncMe'))
+        if session['url']:
+            return redirect(session['url'])
+        else:
+            return redirect(url_for('profile.profileFuncMe'))
