@@ -8,6 +8,7 @@ from my_cities import my_cities
 from our_team import our_team
 from leaderboard import leaderboard
 from profile import profile
+from map_page import map_page
 import os
 import sys
 import threading
@@ -29,6 +30,7 @@ app.register_blueprint(my_cities)
 app.register_blueprint(our_team)
 app.register_blueprint(leaderboard)
 app.register_blueprint(profile)
+app.register_blueprint(map_page)
 app.secret_key = b'_383#y2L"F4Q8z]/'
 # cok gizli
 
