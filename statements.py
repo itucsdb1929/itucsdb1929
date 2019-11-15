@@ -94,7 +94,7 @@ def insert_friend(cursor, user1, user2):
             (username, friend) values (%s, %s)""", (user2, user1))
 
 
-def new_message(cursor, sender, receiver, message):
+def your_message(cursor, sender, receiver, message):
     cursor.execute("""
     INSERT INTO Messages values(
     %s,
@@ -102,6 +102,7 @@ def new_message(cursor, sender, receiver, message):
     %s
     )
     """,(sender, receiver, message))
+
 
 def delete_friend(cursor, username, friend):
     cursor.execute("""select username,friend from friends where(username=%s and friend=%s)""",(username, friend))
@@ -111,7 +112,6 @@ def delete_friend(cursor, username, friend):
     cursor.execute("""delete from friends where (username=%s and friend=%s)""",(username, friend))
     cursor.execute(""" delete from friends where(username=%s and friend=%s)""",(friend, username))
     return True
-
 
 
 def accept_friend(cursor, sender, friend): # sender = session['username'], friend = username
