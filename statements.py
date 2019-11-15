@@ -42,6 +42,16 @@ INIT_STATEMENTS = [
     CITY_LOCATION varchar(50) NOT NULL UNIQUE
     )
     """,
+
+    """
+    CREATE TABLE if not EXISTS Messages(
+    message_id serial primary key,
+    sender varchar(50) not null,
+    receiver varchar(50) not null,
+    message text
+    )
+    """,
+
 ]
 
 def insert_user(cursor,username, password, email):
@@ -82,4 +92,39 @@ def insert_friend(cursor, user1, user2):
     cursor.execute(
     """insert into friends
             (username, friend) values (%s, %s)""", (user2, user1))
-        
+
+
+def new_message(cursor, sender, receiver, message):
+    cursor.execute("""
+    INSERT INTO Messages values(
+    %s,
+    %s,
+    %s
+    )
+    """,(sender, receiver, message))
+
+def delete_friend(cursor, username, friend):
+    cursor.execute("""select username,friend from friends where(username=%s and friend=%s)""",(username, friend))
+    if cursor.fetchone() is None:
+        Print("Friend delete no friend")
+        return False
+    cursor.execute("""delete from friends where (username=%s and friend=%s)""",(username, friend))
+    cursor.execute(""" delete from friends where(username=%s and friend=%s)""",(friend, username))
+    return True
+
+
+
+def accept_friend(cursor, sender, friend): # sender = session['username'], friend = username
+    cursor.execute("""select count(*) from public.friendrequests
+                    WHERE sender=%s AND friend=%s""", (sender, friend))
+    if cursor.fetchone() is None:
+        return 0 #return render_template('logged.html', error="error") #no such request
+    cursor.execute("""
+                    select username from friends where(username=%s and friend=%s)
+                    """,(sender,friend))
+    if cursor.fetchone() is None:
+         return 1 #They are not friends before
+    else:
+        cursor.execute("""DELETE FROM public.friendrequests
+                    WHERE sender=%s AND friend=%s""",(friend, sender))
+        return 2
