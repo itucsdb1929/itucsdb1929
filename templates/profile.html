@@ -146,7 +146,7 @@
         {% endif %}
 
     </div>
-
+{% if username == viewer %}
     <div class="tab-pane" id="settings" role="tabpanel" aria-labelledby="settings-tab">
 
         <div class="row">
@@ -252,6 +252,7 @@
         {% endfor %}
 
     </div>
+{% endif %}
 
 </div>
 
