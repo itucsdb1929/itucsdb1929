@@ -209,19 +209,23 @@
                         <h5 class="card-title">{{idx[0]}}</h5>
                         <h6 class="card-subtitle mb-2 text-muted">Some time ago</h6>
                         <p class="card-text">{{idx[1]}}</p>
-                        <a href="#!" class="card-link">Reply</a>
+                        <a href="SendMessageModal2{{idx[0]}}" class="card-link" data-toggle="modal" data-target="#SendMessageModal2{{idx[0]}}">Reply</a>
                         <a href="#!" class="card-link">Delete Message</a>
                     </div>
                 </div>
                 {% endfor %}
+
+
             </div>
 
             <div class="col">
                 <img src="https://pm1.narvii.com/6320/7291d500bd9041fd6bcb33c5616736798cfd199d_00.jpg">
             </div>
         </div>
-        {% for idx in friends %}
-        <div class="modal fade" id="SendMessageModal{{idx[0]}}" role="dialog">
+        
+
+        {% for idx in message_list %}
+        <div class="modal fade" id="SendMessageModal2{{idx[0]}}" role="dialog">
             <div class="modal-dialog">
 
                 <!-- Modal content-->
