@@ -28,13 +28,19 @@ def profileFunc(userName):
 
     image_links = ["https://sketchmob.com/wp-content/uploads/2017/09/11189_173340de-347x347.jpg",
                     "https://i.postimg.cc/FRCBcMsT/asada.jpg",
-                    "https://i.postimg.cc/kGtfSDH5/original.jpg"];
+                    "https://i.postimg.cc/kGtfSDH5/original.jpg"]
+    message_list = []
+
+    cursor.execute("""select sender, message from messages where (receiver=%s)""", (userName,))
+
+    message_list = cursor.fetchall()
+
 
     return render_template('profile.html', 
                         username = userName,
                         friends = friends,
                         friendRequests = friendRequests, viewer = me, profileImage = profileImage[0],
-                            profile_images_len=3, image_links = image_links
+                            profile_images_len=3, image_links = image_links, message_list = message_list
                         )
 
 @profile.route("/changeProfileImage/<int:imageId>")

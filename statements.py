@@ -48,11 +48,12 @@ INIT_STATEMENTS = [
     ALTER TABLE public.users drop column if exists profile_image; 
     ALTER TABLE public.users ADD COLUMN profile_image int default 0;
     """,
+    """DROP TABLE Messages""",
     """CREATE TABLE if not EXISTS Messages(
     message_id serial primary key,
     sender varchar(50) not null,
     receiver varchar(50) not null,
-    message text
+    message varchar(255)
     )
     """,
 ]
@@ -98,13 +99,7 @@ def insert_friend(cursor, user1, user2):
 
 
 def your_message(cursor, sender, receiver, message):
-    cursor.execute("""
-    INSERT INTO Messages values(
-    %s,
-    %s,
-    %s
-    )
-    """,(sender, receiver, message))
+    cursor.execute("""INSERT INTO Messages (message_id, sender, receiver, message) VALUES (DEFAULT, %s, %s, %s);""",(sender, receiver, message))
 
 
 def delete_friend(cursor, username, friend):
