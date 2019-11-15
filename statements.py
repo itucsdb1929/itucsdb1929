@@ -7,6 +7,7 @@ INIT_STATEMENTS = [
 	username varchar(50) NOT NULL,
 	password char(32) NOT NULL,
 	email varchar(50) not NULL,
+    profile_image INT default 0,
 	CONSTRAINT users_pk PRIMARY KEY (username),
     isAdmin bool default false
     )""",
@@ -41,6 +42,11 @@ INIT_STATEMENTS = [
     CITY_NAME varchar(50) PRIMARY KEY,
     CITY_LOCATION varchar(50) NOT NULL UNIQUE
     )
+    """,
+
+    """
+    ALTER TABLE public.users drop column if exists profile_image; 
+    ALTER TABLE public.users ADD COLUMN profile_image int default 0;
     """,
 ]
 
