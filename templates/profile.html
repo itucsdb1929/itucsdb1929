@@ -1,4 +1,6 @@
-{% extends "layout.html" %} {% set profileActive = 1 %} {% block title %} Profile {% endblock title %} {% block style %} .profile-image { width: 40%; } .profile-image2 { width: 50%; } .space { margin:0; padding:0; height:30px; } {% endblock style %} {% block page_content %}
+{% extends "layout.html" %} {% set profileActive = 1 %} {% block title %} Profile {% endblock title %} {% block style %} .profile-image { width: 40%; } .profile-image2 { width: 50%; } .space { margin:0; padding:0; height:30px; }
+{% endblock style %} {% block page_content %}
+
 
 <div class="space"></div>
 
@@ -6,15 +8,24 @@
     <li class="nav-item">
         <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Home</a>
     </li>
+    {% if username == viewer %}
     <li class="nav-item">
         <a class="nav-link" id="friends-tab" data-toggle="tab" href="#friends" role="tab" aria-controls="friends" aria-selected="false">Friends</a>
     </li>
+    {% endif %}
     {% if username == viewer %}
     <li class="nav-item">
         <a class="nav-link" id="friendrequest-tab" data-toggle="tab" href="#friendrequest" role="tab" aria-controls="friendrequest" aria-selected="false">
     Friend Requests</a>
     </li>
-    {% endif %} {% if username == viewer %}
+    {% endif %} 
+    {% if username == viewer %}
+    <li class="nav-item">
+        <a class="nav-link" id="messages-tab" data-toggle="tab" href="#messages" role="tab" aria-controls="messages" aria-selected="false">
+    Messages</a>
+    </li>
+    {% endif %} 
+    {% if username == viewer %}
     <li class="nav-item">
         <a class="nav-link" id="settings-tab" data-toggle="tab" href="#settings" role="tab" aria-controls="settings" aria-selected="false">Settings</a>
     </li>
@@ -54,7 +65,7 @@
         </div>
 
     </div>
-
+{% if username == viewer %}
     <div class="tab-pane" id="friends" role="tabpanel" aria-labelledby="friends-tab">
         <div class="row">
 
@@ -79,7 +90,11 @@
                         {% for idx in friends %}
                         <tr>
                             <td>{{idx[0]}}</td>
-                            {% if username == viewer %}
+                            <td>
+                                    <button type="submit" rel="tooltip" class="btn btn-info btn-round btn-just-icon btn-sm btn-block" data-original-title="" title="" data-toggle="modal" data-target="#SendMessageModal{{idx[0]}}">
+                                        Send Message
+                                    </button>
+                            </td>
                             <td>
                                 <form action="/friendDelete" method="post">
                                     <input type="hidden" name="username" value={{idx[0]}} />
@@ -88,7 +103,6 @@
                                     </button>
                                 </form>
                             </td>
-                            {% endif %}
                         </tr>
                         {% endfor %}
                     </tbody>
@@ -99,8 +113,34 @@
                 <img src="https://pm1.narvii.com/6320/7291d500bd9041fd6bcb33c5616736798cfd199d_00.jpg">
             </div>
         </div>
+        {% for idx in friends %}
+        <div class="modal fade" id="SendMessageModal{{idx[0]}}" role="dialog">
+            <div class="modal-dialog">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">{{idx[0]}}</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                       <form method ="POST", action="/new_message">
+                        <input type="hidden" name="receiver" value={{idx[0]}} />
+                        <textarea class="form-control" id="message" rows="7" name="message"></textarea>
+                    </div>
+                    <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </form>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+
 
     </div>
+{% endif %}
 
     {% if username == viewer %}
     <div class="tab-pane" id="friendrequest" role="tabpanel" aria-labelledby="friendrequest-tab">
@@ -150,9 +190,65 @@
                 <img src="https://pm1.narvii.com/6320/7291d500bd9041fd6bcb33c5616736798cfd199d_00.jpg">
             </div>
         </div>
-        {% endif %}
+    </div>
+{% endif %}
+
+{% if username == viewer %}
+    <div class="tab-pane" id="messages" role="tabpanel" aria-labelledby="messages-tab">
+        <div class="row">
+
+            <div class="col border">
+                <div class="text-center">
+                    <img src="https://studybreaks.com/wp-content/uploads/2018/05/sora-yori-mo-tooi-basho-0322.jpg" class="rounded profile-image2" alt="...">
+                </div>
+                <br>
+
+                {% for idx in message_list %}
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">{{idx[0]}}</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">Some time ago</h6>
+                        <p class="card-text">{{idx[1]}}</p>
+                        <a href="#!" class="card-link">Reply</a>
+                        <a href="#!" class="card-link">Delete Message</a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <div class="col">
+                <img src="https://pm1.narvii.com/6320/7291d500bd9041fd6bcb33c5616736798cfd199d_00.jpg">
+            </div>
+        </div>
+        {% for idx in friends %}
+        <div class="modal fade" id="SendMessageModal{{idx[0]}}" role="dialog">
+            <div class="modal-dialog">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">{{idx[0]}}</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                       <form method ="POST", action="/new_message">
+                        <input type="hidden" name="receiver" value={{idx[0]}} />
+                        <textarea class="form-control" id="message" rows="7" name="message"></textarea>
+                    </div>
+                    <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </form>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+
 
     </div>
+{% endif %}
+
 {% if username == viewer %}
     <div class="tab-pane" id="settings" role="tabpanel" aria-labelledby="settings-tab">
 
