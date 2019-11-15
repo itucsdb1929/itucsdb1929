@@ -20,7 +20,7 @@ def message():
         connection.commit()
         return redirect(session['url'])
 
-@new_message.route("deleteMessage",methods=['POST'])
+@new_message.route("/deleteMessage",methods=['POST'])
 def delete_message():
     id = request.form.get('id')
     with db.dataBaseLock:
