@@ -48,7 +48,7 @@ INIT_STATEMENTS = [
     ALTER TABLE public.users drop column if exists profile_image; 
     ALTER TABLE public.users ADD COLUMN profile_image int default 0;
     """,
-    CREATE TABLE if not EXISTS Messages(
+    """CREATE TABLE if not EXISTS Messages(
     message_id serial primary key,
     sender varchar(50) not null,
     receiver varchar(50) not null,
