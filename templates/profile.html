@@ -132,7 +132,14 @@
                                     </button>
                                 </form>
                             </td>
-
+                            <td>
+                                <form action="/friendReject" method="post">
+                                    <input type="hidden" name="username" value={{idx[0]}} />
+                                    <button type="submit" rel="tooltip" class="btn btn-info btn-round btn-just-icon btn-sm btn-block" data-original-title="" title="">
+                                        Reject
+                                    </button>
+                                </form>
+                            </td>
                         </tr>
                         {% endfor %}
                     </tbody>
