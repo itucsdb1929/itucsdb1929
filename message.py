@@ -19,3 +19,13 @@ def message():
         your_message(cursor, sender, receiver, _message)
         connection.commit()
         return redirect(session['url'])
+
+@new_message.route("deleteMessage",methods=['POST'])
+def delete_message():
+    id = request.form.get('id')
+    with db.dataBaseLock:
+        cursor = db.get_cursor()
+        connection = db.get_connection()
+        delete_message(cursor, id)
+        connection.commit()
+        return redirect(session['url'])

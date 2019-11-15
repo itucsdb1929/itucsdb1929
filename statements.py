@@ -45,7 +45,7 @@ INIT_STATEMENTS = [
     """,
 
     """
-    ALTER TABLE public.users drop column if exists profile_image; 
+    ALTER TABLE public.users drop column if exists profile_image;
     ALTER TABLE public.users ADD COLUMN profile_image int default 0;
     """,
     """DROP TABLE Messages""",
@@ -101,6 +101,10 @@ def insert_friend(cursor, user1, user2):
 def your_message(cursor, sender, receiver, message):
     cursor.execute("""INSERT INTO Messages (message_id, sender, receiver, message) VALUES (DEFAULT, %s, %s, %s);""",(sender, receiver, message))
 
+def delete_message(cursor, id):
+    cursor.execute("""
+    DELETE FROM MESSAGES WHERE messages.id=id
+    """)
 
 def delete_friend(cursor, username, friend):
     cursor.execute("""select username,friend from friends where(username=%s and friend=%s)""",(username, friend))
