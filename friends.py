@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, session, Blueprint, flash
 from hashlib import md5
 import db
-from statements import friend_request, insert_friend, delete_friend, accept_friend
+from statements import friend_request, insert_friend, delete_friend, accept_friend, reject_friend
 friends = Blueprint('friends', __name__,
                         template_folder='templates')
 
@@ -73,6 +73,21 @@ def accept():
         elif is_acceptable == 1:
             if username:
                 insert_friend(cursor, session['username'], username)
+        connection.commit()
+        if session['url']:
+            return redirect(session['url'])
+        else:
+            return redirect(url_for('profile.profileFuncMe'))
+
+@friends.route("/friendReject", methods = ['POST'])
+def reject():
+    with db.dataBaseLock:
+        cursor = db.get_cursor()
+        connection = db.get_connection()
+        username = request.form.get('username')
+        #print("accept ", username)
+        # is it worth to befriend a person like him/her
+        reject_friend(cursor, session['username'], username)
         connection.commit()
         if session['url']:
             return redirect(session['url'])

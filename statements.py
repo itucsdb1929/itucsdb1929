@@ -128,3 +128,9 @@ def accept_friend(cursor, sender, friend): # sender = session['username'], frien
         cursor.execute("""DELETE FROM public.friendrequests
                     WHERE sender=%s AND friend=%s""",(friend, sender))
         return 2
+
+
+def reject_friend(cursor, sender, friend):
+    cursor.execute("""
+    DELETE FROM public.friendrequests WHERE sender=%s AND friend=%s
+    """,(friend, sender))
