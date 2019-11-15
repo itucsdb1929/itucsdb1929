@@ -7,6 +7,7 @@ INIT_STATEMENTS = [
 	username varchar(50) NOT NULL,
 	password char(32) NOT NULL,
 	email varchar(50) not NULL,
+    profile_image INT default 0,
 	CONSTRAINT users_pk PRIMARY KEY (username),
     isAdmin bool default false
     )""",
@@ -44,6 +45,9 @@ INIT_STATEMENTS = [
     """,
 
     """
+    ALTER TABLE public.users drop column if exists profile_image; 
+    ALTER TABLE public.users ADD COLUMN profile_image int default 0;
+    """,
     CREATE TABLE if not EXISTS Messages(
     message_id serial primary key,
     sender varchar(50) not null,
@@ -51,7 +55,6 @@ INIT_STATEMENTS = [
     message text
     )
     """,
-
 ]
 
 def insert_user(cursor,username, password, email):

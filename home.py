@@ -6,4 +6,5 @@ home = Blueprint('home', __name__,
 def home_page():
     if not session.get('logged_in'):
         return redirect(url_for('loginB.login_func'))
+    
     return render_template('base.html')
