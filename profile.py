@@ -35,7 +35,6 @@ def profileFunc(userName):
 
     message_list = cursor.fetchall()
 
-
     return render_template('profile.html', 
                         username = userName,
                         friends = friends,
