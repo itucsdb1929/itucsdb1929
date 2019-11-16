@@ -8,11 +8,9 @@ new_message = Blueprint('new_message', __name__,
 
 @new_message.route("/new_message", methods=['POST'])
 def message():
-    print("test")
     sender = session['username']
     receiver = request.form.get('receiver')
     _message = request.form.get('message')
-    print(_message)
     with db.dataBaseLock:
         cursor = db.get_cursor()
         connection = db.get_connection()
