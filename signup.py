@@ -26,7 +26,7 @@ def signup_func():
                 return render_template('signup_form.html', error='username is too short (min 5 char)')
 
 
-            cursor.execute("""select password from users
+            cursor.execute("""select userpassword from users
                                 where (username = %s) """, (username,))
 
             passTuple= cursor.fetchone()
@@ -34,7 +34,7 @@ def signup_func():
                 return render_template('signup_form.html', error='username is already taken')
 
 
-            cursor.execute("""select password from users
+            cursor.execute("""select userpassword from users
                                 where (email = %s )""", (email,))
 
             passTuple= cursor.fetchone()

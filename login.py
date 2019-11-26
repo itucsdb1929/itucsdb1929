@@ -45,7 +45,7 @@ def login_func():
             username = request.form.get('username')
             phash = md5(request.form.get('password').encode('utf-8')).hexdigest()
             cursor = db.get_cursor()
-            cursor.execute("""select password from users
+            cursor.execute("""select userpassword from users
                                 where (username = %s or email = %s)""", (username, username))
             passTuple= cursor.fetchone()
             if passTuple == None:

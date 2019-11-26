@@ -20,7 +20,7 @@ def add():
         if len(username) < 5:
             return render_template('logged.html', error='username is too short (min 5 char)')
 
-        cursor.execute("""select password from users
+        cursor.execute("""select userpassword from users
                             where (username = %s) """, (username,))
 
         passTuple= cursor.fetchone()
