@@ -1,4 +1,11 @@
-{% extends "layout.html" %} {% set homeActive = 1 %} {% block style %} .king { transform: scale(1.2); } {% endblock style %} {% block title %} Home Page {% endblock title %} {% block page_content %}
+{% extends "layout.html" %} {% set homeActive = 1 %} {% block style %} .king { transform: scale(1.2); } 
+
+
+{% endblock style %} 
+
+{% block title %} Home Page {% endblock title %}
+
+ {% block page_content %}
 
 <br>
 <br>
@@ -6,7 +13,7 @@
 
 <div class="row">
 
-    <div class="col-4 border m-1">
+    <div class="col border m-1">
 
         <h4> News </h4> Game Development Progress
         <div class="progress">
@@ -29,46 +36,15 @@
 
     </div>
 
-    <div class="col-4 border m-1">
+    <div class="col border m-1">
         <h4> Best Users </h4>
-
-        <table class="table">
-            <tbody>
-                <tr>
-                    <td class="king">
-                        <div class="text-center">
-                            admin
-                        </div>
-                    </td>
-                </tr>
-
-                <tr>
-                    <td> admin </td>
-                </tr>
-
-                <tr>
-                    <td> admin </td>
-                </tr>
-            </tbody>
-        </table>
-
     </div>
 
-    <div class="col-4 border m-1"></div>
+    <div class="col border m-1">
+        <h4> Nothing Here Now </h4>
+    </div>
 
-    {% endblock %}
+</div>
 
-{% extends "layout.html" %}
-
-{% set homeActive = 1 %}
-
-{% block title %} Home Page {% endblock title %}
-  
-{% block page_content %}
-  <div class = "text-center">
-  <h1 class="mt-4">Cities - text-based online strategy game</h1>
-  <h1 class="mt-4">COMING SOON</h1>
-  <img src="https://i.ytimg.com/vi/CNwXJm2lTlo/maxresdefault.jpg
-" class="img-fluid" alt="Cities">
-  </div>
 {% endblock %}
+  
