@@ -334,6 +334,17 @@ def get_base_building_productions(cursor, buildingname):
 
     return baseproductionsDict
 
+def get_base_building_factors(cursor, buildingname):
+    cursor.execute("""select stype, value from public.baseproductions
+                        where buildingname=%s and etype='factor'""", (buildingname,))
+    basefactors = cursor.fetchall()
+    basefactordict = { }
+
+    for (stype, value) in basefactors:
+        basefactordict[stype] = value
+
+    return basefactordict
+
 def get_buildingname(cursor, buildingid):
     cursor.execute("""select buildingname from public.buildings
                         where buildingid=%s""", (buildingid,))
@@ -356,9 +367,21 @@ def get_building_productions(cursor, buildingid):
     productions = get_base_building_productions(cursor, buildingid)
 
     for key in productions:
-        productions[key] = (productions[key] * effect) // 100
+        productions[key] += (productions[key] * effect) // 100
 
     return productions
+
+LEVEL_EFFECT = 10 #percent
+def get_building_factors(cursor, buildingid):
+    level = get_building_level(cursor, buildingid)
+    effect = level * LEVEL_EFFECT
+    factors = get_base_building_productions(cursor, buildingid)
+
+    for key in factors:
+        factors[key] += (factors[key] * effect) // 100
+
+    return factors
+
 
 
 def get_production_of_city(cursor, cityname):
@@ -373,9 +396,18 @@ def get_production_of_city(cursor, cityname):
         prods = get_building_productions(cursor, building)
         for prod in prods:
             productions[prod] += prods[prod]
+        #endfor
 
+        facts = get_base_building_factors(cursor, building)
+
+        for fac in facts:
+            factors[fac] += facts[fac]
+        #endfor
+
+    #endfor
     
+    for key in productions:
+        productions[key] +=  (factors[key] * productions[key]) // 100 
 
-    print("users: ", users)
+    return productions
 
-#def productionUser(cursor, username):
