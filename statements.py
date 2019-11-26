@@ -19,8 +19,8 @@ NEW_STATEMENTS = {
                     ON UPDATE CASCADE,
                 FOREIGN KEY (friend) REFERENCES public.users(username) 
                     ON DELETE CASCADE 
-                    ON UPDATE CASCADE
-                CONSTRAINT friends_pk PRIMARY KEY (username,friend),
+                    ON UPDATE CASCADE,
+                CONSTRAINT friends_pk PRIMARY KEY (username,friend)
         )""",
     "createFriendRequestsTable" : 
         """CREATE TABLE IF NOT EXISTS public.friendrequests (
@@ -192,65 +192,6 @@ INIT_STATEMENTS_ORDER = [
     "createBuildingCostsTable",
 ]
 
-INIT_STATEMENTS = [
-    "CREATE TABLE IF NOT EXISTS DUMMY (NUM INTEGER)",
-    "INSERT INTO DUMMY VALUES (50)",
-
-    """CREATE TABLE if not exists public.users (
-	username varchar(50) NOT NULL,
-	password char(32) NOT NULL,
-	email varchar(50) not NULL,
-    profile_image INT default 0,
-	CONSTRAINT users_pk PRIMARY KEY (username),
-    isAdmin bool default false
-    )""",
-
-    """CREATE TABLE if not exists public.friends (
-        username varchar(50) not null,
-        friend varchar(50) not null,
-        foreign key (username) references public.users(username)
-        on delete cascade
-        on update cascade,
-        FOREIGN key (friend) references public.users(username)
-        on delete cascade
-        on update cascade,
-        CONSTRAINT friends_pk PRIMARY KEY (username, friend)
-    )""",
-
-    """CREATE TABLE if not exists public.friendrequests (
-        sender varchar(50) not null,
-        friend varchar(50) not null,
-        foreign key (sender) references public.users(username)
-        on delete cascade
-        on update cascade,
-        FOREIGN key (friend) references public.users(username)
-        on delete cascade
-        on update cascade,
-        CONSTRAINT frequest_pk PRIMARY KEY (sender, friend)
-    )""",
-
-    """
-    CREATE TABLE if not exists CITY(
-    city_major varchar(50) NOT NULL,
-    CITY_NAME varchar(50) PRIMARY KEY,
-    CITY_LOCATION varchar(50) NOT NULL UNIQUE
-    )
-    """,
-
-    """
-    ALTER TABLE public.users drop column if exists profile_image;
-    ALTER TABLE public.users ADD COLUMN profile_image int default 0;
-    """,
-    """DROP TABLE Messages""",
-    """CREATE TABLE if not EXISTS Messages(
-    message_id serial primary key,
-    sender varchar(50) not null,
-    receiver varchar(50) not null,
-    message varchar(255)
-    )
-    """,
-]
-
 def insert_user(cursor,username, password, email):
     cursor.execute("""
     INSERT INTO users VALUES(
@@ -329,3 +270,112 @@ def reject_friend(cursor, sender, friend):
     cursor.execute("""
     DELETE FROM public.friendrequests WHERE sender=%s AND friend=%s
     """,(friend, sender))
+
+
+#def new_building(cursor, buildingName):
+#yeni bina building tablesine 0 olarak eklenecek
+#pending building tablesina level 1 olarak eklenecek
+#bina masraflari dusulecek kullanicidan
+
+#def levelup_building(cursor, buildingis):
+#buildings tablesinde leveli x olan bina pending building tablesine x+1 olarak eklenecek
+#bina yukselme masraflari kullanicidan dusulecek
+
+def tupleList2List(tupleList):
+    normalList = []
+    for (i,) in tupleList:
+        normalList.append(i)
+    return normalList
+
+def get_all_usernames(cursor):
+    cursor.execute("""select username from public.users""")
+    return tupleList2List(cursor.fetchall())
+
+def get_all_cities(cursor):
+    cursor.execute("""select cityname from public.cities""")
+    return tupleList2List(cursor.fetchall())
+
+def get_cities_of_user(cursor, username):
+    cursor.execute("""select cityname from public.cities
+                        where username=%s""", (username,))
+    return tupleList2List(cursor.fetchall())
+
+def calculate_all_productions(cursor):
+    cities = get_all_cities(cursor)
+    for city in cities:
+        city_production = production_of_city(city)
+
+
+#return building ids
+def get_buildings_of_city(cursor, cityname):
+    cursor.execute("""select buildingid from public.buildings
+                        where cityname=%s""", (cityname,))
+    return tupleList2List(cursor.fetchall())
+
+def get_baseproductions_of_city(cursor, city):
+    cursor.execute("""select stype, value from public.baseproductions
+                        where cityname=%s""", (cityname,))
+    baseproductions = cursor.fetchall()
+    baseproductionsDict = { }
+
+    for (stype, value) in productions:
+        baseproductionsDict[stype] = value
+
+    return baseproductionsDict
+
+def get_base_building_productions(cursor, buildingname):
+    cursor.execute("""select stype, value from public.baseproductions
+                        where buildingname=%s and etype='inc'""", (buildingname,))
+    baseproductions = cursor.fetchall()
+    baseproductionsDict = { }
+
+    for (stype, value) in productions:
+        baseproductionsDict[stype] = value
+
+    return baseproductionsDict
+
+def get_buildingname(cursor, buildingid):
+    cursor.execute("""select buildingname from public.buildings
+                        where buildingid=%s""", (buildingid,))
+
+    (buildingname,) = cursor.fetchone()
+    return buildingname
+
+def get_building_level(cursor, buildingid):
+    cursor.execute("""select level from public.buildings
+                        where buildingid=%s""", (buildingid,))
+
+    (level,) = cursor.fetchone()
+    return level
+
+
+LEVEL_EFFECT = 10 #percent
+def get_building_productions(cursor, buildingid):
+    level = get_building_level(cursor, buildingid)
+    effect = level * LEVEL_EFFECT
+    productions = get_base_building_productions(cursor, buildingid)
+
+    for key in productions:
+        productions[key] = (productions[key] * effect) // 100
+
+    return productions
+
+
+def get_production_of_city(cursor, cityname):
+
+    productions = get_baseproductions_of_city(cityname)
+
+    factors = {}
+
+    buildings = get_buildings_of_city(cursor, cityname)
+
+    for building in buildings:
+        prods = get_building_productions(cursor, building)
+        for prod in prods:
+            productions[prod] += prods[prod]
+
+    
+
+    print("users: ", users)
+
+#def productionUser(cursor, username):

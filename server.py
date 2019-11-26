@@ -21,6 +21,8 @@ import update
 
 from apscheduler.schedulers.background import BackgroundScheduler
 
+# from statements import productions
+
 app = Flask(__name__)
 app.register_blueprint(tables)
 app.register_blueprint(home)
@@ -41,12 +43,12 @@ def test_job():
     with db.dataBaseLock:
         cursor = db.get_cursor()
         connection = db.get_connection()
-        cursor.execute("""INSERT INTO DUMMY VALUES (%s)""", ('10',))
+        # productions(cursor)
         connection.commit()
 
 scheduler = BackgroundScheduler()
 job = scheduler.add_job(test_job, 'interval', seconds=5)
-#scheduler.start()
+# scheduler.start()
 
 
 # @app.route("/")
