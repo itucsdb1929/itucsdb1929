@@ -109,14 +109,11 @@
 
 
 <!-- Page Content -->
-
-<script>$(window).on('load',function(){
-    if ({{message_notification}} == 1) {
-        $('#Notifications').modal('show');
-    }
-});</script>
-
+        {% if homeActive %}
         <div class="container-fluid">
+        {% else %}
+        <div class="container-fluid">
+        {% endif %}    
             {% block page_content %} {% endblock %}
         </div>
 
