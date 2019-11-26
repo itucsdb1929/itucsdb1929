@@ -7,6 +7,9 @@ from friends import friends
 from my_cities import my_cities
 from our_team import our_team
 from leaderboard import leaderboard
+from profile import profile
+from map_page import map_page
+from message import new_message
 import os
 import sys
 import threading
@@ -27,6 +30,9 @@ app.register_blueprint(friends)
 app.register_blueprint(my_cities)
 app.register_blueprint(our_team)
 app.register_blueprint(leaderboard)
+app.register_blueprint(profile)
+app.register_blueprint(map_page)
+app.register_blueprint(new_message)
 app.secret_key = b'_383#y2L"F4Q8z]/'
 # cok gizli
 
@@ -47,7 +53,7 @@ job = scheduler.add_job(test_job, 'interval', seconds=5)
 # def home_page():
 #     connection, cursor = testFonk()
 #     cursor.execute("select * from dummy")
-#     a = cursor.fetchall()    
+#     a = cursor.fetchall()
 #     returnStr = "deneme<br>"
 #     for x in a:
 #         for i in x:
@@ -57,8 +63,6 @@ job = scheduler.add_job(test_job, 'interval', seconds=5)
 #     cursor.close()
 #     return returnStr
 #     #return render_template('base.html')
-
-
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=5000)

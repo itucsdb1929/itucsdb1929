@@ -28,6 +28,14 @@ body {
 
 .space { margin:0; padding:0; height:30px; }
 
+.centreButtons {
+  text-align: center;
+  display: inline-block;
+  position: absolute;
+  top: 50%;
+  left: 50%
+}
+
 {% endblock style %}
 
 
@@ -64,24 +72,68 @@ body {
       <td>0</td>
       <td class="td-actions">
         {% if lst[idx][0] == usr %}
+        <div class="btn-group">
         <button type="button" rel="tooltip" class="btn btn-info btn-round btn-just-icon btn-sm btn-block" data-original-title="" title="" disabled>
-              <i class="fa fa-gamepad"></i>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa fa-gamepad"></i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         </button>
+
+             <form action={{url_for('profile.profileFunc', userName=lst[idx][0])}} method="get">
+            <button type="submit" rel="tooltip" class="btn btn-info btn-round btn-just-icon btn-sm btn-block" data-original-title="" title="">
+              Profile
+        </button>
+        </form>
+      </div>
         {% elif lst[idx][0] in friends %} 
+        <div class="btn-group">
         <button type="button" rel="tooltip" class="btn btn-info btn-round btn-just-icon btn-sm btn-block" data-original-title="" title="" disabled>
               Already friend <i class="fa fa-check-square"></i>
         </button>
+             <form action={{url_for('profile.profileFunc', userName=lst[idx][0])}} method="get">
+            <button type="submit" rel="tooltip" class="btn btn-info btn-round btn-just-icon btn-sm btn-block" data-original-title="" title="">
+              Profile
+        </button>
+        </form>
+      </div>
         {%elif lst[idx][0] in requested %}
+        <div class="btn-group">
         <button type="button" rel="tooltip" class="btn btn-info btn-round btn-just-icon btn-sm btn-block" data-original-title="" title="" disabled>
               Friend Request Waiting
         </button>
+            <form action={{url_for('profile.profileFunc', userName=lst[idx][0])}} method="get">
+            <button type="submit" rel="tooltip" class="btn btn-info btn-round btn-just-icon btn-sm btn-block" data-original-title="" title="">
+              Profile
+        </button>
+        </form>
+      </div>
+      {% elif lst[idx][0] in comingRequests %}
+      <div class="btn-group">
+        <form action="/friendAccept" method="post">
+            <input type="hidden" name="username" value={{lst[idx][0]}} />
+            <button type="submit" rel="tooltip" class="btn btn-info btn-round btn-just-icon btn-sm btn-block" data-original-title="" title="">
+              Accept
+            </button>
+          </form>
+            <form action={{url_for('profile.profileFunc', userName=lst[idx][0])}} method="get">
+            <button type="submit" rel="tooltip" class="btn btn-info btn-round btn-just-icon btn-sm btn-block" data-original-title="" title="">
+              Profile
+        </button>
+        </form>
+      </div>
         {% else %}
+        <div class="btn-group">
+
         <form action="/friendAdd" method="post">
             <input type="hidden" name="username" value={{lst[idx][0]}} />
             <button type="submit" rel="tooltip" class="btn btn-info btn-round btn-just-icon btn-sm btn-block" data-original-title="" title="">
               Add friend
         </button>
         </form>
+            <form action={{url_for('profile.profileFunc', userName=lst[idx][0])}} method="get">
+            <button type="submit" rel="tooltip" class="btn btn-info btn-round btn-just-icon btn-sm btn-block" data-original-title="" title="">
+              Profile
+        </button>
+        </form>
+      </div>
         </td>
         {% endif %}
     </tr>
@@ -90,5 +142,4 @@ body {
 </table>
 </div>
 
-
- {% endblock page_content %}
+{% endblock page_content %}

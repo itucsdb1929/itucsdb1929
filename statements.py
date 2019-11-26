@@ -4,21 +4,23 @@ NEW_STATEMENTS = {
                 username varchar(50) NOT NULL,
                 userpassword char(32) NOT NULL,
                 email varchar(50) NOT NULL,
+                profile_image INT default 0,
                 gold int NOT NULL DEFAULT 0,
                 score int NOT NULL DEFAULT 0,
-                CONSTRAINT users_pk PRIMARY KEY (username)
+                CONSTRAINT users_pk PRIMARY KEY (username),
+                isAdmin bool default false
         )""",
     "createFriendsTable" : 
         """CREATE TABLE IF NOT EXISTS public.friends (
                 username varchar(50) NOT NULL,
                 friend varchar(50) NOT NULL,
-                CONSTRAINT friends_pk PRIMARY KEY (username,friend),
                 FOREIGN KEY (username) REFERENCES public.users(username) 
                     ON DELETE CASCADE 
                     ON UPDATE CASCADE,
                 FOREIGN KEY (friend) REFERENCES public.users(username) 
                     ON DELETE CASCADE 
                     ON UPDATE CASCADE
+                CONSTRAINT friends_pk PRIMARY KEY (username,friend),
         )""",
     "createFriendRequestsTable" : 
         """CREATE TABLE IF NOT EXISTS public.friendrequests (
@@ -32,6 +34,20 @@ NEW_STATEMENTS = {
                     ON DELETE CASCADE 
                     ON UPDATE CASCADE
         )""",
+    "createMessagesTable":
+        """CREATE TABLE if not EXISTS Messages(
+        message_id serial primary key,
+        sender varchar(50) not null,
+        receiver varchar(50) not null,
+        message varchar(255),
+        FOREIGN KEY (sender) REFERENCES public.users(username) 
+            ON DELETE CASCADE 
+            ON UPDATE CASCADE,
+        FOREIGN KEY (receiver) REFERENCES public.users(username) 
+            ON DELETE CASCADE 
+            ON UPDATE CASCADE
+        )
+        """,
     "createSourceTypesTable" : 
         """CREATE TABLE IF NOT EXISTS public.sourcetypes (
                 stype varchar(50) NOT NULL,
@@ -162,6 +178,7 @@ INIT_STATEMENTS_ORDER = [
     "createUserTable",
     "createFriendsTable",
     "createFriendRequestsTable",
+    "createMessagesTable",
     "createSourceTypesTable",
     "createCitiesTable",
     "createSourcesTable",
@@ -183,6 +200,7 @@ INIT_STATEMENTS = [
 	username varchar(50) NOT NULL,
 	password char(32) NOT NULL,
 	email varchar(50) not NULL,
+    profile_image INT default 0,
 	CONSTRAINT users_pk PRIMARY KEY (username),
     isAdmin bool default false
     )""",
@@ -216,6 +234,19 @@ INIT_STATEMENTS = [
     city_major varchar(50) NOT NULL,
     CITY_NAME varchar(50) PRIMARY KEY,
     CITY_LOCATION varchar(50) NOT NULL UNIQUE
+    )
+    """,
+
+    """
+    ALTER TABLE public.users drop column if exists profile_image;
+    ALTER TABLE public.users ADD COLUMN profile_image int default 0;
+    """,
+    """DROP TABLE Messages""",
+    """CREATE TABLE if not EXISTS Messages(
+    message_id serial primary key,
+    sender varchar(50) not null,
+    receiver varchar(50) not null,
+    message varchar(255)
     )
     """,
 ]
@@ -258,4 +289,43 @@ def insert_friend(cursor, user1, user2):
     cursor.execute(
     """insert into friends
             (username, friend) values (%s, %s)""", (user2, user1))
-        
+
+
+def your_message(cursor, sender, receiver, message):
+    cursor.execute("""INSERT INTO Messages (message_id, sender, receiver, message) VALUES (DEFAULT, %s, %s, %s);""",(sender, receiver, message))
+
+def delete_message(cursor, id):
+    cursor.execute("""
+    DELETE FROM MESSAGES WHERE messages.id=id
+    """)
+
+def delete_friend(cursor, username, friend):
+    cursor.execute("""select username,friend from friends where(username=%s and friend=%s)""",(username, friend))
+    if cursor.fetchone() is None:
+        Print("Friend delete no friend")
+        return False
+    cursor.execute("""delete from friends where (username=%s and friend=%s)""",(username, friend))
+    cursor.execute(""" delete from friends where(username=%s and friend=%s)""",(friend, username))
+    return True
+
+
+def accept_friend(cursor, sender, friend): # sender = session['username'], friend = username
+    cursor.execute("""select count(*) from public.friendrequests
+                    WHERE sender=%s AND friend=%s""", (sender, friend))
+    if cursor.fetchone() is None:
+        return 0 #return render_template('logged.html', error="error") #no such request
+    cursor.execute("""
+                    select username from friends where(username=%s and friend=%s)
+                    """,(sender,friend))
+    if cursor.fetchone() is None:
+         return 1 #They are not friends before
+    else:
+        cursor.execute("""DELETE FROM public.friendrequests
+                    WHERE sender=%s AND friend=%s""",(friend, sender))
+        return 2
+
+
+def reject_friend(cursor, sender, friend):
+    cursor.execute("""
+    DELETE FROM public.friendrequests WHERE sender=%s AND friend=%s
+    """,(friend, sender))
