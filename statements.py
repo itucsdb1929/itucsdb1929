@@ -42,6 +42,7 @@ NEW_STATEMENTS = {
         sender varchar(50) not null,
         receiver varchar(50) not null,
         message varchar(255),
+        has_read BOOLEAN,
         FOREIGN KEY (sender) REFERENCES public.users(username)
             ON DELETE CASCADE
             ON UPDATE CASCADE,
@@ -236,7 +237,7 @@ def insert_friend(cursor, user1, user2):
 
 
 def your_message(cursor, sender, receiver, message):
-    cursor.execute("""INSERT INTO Messages (message_id, sender, receiver, message) VALUES (DEFAULT, %s, %s, %s);""",(sender, receiver, message))
+    cursor.execute("""INSERT INTO Messages (message_id, sender, receiver, message, has_read) VALUES (DEFAULT, %s, %s, %s, %s);""",(sender, receiver, message, 'FALSE'))
 
 def delete_message(cursor, id):
     cursor.execute("""
