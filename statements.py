@@ -1,3 +1,5 @@
+import sources from data
+
 NEW_STATEMENTS = {
     "createUserTable" : 
         """CREATE TABLE IF NOT EXISTS public.users (
@@ -68,11 +70,11 @@ NEW_STATEMENTS = {
         )""",
     "createSourcesTable" :
         """CREATE TABLE IF NOT EXISTS public.sources (
-                cityname varchar(50) NOT NULL,
+                username varchar(50) NOT NULL,
                 stype varchar(50) NOT NULL,
                 count bigint NOT NULL,
-                CONSTRAINT sources_pk PRIMARY KEY (cityname,stype),
-                FOREIGN KEY (cityname) REFERENCES public.cities(cityname) 
+                CONSTRAINT sources_pk PRIMARY KEY (username,stype),
+                FOREIGN KEY (username) REFERENCES public.users(username) 
                     ON DELETE CASCADE 
                     ON UPDATE CASCADE,
                 FOREIGN KEY (stype) REFERENCES public.sourcetypes(stype) 
@@ -94,11 +96,11 @@ NEW_STATEMENTS = {
         )""",
     "createBaseLimitsTable" :
         """CREATE TABLE IF NOT EXISTS public.baselimits (
-                cityname varchar(50) NOT NULL,
+                username varchar(50) NOT NULL,
                 stype varchar(50) NOT NULL,
                 baselimit bigint NOT NULL,
-                CONSTRAINT baselimits_pk PRIMARY KEY (cityname,stype),
-                FOREIGN KEY (cityname) REFERENCES public.cities(cityname) 
+                CONSTRAINT baselimits_pk PRIMARY KEY (username,stype),
+                FOREIGN KEY (username) REFERENCES public.users(username) 
                     ON DELETE CASCADE 
                     ON UPDATE CASCADE,
                 FOREIGN KEY (stype) REFERENCES public.sourcetypes(stype) 
@@ -120,11 +122,11 @@ NEW_STATEMENTS = {
         )""",
     "createLimitsTable" :
         """CREATE TABLE IF NOT EXISTS public.limits (
-                cityname varchar(50) NOT NULL,
+                username varchar(50) NOT NULL,
                 stype varchar(50) NOT NULL,
                 sourcelimit bigint NOT NULL,
-                CONSTRAINT limits_pk PRIMARY KEY (cityname,stype),
-                FOREIGN KEY (cityname) REFERENCES public.cities(cityname) 
+                CONSTRAINT limits_pk PRIMARY KEY (username,stype),
+                FOREIGN KEY (username) REFERENCES public.users(username) 
                     ON DELETE CASCADE 
                     ON UPDATE CASCADE,
                 FOREIGN KEY (stype) REFERENCES public.sourcetypes(stype) 
@@ -300,10 +302,50 @@ def get_cities_of_user(cursor, username):
                         where username=%s""", (username,))
     return tupleList2List(cursor.fetchall())
 
-def calculate_all_productions(cursor):
+def get_user_source_limits(cursor, username):
+    cursor.execute("""select stype,value from public.limits
+                        where username=%s""", (username,))
+
+    limitsUser = cursor.fetchall()
+    limitsDict = { }
+    for s in sources:
+        limitsDict[s] = 0
+
+
+    for (stype, value) in limitsUser:
+        limitsDict[stype] += value
+
+    return limitsDict
+
+
+def update_all_sources(cursor):
     cities = get_all_cities(cursor)
     for city in cities:
-        city_production = production_of_city(city)
+        city_production = get_production_of_city(city)
+        username = get_user_of_city(city)
+        sources = get_sources_of_user(username)
+        for key in city_production:
+            sources[key] +=city_production[key]
+        
+        limits = get_user_source_limits(cursor, username)
+
+        update_user_sources(cursor, username, sources, limits)         
+
+
+def get_sources_of_user(cursor, username):
+    cursor.execute("""select stype,value from public.sources
+                        where username=%s""", (username,))
+
+    sourcesUser = cursor.fetchall()
+    sourcesDict = { }
+    for s in sources:
+        sourcesDict[s] = 0
+
+
+    for (stype, value) in sourcesUser:
+        sourcesDict[stype] += value
+
+    return sourcesDict
 
 
 #return building ids
