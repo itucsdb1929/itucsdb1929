@@ -1,5 +1,5 @@
 NEW_STATEMENTS = {
-    "createUserTable" : 
+    "createUserTable" :
         """CREATE TABLE IF NOT EXISTS public.users (
                 username varchar(50) NOT NULL,
                 userpassword char(32) NOT NULL,
@@ -10,28 +10,28 @@ NEW_STATEMENTS = {
                 CONSTRAINT users_pk PRIMARY KEY (username),
                 isAdmin bool default false
         )""",
-    "createFriendsTable" : 
+    "createFriendsTable" :
         """CREATE TABLE IF NOT EXISTS public.friends (
                 username varchar(50) NOT NULL,
                 friend varchar(50) NOT NULL,
-                FOREIGN KEY (username) REFERENCES public.users(username) 
-                    ON DELETE CASCADE 
+                FOREIGN KEY (username) REFERENCES public.users(username)
+                    ON DELETE CASCADE
                     ON UPDATE CASCADE,
-                FOREIGN KEY (friend) REFERENCES public.users(username) 
-                    ON DELETE CASCADE 
+                FOREIGN KEY (friend) REFERENCES public.users(username)
+                    ON DELETE CASCADE
                     ON UPDATE CASCADE,
                 CONSTRAINT friends_pk PRIMARY KEY (username,friend)
         )""",
-    "createFriendRequestsTable" : 
+    "createFriendRequestsTable" :
         """CREATE TABLE IF NOT EXISTS public.friendrequests (
                 sender varchar(50) NOT NULL,
                 friend varchar(50) NOT NULL,
                 CONSTRAINT friendrequests_pk PRIMARY KEY (sender,friend),
-                FOREIGN KEY (sender) REFERENCES public.users(username) 
-                    ON DELETE CASCADE 
+                FOREIGN KEY (sender) REFERENCES public.users(username)
+                    ON DELETE CASCADE
                     ON UPDATE CASCADE,
-                FOREIGN KEY (friend) REFERENCES public.users(username) 
-                    ON DELETE CASCADE 
+                FOREIGN KEY (friend) REFERENCES public.users(username)
+                    ON DELETE CASCADE
                     ON UPDATE CASCADE
         )""",
     "createMessagesTable":
@@ -40,20 +40,20 @@ NEW_STATEMENTS = {
         sender varchar(50) not null,
         receiver varchar(50) not null,
         message varchar(255),
-        FOREIGN KEY (sender) REFERENCES public.users(username) 
-            ON DELETE CASCADE 
+        FOREIGN KEY (sender) REFERENCES public.users(username)
+            ON DELETE CASCADE
             ON UPDATE CASCADE,
-        FOREIGN KEY (receiver) REFERENCES public.users(username) 
-            ON DELETE CASCADE 
+        FOREIGN KEY (receiver) REFERENCES public.users(username)
+            ON DELETE CASCADE
             ON UPDATE CASCADE
         )
         """,
-    "createSourceTypesTable" : 
+    "createSourceTypesTable" :
         """CREATE TABLE IF NOT EXISTS public.sourcetypes (
                 stype varchar(50) NOT NULL,
                 CONSTRAINT sourcetypes_pk PRIMARY KEY (stype)
         )""",
-    "createCitiesTable" : 
+    "createCitiesTable" :
         """CREATE TABLE IF NOT EXISTS public.cities (
                 cityname varchar(50) NOT NULL,
                 username varchar(50) NOT NULL,
@@ -62,21 +62,21 @@ NEW_STATEMENTS = {
                 buildinglimit bigint NOT NULL,
                 buildingcount bigint NOT NULL,
                 CONSTRAINT cities_pk PRIMARY KEY (cityname),
-                FOREIGN KEY (username) REFERENCES public.users(username) 
-                    ON DELETE CASCADE 
+                FOREIGN KEY (username) REFERENCES public.users(username)
+                    ON DELETE CASCADE
                     ON UPDATE CASCADE
         )""",
     "createSourcesTable" :
         """CREATE TABLE IF NOT EXISTS public.sources (
-                cityname varchar(50) NOT NULL,
+                username varchar(50) NOT NULL,
                 stype varchar(50) NOT NULL,
                 count bigint NOT NULL,
                 CONSTRAINT sources_pk PRIMARY KEY (cityname,stype),
-                FOREIGN KEY (cityname) REFERENCES public.cities(cityname) 
-                    ON DELETE CASCADE 
+                FOREIGN KEY (cityname) REFERENCES public.cities(cityname)
+                    ON DELETE CASCADE
                     ON UPDATE CASCADE,
-                FOREIGN KEY (stype) REFERENCES public.sourcetypes(stype) 
-                    ON DELETE CASCADE 
+                FOREIGN KEY (stype) REFERENCES public.sourcetypes(stype)
+                    ON DELETE CASCADE
                     ON UPDATE CASCADE
         )""",
     "createBaseProductionsTable" :
@@ -85,11 +85,11 @@ NEW_STATEMENTS = {
                 stype varchar(50) NOT NULL,
                 baseproduction bigint NOT NULL,
                 CONSTRAINT baseproductions_pk PRIMARY KEY (cityname,stype),
-                FOREIGN KEY (cityname) REFERENCES public.cities(cityname) 
-                    ON DELETE CASCADE 
+                FOREIGN KEY (cityname) REFERENCES public.cities(cityname)
+                    ON DELETE CASCADE
                     ON UPDATE CASCADE,
-                FOREIGN KEY (stype) REFERENCES public.sourcetypes(stype) 
-                    ON DELETE CASCADE 
+                FOREIGN KEY (stype) REFERENCES public.sourcetypes(stype)
+                    ON DELETE CASCADE
                     ON UPDATE CASCADE
         )""",
     "createBaseLimitsTable" :
@@ -98,11 +98,11 @@ NEW_STATEMENTS = {
                 stype varchar(50) NOT NULL,
                 baselimit bigint NOT NULL,
                 CONSTRAINT baselimits_pk PRIMARY KEY (cityname,stype),
-                FOREIGN KEY (cityname) REFERENCES public.cities(cityname) 
-                    ON DELETE CASCADE 
+                FOREIGN KEY (cityname) REFERENCES public.cities(cityname)
+                    ON DELETE CASCADE
                     ON UPDATE CASCADE,
-                FOREIGN KEY (stype) REFERENCES public.sourcetypes(stype) 
-                    ON DELETE CASCADE 
+                FOREIGN KEY (stype) REFERENCES public.sourcetypes(stype)
+                    ON DELETE CASCADE
                     ON UPDATE CASCADE
         )""",
     "createProductionsTable" :
@@ -111,11 +111,11 @@ NEW_STATEMENTS = {
                 stype varchar(50) NOT NULL,
                 production bigint NOT NULL,
                 CONSTRAINT productions_pk PRIMARY KEY (cityname,stype),
-                FOREIGN KEY (cityname) REFERENCES public.cities(cityname) 
-                    ON DELETE CASCADE 
+                FOREIGN KEY (cityname) REFERENCES public.cities(cityname)
+                    ON DELETE CASCADE
                     ON UPDATE CASCADE,
-                FOREIGN KEY (stype) REFERENCES public.sourcetypes(stype) 
-                    ON DELETE CASCADE 
+                FOREIGN KEY (stype) REFERENCES public.sourcetypes(stype)
+                    ON DELETE CASCADE
                     ON UPDATE CASCADE
         )""",
     "createLimitsTable" :
@@ -124,19 +124,19 @@ NEW_STATEMENTS = {
                 stype varchar(50) NOT NULL,
                 sourcelimit bigint NOT NULL,
                 CONSTRAINT limits_pk PRIMARY KEY (cityname,stype),
-                FOREIGN KEY (cityname) REFERENCES public.cities(cityname) 
-                    ON DELETE CASCADE 
+                FOREIGN KEY (cityname) REFERENCES public.cities(cityname)
+                    ON DELETE CASCADE
                     ON UPDATE CASCADE,
-                FOREIGN KEY (stype) REFERENCES public.sourcetypes(stype) 
-                    ON DELETE CASCADE 
+                FOREIGN KEY (stype) REFERENCES public.sourcetypes(stype)
+                    ON DELETE CASCADE
                     ON UPDATE CASCADE
         )""",
-    "createEffectTypesTable" : 
+    "createEffectTypesTable" :
         """CREATE TABLE IF NOT EXISTS public.effecttypes (
                 etype varchar(50) NOT NULL,
                 CONSTRAINT effecttypes_pk PRIMARY KEY (etype)
         )""",
-    "createBuildingTypesTable" : 
+    "createBuildingTypesTable" :
         """CREATE TABLE IF NOT EXISTS public.buildingtypes (
                 buildingname varchar(50) NOT NULL,
                 buildtime bigint NOT NULL,
@@ -149,14 +149,14 @@ NEW_STATEMENTS = {
                 etype varchar(50) NOT NULL,
                 value bigint NOT NULL,
                 CONSTRAINT buildingeffects_pk PRIMARY KEY (buildingname,stype,etype),
-                FOREIGN KEY (buildingname) REFERENCES public.buildingtypes(buildingname) 
-                    ON DELETE CASCADE 
+                FOREIGN KEY (buildingname) REFERENCES public.buildingtypes(buildingname)
+                    ON DELETE CASCADE
                     ON UPDATE CASCADE,
-                FOREIGN KEY (stype) REFERENCES public.sourcetypes(stype) 
-                    ON DELETE CASCADE 
+                FOREIGN KEY (stype) REFERENCES public.sourcetypes(stype)
+                    ON DELETE CASCADE
                     ON UPDATE CASCADE,
-                FOREIGN KEY (etype) REFERENCES public.effecttypes(etype) 
-                    ON DELETE CASCADE 
+                FOREIGN KEY (etype) REFERENCES public.effecttypes(etype)
+                    ON DELETE CASCADE
                     ON UPDATE CASCADE
         )""",
     "createBuildingCostsTable" :
@@ -165,11 +165,11 @@ NEW_STATEMENTS = {
                 costsource varchar(50) NOT NULL,
                 cost bigint NOT NULL,
                 CONSTRAINT buildingcosts_pk PRIMARY KEY (buildingname,costsource),
-                FOREIGN KEY (buildingname) REFERENCES public.buildingtypes(buildingname) 
-                    ON DELETE CASCADE 
+                FOREIGN KEY (buildingname) REFERENCES public.buildingtypes(buildingname)
+                    ON DELETE CASCADE
                     ON UPDATE CASCADE,
-                FOREIGN KEY (costsource) REFERENCES public.sourcetypes(stype) 
-                    ON DELETE CASCADE 
+                FOREIGN KEY (costsource) REFERENCES public.sourcetypes(stype)
+                    ON DELETE CASCADE
                     ON UPDATE CASCADE
         )""",
 }
@@ -405,9 +405,36 @@ def get_production_of_city(cursor, cityname):
         #endfor
 
     #endfor
-    
+
     for key in productions:
-        productions[key] +=  (factors[key] * productions[key]) // 100 
+        productions[key] +=  (factors[key] * productions[key]) // 100
 
     return productions
 
+
+def change_city_major(cursor, username, cityname):
+    cursor.execute("""
+    UPDATE public.cities
+    SET  username=%s
+    WHERE(cityname=%s)
+    """, (username, cityname))
+    cursor.commit()
+
+
+def get_user_of_city(cursor, cityname):
+    cursor.execute("""
+    SELECT username FROM public.cities WHERE(cityname=%s)
+    """, (cityname))
+    user = cursor.fetchone()
+    return user[0]
+
+
+def update_user_sources(cursor, username, sources, limit):
+    for key, values in sources:
+        value = min(limit[key], values)
+        cursor.execute("""
+        UPDATE sources
+        SET count=%s
+        WHERE (username=%s)
+        """,(value, username))
+    cursor.commit()
