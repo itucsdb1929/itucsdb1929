@@ -1,0 +1,90 @@
+{% extends "layout.html" %} {% set homeActive = 1 %} 
+
+
+{% block style %} 
+
+h1 {
+    text-align: center;
+} 
+{% endblock style %} 
+
+{% block title %} Home Page {% endblock title %}
+
+ {% block page_content %}
+
+ <h1> TOP SECRET ADMIN PANEL </h1>
+
+<div class = "row">
+
+    <div class="col">
+        <h1> Add City </h1>
+  <div class = "form-group">
+              <form name = "addcity" action= "{{url_for('adminpanel.adminpanel_add_city')}}" method="post">
+                <div class="form-label-group">
+                    <label for="inputCityname">City Name</label>
+                    <input type="text" name="cityname" id="inputCityname" class="form-control" placeholder="Cityname" value="{{
+          request.form.cityname }}" required autofocus>
+                </div>
+
+                <div class="form-label-group">
+                    <label for="inputUsername">Username</label>
+                  <input type="text" name="username" id="inputUsername" class="form-control" placeholder="Username" value="{{
+          request.form.username }}" required>
+                </div>
+
+                <div class="form-label-group">
+                    <label for="inputXcoordinate">X coordinate</label>
+                  <input type="number" name="xcoordinate" id="inputXcoordinate" class="form-control" placeholder="Xcoordinate" value="{{
+          request.form.xcoordinate }}" required>
+                </div>
+
+                <div class="form-label-group">
+                    <label for="inputYcoordinate">Y coordinate</label>
+                  <input type="number" name="ycoordinate" id="inputYcoordinate" class="form-control" placeholder="Ycoordinate" value="{{
+          request.form.ycoordinate }}" required>
+                </div>
+                <div class="form-label-group">
+                    <label for="inputBuildinglimit">Building Limit</label>
+                  <input type="number" name="buildinglimit" id="inputBuildinglimit" class="form-control" placeholder="Buildinglimit" value="{{
+          request.form.buildinglimit }}" required>
+                </div>
+                
+                <div class="form-label-group">
+                    <label for="inputBuildingcount">Building Count</label>
+                  <input type="number" name="buildingcount" id="inputBuildingcount" class="form-control" placeholder="Buildingcount" value="{{
+          request.form.buildingcount }}" required>
+                </div>
+                <input class="btn btn-default" type="submit" value="Add City">
+              </form>
+            </div>
+        </div>
+        <div class="col">
+            <h1> Add Building </h1>
+            <div class = "form-group">
+              <form name = "signup" action= "{{url_for('signup.signup_func')}}" method="post">
+                <div class="form-label-group">
+                    <label for="inputUsername">Username</label>
+                    <input type="text" name="username" id="inputUsername" class="form-control" placeholder="Username" value="{{
+          request.form.username }}" required autofocus>
+                </div>
+
+                <div class="form-label-group">
+                    <label for="inputPassword">Password</label>
+                  <input type="password" name="password" id="inputPassword" class="form-control" placeholder="Password" value="{{
+          request.form.password }}" required>
+                </div>
+
+                <div class="form-label-group">
+                <label for="inputEmail">Email</label>
+
+                  <input type="text" name="email" id="inputEmail" class="form-control" placeholder="Email" value="{{
+          request.form.email }}" required>
+                </div>
+                <input class="btn btn-default" type="submit" value="Add Building">
+              </form>
+            </div>
+        </div>
+        </div>
+
+{% endblock %}
+  
