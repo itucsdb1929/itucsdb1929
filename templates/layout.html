@@ -32,10 +32,8 @@
 
     <body>
 
-
-        <script>
-    $.get("/notifications", function(data) {
-        
+    <script>
+    $.get("/api/notifications", function(data) {
             if(data['notifications']) {
                  $('.toast').toast('show');
             } else {

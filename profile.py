@@ -4,7 +4,7 @@ import db
 profile = Blueprint('profile', __name__,
                         template_folder='templates')
 
-@profile.route("/notifications")
+@profile.route("/api/notifications")
 def hasNotifications():
     if session.get('logged_in'):
         cursor = db.get_cursor()
