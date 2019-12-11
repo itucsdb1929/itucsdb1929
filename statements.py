@@ -1,4 +1,4 @@
-import sources from data
+from data import sources
 
 NEW_STATEMENTS = {
     "createUserTable" :
