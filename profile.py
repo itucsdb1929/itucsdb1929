@@ -1,11 +1,27 @@
-from flask import Flask, render_template, request, redirect, url_for, session, Blueprint, flash
+from flask import Flask, render_template, request, redirect, url_for, session, Blueprint, flash, jsonify
 import db
 
 profile = Blueprint('profile', __name__,
                         template_folder='templates')
 
+@profile.route("/api/notifications")
+def hasNotifications():
+    if session.get('logged_in'):
+        cursor = db.get_cursor()
+        cursor.execute("select * from messages where(receiver=%s and has_read=FALSE)", (session['username'],))
+        lst = cursor.fetchone()
+        if lst:
+            return jsonify({'notifications': True})
+        else:
+            return jsonify({'notifications': False})
+    return jsonify({'notifications': False})
+
 @profile.route("/profile")
 def profileFuncMe():
+    cursor = db.get_cursor()
+    connection = db.get_connection()
+    cursor.execute("""update messages set has_read=TRUE where (receiver=%s)""", (session['username'],))
+    connection.commit()
     return redirect(url_for('profile.profileFunc', userName = session['username']))
 
 @profile.route("/profile/<userName>")
