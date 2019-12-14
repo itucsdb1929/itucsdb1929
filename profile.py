@@ -20,7 +20,7 @@ def hasNotifications():
 def profileFuncMe():
     cursor = db.get_cursor()
     connection = db.get_connection()
-    cursor.execute("""update messages set has_read=TRUE where (receiver=%s)""", (session['username'],))
+    #cursor.execute("""update messages set has_read=TRUE where (receiver=%s)""", (session['username'],))
     connection.commit()
     return redirect(url_for('profile.profileFunc', userName = session['username']))
 
