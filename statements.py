@@ -42,7 +42,7 @@ NEW_STATEMENTS = {
         sender varchar(50) not null,
         receiver varchar(50) not null,
         message varchar(255),
-        has_read BOOLEAN,
+        has_read boolean,
         FOREIGN KEY (sender) REFERENCES public.users(username)
             ON DELETE CASCADE
             ON UPDATE CASCADE,
