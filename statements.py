@@ -37,7 +37,8 @@ NEW_STATEMENTS = {
                     ON UPDATE CASCADE
         )""",
     "createMessagesTable":
-        """CREATE TABLE if not EXISTS Messages(
+        """DROP TABLE Messages;
+        CREATE TABLE if not EXISTS Messages(
         message_id serial primary key,
         sender varchar(50) not null,
         receiver varchar(50) not null,
