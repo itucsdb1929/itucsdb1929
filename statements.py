@@ -240,10 +240,8 @@ def insert_friend(cursor, user1, user2):
 def your_message(cursor, sender, receiver, message):
     cursor.execute("""INSERT INTO Messages (message_id, sender, receiver, message, has_read) VALUES (DEFAULT, %s, %s, %s, %s);""",(sender, receiver, message, 'FALSE'))
 
-def delete_message(cursor, id):
-    cursor.execute("""
-    DELETE FROM MESSAGES WHERE messages.id=id
-    """)
+def delete_message(cursor, val):
+    cursor.execute("""DELETE FROM Messages WHERE (message_id=%s)""", (val, ))
 
 def delete_friend(cursor, username, friend):
     cursor.execute("""select username,friend from friends where(username=%s and friend=%s)""",(username, friend))

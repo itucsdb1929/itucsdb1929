@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for, session, Blueprint, flash, jsonify
+from statements import delete_message
 import db
 
 profile = Blueprint('profile', __name__,
@@ -15,6 +16,15 @@ def hasNotifications():
         else:
             return jsonify({'notifications': False})
     return jsonify({'notifications': False})
+
+@profile.route("/api/delete_message", methods=['POST'])
+def deleteMessage():
+    message_id = request.form.get('message_id')
+    cursor = db.get_cursor()
+    connection = db.get_connection()
+    delete_message(cursor, message_id)
+    connection.commit()
+    return jsonify({'result': 'success'})
 
 @profile.route("/profile")
 def profileFuncMe():
@@ -47,7 +57,7 @@ def profileFunc(userName):
                     "https://i.postimg.cc/kGtfSDH5/original.jpg"]
     message_list = []
 
-    cursor.execute("""select sender, message from messages where (receiver=%s)""", (userName,))
+    cursor.execute("""select sender, message, message_id from messages where (receiver=%s)""", (userName,))
 
     message_list = cursor.fetchall()
 

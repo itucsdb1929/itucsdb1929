@@ -9,6 +9,21 @@
 
 {% block page_content %}
 
+<script>
+   $(document).on('click','#delete-message',function(){
+        var id = $(this).attr("value");
+        $.ajax({
+            type: 'post',
+            url: '/api/delete_message',
+            data: {
+                message_id: id,
+            },
+        })
+        $(this).parent().parent().remove();
+    });
+
+</script>
+
 <div class="space"></div>
 
 <ul class="nav nav-tabs" id="myTab" role="tablist">
@@ -220,7 +235,7 @@
                         <h6 class="card-subtitle mb-2 text-muted">Some time ago</h6>
                         <p class="card-text">{{idx[1]}}</p>
                         <a href="SendMessageModal2{{idx[0]}}" class="card-link" data-toggle="modal" data-target="#SendMessageModal2{{idx[0]}}">Reply</a>
-                        <a href="#!" class="card-link">Delete Message</a>
+                        <a href="#!" id="delete-message" class="card-link" value="{{idx[2]}}">Delete Message</a>
                     </div>
                 </div>
                 {% endfor %}
