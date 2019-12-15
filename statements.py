@@ -1,7 +1,7 @@
 from data import sources
 
 NEW_STATEMENTS = {
-    "createUserTable" :
+    "createUsersTable" :
         """CREATE TABLE IF NOT EXISTS public.users (
                 username varchar(50) NOT NULL,
                 userpassword char(32) NOT NULL,
@@ -187,18 +187,18 @@ NEW_STATEMENTS = {
                     ON DELETE CASCADE
                     ON UPDATE CASCADE
         )""",
-    "createPendingsBuildingsTable" :
+    "createPendingBuildingsTable" :
         """CREATE TABLE IF NOT EXISTS public.PendingBuildings (
                 buildingid int primary key,
                 level bigint not null,
-                FOREIGN KEY (buildingid) REFERENCES public.buildings(buildingname)
+                FOREIGN KEY (buildingid) REFERENCES public.buildings(buildingid)
                     ON DELETE CASCADE
                     ON UPDATE CASCADE
         )""",
 }
 
 INIT_STATEMENTS_ORDER = [
-    "createUserTable",
+    "createUsersTable",
     "createFriendsTable",
     "createFriendRequestsTable",
     "createMessagesTable",
@@ -214,14 +214,14 @@ INIT_STATEMENTS_ORDER = [
     "createBuildingEffectsTable",
     "createBuildingCostsTable",
     "createBuildingsTable",
-    "createPendingsBuildingsTable",
+    "createPendingBuildingsTable",
 ]
 
 def drop_all_tables(cursor):
     global INIT_STATEMENTS_ORDER, NEW_STATEMENTS
     for i in INIT_STATEMENTS_ORDER:
         tablename = i[6:-5]
-        cursor.execute("""Drop Table %s if exist CASCADE""", (tablename))
+        cursor.execute("""DROP TABLE IF EXISTS %s CASCADE;""" % tablename)
 
 
 

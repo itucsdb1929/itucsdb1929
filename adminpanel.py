@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for, session, B
 from statements import insert_city
 from functions3 import new_building
 from dbinit import initialize
-from statements import INIT_STATEMENTS_ORDER, NEW_STATEMENTS
+from statements import INIT_STATEMENTS_ORDER, NEW_STATEMENTS, drop_all_tables
 import db, os
 
 
@@ -57,6 +57,16 @@ def adminpanel_db_init():
         cursor = db.get_cursor()
         connection = db.get_connection()
         for statement in INIT_STATEMENTS_ORDER:
+            print(statement)
             cursor.execute(NEW_STATEMENTS[statement])
+        connection.commit()
+    return redirect(url_for('adminpanel.adminpanel_func'))
+
+@adminpanel.route("/adminpanel/dbdelete", methods=['GET'])
+def adminpanel_db_delete():
+    with db.dataBaseLock:
+        cursor = db.get_cursor()
+        connection = db.get_connection()
+        drop_all_tables(cursor)
         connection.commit()
     return redirect(url_for('adminpanel.adminpanel_func'))
