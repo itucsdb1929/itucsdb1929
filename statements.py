@@ -188,7 +188,7 @@ NEW_STATEMENTS = {
                     ON UPDATE CASCADE
         )""",
     "createPendingsBuildingsTable" :
-        """CREATE TABLE IF NOT EXISTS public.buildings (
+        """CREATE TABLE IF NOT EXISTS public.PendingBuildings (
                 buildingid int primary key,
                 level bigint not null,
                 FOREIGN KEY (buildingid) REFERENCES public.buildings(buildingname)
@@ -216,6 +216,14 @@ INIT_STATEMENTS_ORDER = [
     "createBuildingsTable",
     "createPendingsBuildingsTable",
 ]
+
+def drop_all_tables() {
+    global INIT_STATEMENTS_ORDER, NEW_STATEMENTS
+    for i in INIT_STATEMENTS_ORDER:
+        tablename = i[6:-5]
+        cursor.execute("""Drop Table %s if exist CASCADE""", (tablename))
+
+}
 
 def insert_user(cursor,username, password, email):
     cursor.execute("""
