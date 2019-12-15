@@ -179,6 +179,7 @@ NEW_STATEMENTS = {
                 buildingid serial primary key,
                 cityname varchar(50) NOT NULL,
                 buildingname varchar(50) NOT NULL,
+                level bigint NOT NULL,
                 FOREIGN KEY (buildingname) REFERENCES public.buildingtypes(buildingname)
                     ON DELETE CASCADE
                     ON UPDATE CASCADE,

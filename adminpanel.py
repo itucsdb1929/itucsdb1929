@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, session, Blueprint, flash
 from statements import insert_city
+from functions3 import new_building
 from dbinit import initialize
 from statements import INIT_STATEMENTS_ORDER, NEW_STATEMENTS
 import db, os
@@ -24,6 +25,18 @@ def adminpanel_add_city():
         buildinglimit = request.form.get('buildinglimit')
         buildingcount = request.form.get('buildingcount')
         insert_city(cursor, cityname, username, xcoordinate, ycoordinate, buildinglimit, buildingcount)
+        connection.commit()
+    return redirect(url_for('adminpanel.adminpanel_func')) 
+
+
+@adminpanel.route("/adminpanel/addbuilding", methods=['POST'])
+def adminpanel_add_building():
+    with db.dataBaseLock:
+        cursor = db.get_cursor()
+        connection = db.get_connection()
+        cityname = request.form.get('cityname')
+        buildingname = request.form.get('buildingname')
+        new_building(cursor, cityname, buildingname)
         connection.commit()
     return redirect(url_for('adminpanel.adminpanel_func')) 
 

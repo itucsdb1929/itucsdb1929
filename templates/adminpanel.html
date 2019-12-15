@@ -145,8 +145,34 @@ h1 {
             </div>
         </div>
         </div>
+        <div class="row">
 
-        <div class="row"><a href="/adminpanel/dbinit"><img class="onepunchman" src="https://i.ytimg.com/vi/VqNJxqblPk8/maxresdefault.jpg" style="width: 40%;" alt="One Punch Man"></a></div>
+            <div class="col">
+
+                 <div class = "form-group">
+              <form name = "addcity" action= "{{url_for('adminpanel.adminpanel_add_building')}}" method="post">
+                <div class="form-label-group">
+                    <label for="inputCityname">City Name</label>
+                    <input type="text" name="cityname" id="inputCityname" class="form-control" placeholder="Cityname" value="{{
+          request.form.cityname }}" required autofocus>
+                </div>
+
+                <div class="form-label-group">
+                    <label for="inputBuildingname">Building Name</label>
+                  <input type="text" name="buildingname" id="inputBuildingname" class="form-control" placeholder="Buildingname" value="{{
+          request.form.buildingname }}" required>
+                </div>
+                <input class="btn btn-default" type="submit" value="Add Building">
+              </form>
+            </div>
+
+            </div>
+
+            <div class="col">
+                <a href="/adminpanel/dbinit"><img class="onepunchman" src="https://i.ytimg.com/vi/VqNJxqblPk8/maxresdefault.jpg" style="width: 40%;" alt="One Punch Man"></a>
+            </div>
+
+        </div>
 
 {% endblock %}
   
