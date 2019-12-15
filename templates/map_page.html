@@ -37,6 +37,15 @@
 
 {% block page_content %}
 
+<script>
+     function play(){
+       var audio = document.getElementById("audio");
+       audio.currentTime = 4;
+       audio.volume = 0.2;
+       audio.play();
+    }
+</script>
+
 <div class="leaderboard">
 
 {% for i in range(0, 12) %}
@@ -50,9 +59,9 @@
             {% if cities[i][j][0] == 'empty' %}
             <img src="https://i.postimg.cc/YShP4G2J/map-grass.jpg">
             {% elif cities[i][j][1] == 1 %}
-            <img src="https://i.postimg.cc/mg5s6GPW/map-city-level-1.jpg" data-toggle="modal" data-target="#myModal{{i}}{{j}}" class="clickable">           
+            <img src="https://i.postimg.cc/mg5s6GPW/map-city-level-1.jpg" data-toggle="modal" data-target="#myModal{{i}}{{j}}" class="clickable" onclick="play()">           
             {% else %}
-             <img src="https://i.postimg.cc/LXzFXYNm/map-city-level-2.jpg" data-toggle="modal" data-target="#myModal{{i}}{{j}}" class="clickable">
+             <img src="https://i.postimg.cc/LXzFXYNm/map-city-level-2.jpg" data-toggle="modal" data-target="#myModal{{i}}{{j}}" class="clickable" onclick="play()">
             {% endif %}
         </div>
     </div>
@@ -90,5 +99,7 @@
 
 {% endfor %}
 {% endfor %}
+
+<audio id="audio" src="http://www.orangefreesounds.com/wp-content/uploads/2018/05/War-horn-sound.mp3" ></audio>
 
 {% endblock page_content %}
