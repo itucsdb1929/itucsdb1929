@@ -37,21 +37,19 @@ NEW_STATEMENTS = {
                     ON UPDATE CASCADE
         )""",
     "createMessagesTable":
-        """
-        CREATE TABLE if not EXISTS Messages(
-        message_id serial primary key,
-        sender varchar(50) not null,
-        receiver varchar(50) not null,
-        message varchar(255),
-        has_read boolean,
-        FOREIGN KEY (sender) REFERENCES public.users(username)
-            ON DELETE CASCADE
-            ON UPDATE CASCADE,
-        FOREIGN KEY (receiver) REFERENCES public.users(username)
-            ON DELETE CASCADE
-            ON UPDATE CASCADE
-        )
-        """,
+        """CREATE TABLE if not EXISTS Messages(
+          message_id serial primary key,
+          sender varchar(50) not null,
+          receiver varchar(50) not null,
+          message varchar(255),
+          has_read boolean,
+          FOREIGN KEY (sender) REFERENCES public.users(username)
+              ON DELETE CASCADE
+              ON UPDATE CASCADE,
+          FOREIGN KEY (receiver) REFERENCES public.users(username)
+              ON DELETE CASCADE
+              ON UPDATE CASCADE
+        )""",
     "createSourceTypesTable" :
         """CREATE TABLE IF NOT EXISTS public.sourcetypes (
                 stype varchar(50) NOT NULL,
@@ -61,8 +59,8 @@ NEW_STATEMENTS = {
         """CREATE TABLE IF NOT EXISTS public.cities (
                 cityname varchar(50) NOT NULL,
                 username varchar(50) NOT NULL,
-                xcoordiante bigint NOT NULL,
-                ycoordiante bigint NOT NULL,
+                xcoordinate bigint NOT NULL,
+                ycoordinate bigint NOT NULL,
                 buildinglimit bigint NOT NULL,
                 buildingcount bigint NOT NULL,
                 CONSTRAINT cities_pk PRIMARY KEY (cityname),
@@ -75,10 +73,9 @@ NEW_STATEMENTS = {
                 username varchar(50) NOT NULL,
                 stype varchar(50) NOT NULL,
                 count bigint NOT NULL,
-
                 CONSTRAINT sources_pk PRIMARY KEY (username,stype),
-                FOREIGN KEY (username) REFERENCES public.users(username) 
-                    ON DELETE CASCADE 
+                FOREIGN KEY (username) REFERENCES public.users(username)
+                    ON DELETE CASCADE
                     ON UPDATE CASCADE,
                 FOREIGN KEY (stype) REFERENCES public.sourcetypes(stype)
                     ON DELETE CASCADE
@@ -103,8 +100,8 @@ NEW_STATEMENTS = {
                 stype varchar(50) NOT NULL,
                 baselimit bigint NOT NULL,
                 CONSTRAINT baselimits_pk PRIMARY KEY (username,stype),
-                FOREIGN KEY (username) REFERENCES public.users(username) 
-                    ON DELETE CASCADE 
+                FOREIGN KEY (username) REFERENCES public.users(username)
+                    ON DELETE CASCADE
                     ON UPDATE CASCADE,
                 FOREIGN KEY (stype) REFERENCES public.sourcetypes(stype)
                     ON DELETE CASCADE
@@ -129,8 +126,8 @@ NEW_STATEMENTS = {
                 stype varchar(50) NOT NULL,
                 sourcelimit bigint NOT NULL,
                 CONSTRAINT limits_pk PRIMARY KEY (username,stype),
-                FOREIGN KEY (username) REFERENCES public.users(username) 
-                    ON DELETE CASCADE 
+                FOREIGN KEY (username) REFERENCES public.users(username)
+                    ON DELETE CASCADE
                     ON UPDATE CASCADE,
                 FOREIGN KEY (stype) REFERENCES public.sourcetypes(stype)
                     ON DELETE CASCADE
@@ -197,7 +194,6 @@ NEW_STATEMENTS = {
                     ON DELETE CASCADE
                     ON UPDATE CASCADE
         )""",
-
 }
 
 INIT_STATEMENTS_ORDER = [
@@ -230,14 +226,17 @@ def insert_user(cursor,username, password, email):
     """,(username, password, email))
 
 
-def insert_city(cursor,city_major, city_name, city_location):
+def insert_city(cursor, city_name, user_name, xcoordinate, ycoordinate, buildinglimit, buildingcount):
     cursor.execute("""
-    INSERT INTO CITY VALUES(
+    INSERT INTO cities VALUES(
+    %s,
+    %s,
+    %s,
     %s,
     %s,
     %s
     )
-    """,(city_major, city_name, city_location))
+    """,(city_name, user_name, xcoordinate, ycoordinate, buildinglimit, buildingcount))
 
 
 def friend_request(cursor, sender, receiver):
@@ -350,10 +349,10 @@ def update_all_sources(cursor):
         sources = get_sources_of_user(username)
         for key in city_production:
             sources[key] +=city_production[key]
-        
+
         limits = get_user_source_limits(cursor, username)
 
-        update_user_sources(cursor, username, sources, limits)         
+        update_user_sources(cursor, username, sources, limits)
 
 
 def get_sources_of_user(cursor, username):
