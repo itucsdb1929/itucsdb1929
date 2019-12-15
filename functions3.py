@@ -40,3 +40,4 @@ def level_up_building(cursor, buildingid):
      %s
      )
      """,(buildingid, city_name, buildingname, new_level, remaining_time))
+     cursor.commit()
