@@ -38,11 +38,22 @@
 {% block page_content %}
 
 <script>
+
+ $(document).ready(function(){
+   $("#mapTutorial").modal();
+});
+
      function play(){
        var audio = document.getElementById("audio");
        audio.currentTime = 4;
        audio.volume = 0.2;
        audio.play();
+    }
+
+    function play2(){
+        var audio = document.getElementById("audio2");
+        audio.volume = 0.03;
+        audio.play();
     }
 </script>
 
@@ -100,6 +111,30 @@
 {% endfor %}
 {% endfor %}
 
+
+<div class="modal fade" id="mapTutorial" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+        <h4 class="modal-title">Commander Shirei-kan</h4>
+          <button type="button" class="close" data-dismiss="modal" onclick="play2()">&times;</button>
+        </div>
+        <div class="modal-body" style="text-align:center;">
+            <img src="https://i.ibb.co/j4KbqJf/912067986eaa93c2599de06643797b29-removebg-preview.png" style="width:50%;" alt="Commander image">
+            <br>
+          <p>I am at your command, general!</p>
+         <p> Click on the cities you want to attack or send supplies!</p>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal" onclick="play2()">Close</button>
+        </div>
+      </div>
+    </div>
+</div>
+
 <audio id="audio" src="http://www.orangefreesounds.com/wp-content/uploads/2018/05/War-horn-sound.mp3" ></audio>
+<audio id="audio2" src="http://www.orangefreesounds.com/wp-content/uploads/2016/08/Epic-battle-music-grzegorz-majcherczyk-heroica.mp3"></audio>
 
 {% endblock page_content %}
