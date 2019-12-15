@@ -93,6 +93,7 @@ buildings = [
 
 
 def dataCreaterAndUpdater(cursor):
+
     for source in sources:
         cursor.execute("""insert into sourceTypes(stype) values(%s) 
             ON CONFLICT ON CONSTRAINT sourceTypes_pk DO UPDATE SET stype = %s""", (source,source))
@@ -122,3 +123,4 @@ def dataCreaterAndUpdater(cursor):
                 SET buildingName = %s, stype = %s, etype = %s, value = %s""", 
                     (building["buildingname"], source, effect, building["effects"][effect][source],
                     building["buildingname"], source, effect, building["effects"][effect][source]))
+    pass

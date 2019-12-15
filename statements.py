@@ -37,7 +37,7 @@ NEW_STATEMENTS = {
                     ON UPDATE CASCADE
         )""",
     "createMessagesTable":
-        """DROP TABLE Messages;
+        """
         CREATE TABLE if not EXISTS Messages(
         message_id serial primary key,
         sender varchar(50) not null,
@@ -177,6 +177,27 @@ NEW_STATEMENTS = {
                     ON DELETE CASCADE
                     ON UPDATE CASCADE
         )""",
+    "createBuildingsTable" :
+        """CREATE TABLE IF NOT EXISTS public.buildings (
+                buildingid serial primary key,
+                cityname varchar(50) NOT NULL,
+                buildingname varchar(50) NOT NULL,
+                FOREIGN KEY (buildingname) REFERENCES public.buildingtypes(buildingname)
+                    ON DELETE CASCADE
+                    ON UPDATE CASCADE,
+                FOREIGN KEY (cityname) REFERENCES public.cities(cityname)
+                    ON DELETE CASCADE
+                    ON UPDATE CASCADE
+        )""",
+    "createPendingsBuildingsTable" :
+        """CREATE TABLE IF NOT EXISTS public.buildings (
+                buildingid int primary key,
+                level bigint not null,
+                FOREIGN KEY (buildingid) REFERENCES public.buildings(buildingname)
+                    ON DELETE CASCADE
+                    ON UPDATE CASCADE
+        )""",
+
 }
 
 INIT_STATEMENTS_ORDER = [
@@ -195,6 +216,8 @@ INIT_STATEMENTS_ORDER = [
     "createBuildingTypesTable",
     "createBuildingEffectsTable",
     "createBuildingCostsTable",
+    "createBuildingsTable",
+    "createPendingsBuildingsTable",
 ]
 
 def insert_user(cursor,username, password, email):
@@ -405,6 +428,7 @@ def get_building_level(cursor, buildingid):
 
 LEVEL_EFFECT = 10 #percent
 def get_building_productions(cursor, buildingid):
+    global LEVEL_EFFECT
     level = get_building_level(cursor, buildingid)
     effect = level * LEVEL_EFFECT
     productions = get_base_building_productions(cursor, buildingid)
@@ -416,6 +440,7 @@ def get_building_productions(cursor, buildingid):
 
 LEVEL_EFFECT = 10 #percent
 def get_building_factors(cursor, buildingid):
+    global LEVEL_EFFECT
     level = get_building_level(cursor, buildingid)
     effect = level * LEVEL_EFFECT
     factors = get_base_building_productions(cursor, buildingid)
