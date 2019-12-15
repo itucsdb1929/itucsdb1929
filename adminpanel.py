@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for, session, Blueprint, flash
-from statements import insert_city
+from statements import insert_city, insert_user
 from functions3 import new_building, level_up_building
 from dbinit import initialize
 from statements import INIT_STATEMENTS_ORDER, NEW_STATEMENTS, drop_all_tables
@@ -71,7 +71,7 @@ def adminpanel_db_init():
             cursor.execute(NEW_STATEMENTS[statement])
         
         data.dataCreaterAndUpdater(cursor)
-        
+        insert_user(cursor, "admin", "0192023a7bbd73250516f069df18b500", "admin@admin")
         connection.commit()
     return redirect(url_for('adminpanel.adminpanel_func'))
 
