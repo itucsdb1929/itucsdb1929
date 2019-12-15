@@ -1,4 +1,5 @@
-from data import sources
+from data import sources, sourcesDict
+
 
 NEW_STATEMENTS = {
     "createUsersTable" :
@@ -72,7 +73,7 @@ NEW_STATEMENTS = {
         """CREATE TABLE IF NOT EXISTS public.sources (
                 username varchar(50) NOT NULL,
                 stype varchar(50) NOT NULL,
-                count bigint NOT NULL,
+                value bigint NOT NULL,
                 CONSTRAINT sources_pk PRIMARY KEY (username,stype),
                 FOREIGN KEY (username) REFERENCES public.users(username)
                     ON DELETE CASCADE
@@ -85,7 +86,7 @@ NEW_STATEMENTS = {
         """CREATE TABLE IF NOT EXISTS public.baseproductions (
                 cityname varchar(50) NOT NULL,
                 stype varchar(50) NOT NULL,
-                baseproduction bigint NOT NULL,
+                value bigint NOT NULL,
                 CONSTRAINT baseproductions_pk PRIMARY KEY (cityname,stype),
                 FOREIGN KEY (cityname) REFERENCES public.cities(cityname)
                     ON DELETE CASCADE
@@ -98,7 +99,7 @@ NEW_STATEMENTS = {
         """CREATE TABLE IF NOT EXISTS public.baselimits (
                 username varchar(50) NOT NULL,
                 stype varchar(50) NOT NULL,
-                baselimit bigint NOT NULL,
+                value bigint NOT NULL,
                 CONSTRAINT baselimits_pk PRIMARY KEY (username,stype),
                 FOREIGN KEY (username) REFERENCES public.users(username)
                     ON DELETE CASCADE
@@ -111,7 +112,7 @@ NEW_STATEMENTS = {
         """CREATE TABLE IF NOT EXISTS public.productions (
                 cityname varchar(50) NOT NULL,
                 stype varchar(50) NOT NULL,
-                production bigint NOT NULL,
+                value bigint NOT NULL,
                 CONSTRAINT productions_pk PRIMARY KEY (cityname,stype),
                 FOREIGN KEY (cityname) REFERENCES public.cities(cityname)
                     ON DELETE CASCADE
@@ -124,7 +125,7 @@ NEW_STATEMENTS = {
         """CREATE TABLE IF NOT EXISTS public.limits (
                 username varchar(50) NOT NULL,
                 stype varchar(50) NOT NULL,
-                sourcelimit bigint NOT NULL,
+                value bigint NOT NULL,
                 CONSTRAINT limits_pk PRIMARY KEY (username,stype),
                 FOREIGN KEY (username) REFERENCES public.users(username)
                     ON DELETE CASCADE
@@ -233,6 +234,21 @@ def insert_user(cursor,username, password, email):
     %s
     )
     """,(username, password, email))
+    for so in sources:
+        cursor.execute("""
+        INSERT INTO sources VALUES(
+        %s,
+        %s,
+        %s
+        )
+        """,(username, so, 0))
+        cursor.execute("""
+        INSERT INTO limits VALUES(
+        %s,
+        %s,
+        %s
+        )
+        """,(username, so, 1000))
 
 
 def insert_city(cursor, city_name, user_name, xcoordinate, ycoordinate, buildinglimit, buildingcount):
@@ -323,44 +339,52 @@ def tupleList2List(tupleList):
 
 def get_all_usernames(cursor):
     cursor.execute("""select username from public.users""")
-    return tupleList2List(cursor.fetchall())
+    x = cursor.fetchall()
+    return tupleList2List(x)
 
 def get_all_cities(cursor):
     cursor.execute("""select cityname from public.cities""")
-    return tupleList2List(cursor.fetchall())
+    x = cursor.fetchall()
+    return tupleList2List(x)
 
 def get_cities_of_user(cursor, username):
     cursor.execute("""select cityname from public.cities
                         where username=%s""", (username,))
-    return tupleList2List(cursor.fetchall())
+    x = cursor.fetchall()
+    return tupleList2List(x)
 
 def get_user_source_limits(cursor, username):
     cursor.execute("""select stype,value from public.limits
                         where username=%s""", (username,))
 
     limitsUser = cursor.fetchall()
-    limitsDict = { }
-    for s in sources:
-        limitsDict[s] = 0
+    # print("limit user", limitsUser)
 
+    limitsDict = sourcesDict.copy()
 
     for (stype, value) in limitsUser:
         limitsDict[stype] += value
 
+    # print("limit return", limitsDict)
     return limitsDict
+
+
 
 
 def update_all_sources(cursor):
     cities = get_all_cities(cursor)
     for city in cities:
-        city_production = get_production_of_city(city)
-        username = get_user_of_city(city)
-        sources = get_sources_of_user(username)
+        city_production = get_production_of_city(cursor, city)
+        username = get_user_of_city(cursor, city)
+        sources = get_sources_of_user(cursor, username)
+        # print("update_all_sources: ", sources)
+        
+
         for key in city_production:
             sources[key] +=city_production[key]
 
         limits = get_user_source_limits(cursor, username)
-
+        
         update_user_sources(cursor, username, sources, limits)
 
 
@@ -369,15 +393,14 @@ def get_sources_of_user(cursor, username):
                         where username=%s""", (username,))
 
     sourcesUser = cursor.fetchall()
-    sourcesDict = { }
-    for s in sources:
-        sourcesDict[s] = 0
+    sourcesD = sourcesDict.copy()
+
 
 
     for (stype, value) in sourcesUser:
-        sourcesDict[stype] += value
+        sourcesD[stype] += value
 
-    return sourcesDict
+    return sourcesD
 
 
 #return building ids
@@ -398,26 +421,18 @@ def get_baseproductions_of_city(cursor, city):
     return baseproductionsDict
 
 def get_base_building_productions(cursor, buildingname):
-    cursor.execute("""select stype, value from public.baseproductions
+    cursor.execute("""select stype, value from public.BuildingEffects
                         where buildingname=%s and etype='inc'""", (buildingname,))
     baseproductions = cursor.fetchall()
-    baseproductionsDict = { }
+    baseproductionsDict = sourcesDict.copy()
 
-    for (stype, value) in productions:
+    for (stype, value) in baseproductions:
         baseproductionsDict[stype] = value
 
     return baseproductionsDict
 
-def get_base_building_factors(cursor, buildingname):
-    cursor.execute("""select stype, value from public.baseproductions
-                        where buildingname=%s and etype='factor'""", (buildingname,))
-    basefactors = cursor.fetchall()
-    basefactordict = { }
-
-    for (stype, value) in basefactors:
-        basefactordict[stype] = value
-
-    return basefactordict
+def get_base_limits():
+    return base_limits
 
 def get_buildingname(cursor, buildingid):
     cursor.execute("""select buildingname from public.buildings
@@ -439,7 +454,8 @@ def get_building_productions(cursor, buildingid):
     global LEVEL_EFFECT
     level = get_building_level(cursor, buildingid)
     effect = level * LEVEL_EFFECT
-    productions = get_base_building_productions(cursor, buildingid)
+    build_name = get_buildingname(cursor, buildingid)
+    productions = get_base_building_productions(cursor, build_name)
 
     for key in productions:
         productions[key] += (productions[key] * effect) // 100
@@ -447,24 +463,21 @@ def get_building_productions(cursor, buildingid):
     return productions
 
 LEVEL_EFFECT = 10 #percent
-def get_building_factors(cursor, buildingid):
+def get_building_limits(cursor, buildingid):
     global LEVEL_EFFECT
     level = get_building_level(cursor, buildingid)
     effect = level * LEVEL_EFFECT
-    factors = get_base_building_productions(cursor, buildingid)
 
-    for key in factors:
-        factors[key] += (factors[key] * effect) // 100
+    for key in limits:
+        limits[key] += (limits[key] * effect) // 100
 
-    return factors
-
-
+    return limits
 
 def get_production_of_city(cursor, cityname):
 
-    productions = get_baseproductions_of_city(cityname)
+    productions = sourcesDict.copy()
 
-    factors = {}
+    factors = sourcesDict.copy()
 
     buildings = get_buildings_of_city(cursor, cityname)
 
@@ -474,17 +487,8 @@ def get_production_of_city(cursor, cityname):
             productions[prod] += prods[prod]
         #endfor
 
-        facts = get_base_building_factors(cursor, building)
-
-        for fac in facts:
-            factors[fac] += facts[fac]
-        #endfor
-
     #endfor
-
-    for key in productions:
-        productions[key] +=  (factors[key] * productions[key]) // 100
-
+    update_city_productions(cursor, cityname, productions)
     return productions
 
 
@@ -494,23 +498,25 @@ def change_city_major(cursor, username, cityname):
     SET  username=%s
     WHERE(cityname=%s)
     """, (username, cityname))
-    cursor.commit()
 
 
 def get_user_of_city(cursor, cityname):
     cursor.execute("""
     SELECT username FROM public.cities WHERE(cityname=%s)
-    """, (cityname))
+    """, (cityname,))
     user = cursor.fetchone()
     return user[0]
 
 
-def update_user_sources(cursor, username, sources, limit):
-    for key, values in sources:
-        value = min(limit[key], values)
+def update_user_sources(cursor, username, sour, limit):
+    # print("update_user_sources scr", sour)
+    # print("update_user_sources lmt", limit)
+    for key in sour:
+        value = min(limit[key], sour[key])
+
         cursor.execute("""
         UPDATE sources
-        SET count=%s
-        WHERE (username=%s)
-        """,(value, username))
-    cursor.commit()
+        SET value=%s
+        WHERE (username=%s and stype=%s)
+        """,(value, username, key))
+

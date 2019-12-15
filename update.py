@@ -16,14 +16,13 @@ def update():
 
         # for a_user in all_users:
         #     user_cities = statements.get_all_cities_of_user(cursor)
-        update_all_sources(cursor)
+        # updateBuildings(cursor)
+        print("deneme val", db.val)
+        statements.update_all_sources(cursor)
 
 
         connection.commit()
 
     db.val = db.val + 1
-    gameThread = threading.Timer(POOL_TIME, update, ())
-    gameThread.start() 
-
 
 

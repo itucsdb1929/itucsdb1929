@@ -6,9 +6,17 @@ sources = [
     "population",
 ]
 
+
+sourcesDict= {
+    "wood":0,
+    "stone":0,
+    "food":0,
+    "metal":0,
+    "population":0,
+}
+
 effects = [
     "limit", #maximum limiliti # kadar artirir
-    "factor", #artirimlar hesaplandiktan sonra uretimi # ile carpar
     "inc", #uretimi # kadar arttirir
 ]
 
@@ -51,8 +59,8 @@ buildings = [
             "metal": 10,
         },
         "effects": {
-            "factor": {
-                "food" : 1.2,
+            "inc": {
+                "food" : 100,
             },
         },
     },
@@ -66,12 +74,6 @@ buildings = [
             "food": 99,
         },
         "effects": {
-            "factor": {
-                "food" : 9,
-                "metal" : 9,
-                "stone" : 9,
-                "wood" : 9,
-            },
             "limit": {
                 "food" : 9,
                 "metal" : 9,
