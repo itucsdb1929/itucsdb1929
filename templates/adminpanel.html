@@ -179,5 +179,18 @@ h1 {
 
         </div>
 
+        <div class="row">
+
+            <form name = "levelup" action= "{{url_for('adminpanel.adminpanel_levelup_building')}}" method="post">
+                <div class="form-label-group">
+                    <label for="inputBuildingid">Building Id</label>
+                    <input type="number" name="buildingid" id="inputBuildingid" class="form-control" placeholder="Buildingid" value="{{
+          request.form.buildingid }}" required autofocus>
+                </div>
+                <input class="btn btn-default" type="submit" value="Level Up Building">
+            </form>
+
+        </div>
+
 {% endblock %}
   
