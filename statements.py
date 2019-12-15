@@ -217,13 +217,13 @@ INIT_STATEMENTS_ORDER = [
     "createPendingsBuildingsTable",
 ]
 
-def drop_all_tables() {
+def drop_all_tables(cursor):
     global INIT_STATEMENTS_ORDER, NEW_STATEMENTS
     for i in INIT_STATEMENTS_ORDER:
         tablename = i[6:-5]
         cursor.execute("""Drop Table %s if exist CASCADE""", (tablename))
 
-}
+
 
 def insert_user(cursor,username, password, email):
     cursor.execute("""
