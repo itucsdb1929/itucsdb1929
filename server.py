@@ -10,6 +10,7 @@ from leaderboard import leaderboard
 from profile import profile
 from map_page import map_page
 from message import new_message
+from adminpanel import adminpanel
 import os
 import sys
 import threading
@@ -35,6 +36,7 @@ app.register_blueprint(leaderboard)
 app.register_blueprint(profile)
 app.register_blueprint(map_page)
 app.register_blueprint(new_message)
+app.register_blueprint(adminpanel)
 app.secret_key = b'_383#y2L"F4Q8z]/'
 # cok gizli
 
