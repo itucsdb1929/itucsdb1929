@@ -4,7 +4,7 @@ from functions3 import new_building, level_up_building
 from dbinit import initialize
 from statements import INIT_STATEMENTS_ORDER, NEW_STATEMENTS, drop_all_tables
 import db, os
-
+import data
 
 adminpanel = Blueprint('adminpanel', __name__,
                         template_folder='templates')
@@ -69,6 +69,9 @@ def adminpanel_db_init():
         for statement in INIT_STATEMENTS_ORDER:
             print(statement)
             cursor.execute(NEW_STATEMENTS[statement])
+        
+        data.dataCreaterAndUpdater(cursor)
+        
         connection.commit()
     return redirect(url_for('adminpanel.adminpanel_func'))
 
