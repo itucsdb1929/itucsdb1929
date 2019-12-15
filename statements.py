@@ -59,8 +59,8 @@ NEW_STATEMENTS = {
         """CREATE TABLE IF NOT EXISTS public.cities (
                 cityname varchar(50) NOT NULL,
                 username varchar(50) NOT NULL,
-                xcoordiante bigint NOT NULL,
-                ycoordiante bigint NOT NULL,
+                xcoordinate bigint NOT NULL,
+                ycoordinate bigint NOT NULL,
                 buildinglimit bigint NOT NULL,
                 buildingcount bigint NOT NULL,
                 CONSTRAINT cities_pk PRIMARY KEY (cityname),
@@ -73,7 +73,6 @@ NEW_STATEMENTS = {
                 username varchar(50) NOT NULL,
                 stype varchar(50) NOT NULL,
                 count bigint NOT NULL,
-
                 CONSTRAINT sources_pk PRIMARY KEY (username,stype),
                 FOREIGN KEY (username) REFERENCES public.users(username) 
                     ON DELETE CASCADE 
@@ -205,14 +204,17 @@ def insert_user(cursor,username, password, email):
     """,(username, password, email))
 
 
-def insert_city(cursor,city_major, city_name, city_location):
+def insert_city(cursor, city_name, user_name, xcoordinate, ycoordinate, buildinglimit, buildingcount):
     cursor.execute("""
-    INSERT INTO CITY VALUES(
+    INSERT INTO cities VALUES(
+    %s,
+    %s,
+    %s,
     %s,
     %s,
     %s
     )
-    """,(city_major, city_name, city_location))
+    """,(city_name, user_name, xcoordinate, ycoordinate, buildinglimit, buildingcount))
 
 
 def friend_request(cursor, sender, receiver):

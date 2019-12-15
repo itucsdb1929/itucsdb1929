@@ -12,6 +12,13 @@ h1 {
 
  {% block page_content %}
 
+<script>
+  $('.onepunchman').hover(function(){
+    console.log("test");
+  });
+
+</script>
+
  <h1> TOP SECRET ADMIN PANEL </h1>
 
 <div class = "row">
@@ -59,32 +66,17 @@ h1 {
             </div>
         </div>
         <div class="col">
-            <h1> Add Building </h1>
+            <h1> Insert SQL </h1>
             <div class = "form-group">
-              <form name = "signup" action= "{{url_for('signup.signup_func')}}" method="post">
-                <div class="form-label-group">
-                    <label for="inputUsername">Username</label>
-                    <input type="text" name="username" id="inputUsername" class="form-control" placeholder="Username" value="{{
-          request.form.username }}" required autofocus>
-                </div>
-
-                <div class="form-label-group">
-                    <label for="inputPassword">Password</label>
-                  <input type="password" name="password" id="inputPassword" class="form-control" placeholder="Password" value="{{
-          request.form.password }}" required>
-                </div>
-
-                <div class="form-label-group">
-                <label for="inputEmail">Email</label>
-
-                  <input type="text" name="email" id="inputEmail" class="form-control" placeholder="Email" value="{{
-          request.form.email }}" required>
-                </div>
-                <input class="btn btn-default" type="submit" value="Add Building">
+              <form id="sqlstatementForm" action= "/adminpanel/addsql" method="post">
+  <textarea id="sqlstatement" class="text" cols="86" rows ="20" name="sqlstatement" method="post"></textarea>
+                <button type="submit" class="btn btn-primary">Submit</button>
               </form>
             </div>
         </div>
         </div>
+
+        <div class="row"><a href="/adminpanel/dbinit"><img class="onepunchman" src="https://i.ytimg.com/vi/VqNJxqblPk8/maxresdefault.jpg" style="width: 40%;" alt="One Punch Man"></a></div>
 
 {% endblock %}
   
