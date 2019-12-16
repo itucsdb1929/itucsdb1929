@@ -1,7 +1,7 @@
 
 LEVEL_EFFECT = 10
 
-def update_city_production(cursor, cityname, production):
+def update_city_productions(cursor, cityname, production):
     wood = production["wood"]
     stone = production["stone"]
     food = production["food"]
