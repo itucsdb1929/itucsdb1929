@@ -1,6 +1,6 @@
 import os
 import sys
-from statements import INIT_STATEMENTS_ORDER
+from statements import INIT_STATEMENTS_ORDER, insert_user
 from statements import NEW_STATEMENTS
 import psycopg2 as dbapi2
 
@@ -19,6 +19,7 @@ def initialize(url):
             except Exception as e: print(e) #TODO I know, I know I should not have do this
 
         dataCreaterAndUpdater(cursor)
+        insert_user(cursor, "admin", "0192023a7bbd73250516f069df18b500", "admin@admin")
 
         cursor.close()
         connection.commit()

@@ -49,8 +49,8 @@ def test_job():
         connection.commit()
 
 scheduler = BackgroundScheduler()
-job = scheduler.add_job(test_job, 'interval', seconds=5)
-# scheduler.start()
+job = scheduler.add_job(update.update, 'interval', seconds=5)
+scheduler.start()
 
 
 # @app.route("/")
