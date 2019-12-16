@@ -20,7 +20,7 @@ def update_all_user_sources(cursor):
                 return False
             total_source = total_source[0]
             cursor.execute("""
-            Update userproductions
+            Update usersources
             set """+source+ """ = %s
             where(username = %s)
             """, (total_source, user))
