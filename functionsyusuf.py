@@ -25,6 +25,25 @@ def update_all_user_sources(cursor):
             where(username = %s)
             """, (total_source, user))
 
+def update_all_user_productions(cursor):
+    usernames = get_all_usernames(cursor)
+    prods = ["wood", "stone", "food", "metal", "population"]
+    for user in usernames:
+        for prod in prods:
+            cursor.execute("""
+            select sum("""+prod+""") from cityproductions join cities on (cityproductions.cityname=cities.cityname)
+            where(cities.username=%s) group by username""",(user,))
+            total_prod = cursor.fetchone()
+            if total_prod == None:
+                return False
+            total_prod = total_prod[0]
+            cursor.execute("""
+            Update userproductions
+            set """+prod+ """ = %s
+            where(username = %s)
+            """, (total_prod, user))
+
+
 def get_base_limits_of_city(cursor, cityname):
     cursor.execute("""select wood, stone, metal, food, population from public.citybaselimits
                         where cityname=%s""", (cityname,))

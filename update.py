@@ -1,7 +1,7 @@
 import db
 import threading
 import statements
-from functionsyusuf import update_all_city_limits, update_all_user_sources
+from functionsyusuf import update_all_city_limits, update_all_user_sources, update_all_user_productions
 from functionsosman import update_all_city_sources
 POOL_TIME = 5 #Seconds
 
@@ -22,6 +22,7 @@ def update():
         print("deneme val", db.val)
 
         update_all_city_limits(cursor)
+        update_all_user_productions(cursor)
         update_all_city_sources(cursor)
         update_all_user_sources(cursor)
 
