@@ -21,9 +21,9 @@ def update():
         # updateBuildings(cursor)
         print("deneme val", db.val)
 
-        statements.update_all_city_limits(cursor)
-        statements.update_all_city_sources(cursor)
-        statements.update_all_user_sources(cursor)
+        update_all_city_limits(cursor)
+        update_all_city_sources(cursor)
+        update_all_user_sources(cursor)
 
 
         connection.commit()

@@ -13,18 +13,20 @@ def update_all_user_sources(cursor):
     for user in usernames:
         for source in sources:
             cursor.execute("""
-            select sum(%s) from citysources join cities on (citysources.cityname=cities.cityname)
-            where(cities.username=%s) group by username""",(source, user))
+            select sum("""+source+""") from citysources join cities on (citysources.cityname=cities.cityname)
+            where(cities.username=%s) group by username""",(user,))
             total_source = cursor.fetchone()
+            if total_source == None:
+                return False
             total_source = total_source[0]
             cursor.execute("""
-            Update UserProductions
-            set %s = %s
+            Update userproductions
+            set """+source+ """ = %s
             where(username = %s)
-            """(source, total_source, user))
+            """, (total_source, user))
 
 def get_base_limits_of_city(cursor, cityname):
-    cursor.execute("""select wood, stone, metal, food, population from public.baselimits
+    cursor.execute("""select wood, stone, metal, food, population from public.citybaselimits
                         where cityname=%s""", (cityname,))
     res = cursor.fetchone()
     lmts = {
@@ -38,7 +40,7 @@ def get_base_limits_of_city(cursor, cityname):
     return lmts
 
 
-def update_all_city_limtis(cursor):
+def update_all_city_limits(cursor):
     cities = get_all_cities(cursor)
     for city in cities:
         bases = get_base_limits_of_city(cursor, city)
@@ -48,4 +50,4 @@ def update_all_city_limtis(cursor):
             for key in buildlims:
                 bases[key] += buildlims[key]
         for key in bases:
-            CRUD.update_column(cursor, "cities","cityname", city ,key , bases[key])
+            CRUD.update_column(cursor, "citylimits","cityname", city ,key , bases[key])
