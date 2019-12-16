@@ -256,7 +256,6 @@ INIT_STATEMENTS_ORDER = [
 ]
 
 def drop_all_tables(cursor):
-    global INIT_STATEMENTS_ORDER, NEW_STATEMENTS
     for i in INIT_STATEMENTS_ORDER:
         tablename = i[6:-5]
         cursor.execute("""DROP TABLE IF EXISTS %s CASCADE;""" % tablename)
@@ -277,7 +276,7 @@ def insert_user(cursor,username, password, email):
 
     CRUD.initializer(cursor, "userproductions", username)
     CRUD.initializer(cursor, "usersources", username)
-     
+
 
 
 def insert_city(cursor, city_name, user_name, xcoordinate, ycoordinate, buildinglimit, buildingcount):
