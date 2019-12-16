@@ -119,11 +119,7 @@ buildings = [
 
 
 def dataCreaterAndUpdater(cursor):
-
-    for source in sources:
-        cursor.execute("""insert into sourceTypes(stype) values(%s) 
-            ON CONFLICT ON CONSTRAINT sourceTypes_pk DO UPDATE SET stype = %s""", (source,source))
-
+    
     for building in buildings:
         cursor.execute("""insert into buildingTypes(buildingName,buildTime) values(%s,%s)
             ON CONFLICT ON CONSTRAINT buildingTypes_pk DO UPDATE SET 

@@ -1,4 +1,3 @@
-from functionsyusuf import 
 from statements import tupleList2List
 from data import sourcesDict
 import CRUD

@@ -1,8 +1,8 @@
 def get_column(cursor, tablename, keyname, key, column):
     cursor.execute("""
-        select %s from %s
-        where %s=%s
-        """(column, tablename, keyname, key))
+        select """+ column+ """ from """+ tablename + """
+        where """+ keyname +"""=%s
+        """ , (key, ))
     column = cursor.fetchone()
     column = column[0]
     return column
@@ -14,26 +14,26 @@ def update_column(cursor,
                 column, 
                 value):		
     cursor.execute("""		
-    UPDATE %s		
-    SET %s = %s		
-    WHERE(%s = %s)		
-    """, (tablename, column, value, keyname, key))
+    UPDATE """+ tablename + """	
+    SET """+ column+ """= %s		
+    WHERE("""+ keyname +""" = %s)		
+    """ , (value, key))
 
 def delete_row(cursor, tablename, keyname, key):
     cursor.execute("""		
-    DELETE from %s		
-    WHERE(%s = %s)		
-    """, (tablename, column, value, keyname, key))
+    DELETE from """+ tablename + """			
+    WHERE( """+ keyname +""" = %s)		
+    """ , (key,))
 
 
 def initializer(cursor,tablename, key):		
     cursor.execute("""		
-        INSERT INTO %s values(		
+        INSERT INTO """+ tablename + """ values(		
         %s,		
-        0		
-        0		
-        0		
-        0		
+        0,		
+        0,		
+        0,		
+        0,		
         0		
         )		
-        """,(tablename, key))		
+        """ , (key,))		

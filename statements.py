@@ -1,8 +1,9 @@
 from data import sources, sourcesDict
 from functions3 import update_city_productions
 from random import random
+import CRUD
 NEW_STATEMENTS = {
-    "createUsersTable" :
+    "createusersTable" :
         """CREATE TABLE IF NOT EXISTS public.users (
                 username varchar(50) NOT NULL,
                 userpassword char(32) NOT NULL,
@@ -13,7 +14,7 @@ NEW_STATEMENTS = {
                 CONSTRAINT users_pk PRIMARY KEY (username),
                 isAdmin bool default false
         )""",
-    "createFriendsTable" :
+    "createfriendsTable" :
         """CREATE TABLE IF NOT EXISTS public.friends (
                 username varchar(50) NOT NULL,
                 friend varchar(50) NOT NULL,
@@ -25,7 +26,7 @@ NEW_STATEMENTS = {
                     ON UPDATE CASCADE,
                 CONSTRAINT friends_pk PRIMARY KEY (username,friend)
         )""",
-    "createFriendRequestsTable" :
+    "createfriendrequestsTable" :
         """CREATE TABLE IF NOT EXISTS public.friendrequests (
                 sender varchar(50) NOT NULL,
                 friend varchar(50) NOT NULL,
@@ -37,8 +38,8 @@ NEW_STATEMENTS = {
                     ON DELETE CASCADE
                     ON UPDATE CASCADE
         )""",
-    "createMessagesTable":
-        """CREATE TABLE if not EXISTS Messages(
+    "createmessagesTable":
+        """CREATE TABLE if not EXISTS messages(
           message_id serial primary key,
           sender varchar(50) not null,
           receiver varchar(50) not null,
@@ -51,12 +52,12 @@ NEW_STATEMENTS = {
               ON DELETE CASCADE
               ON UPDATE CASCADE
         )""",
-    "createSourceTypesTable" :
+    "createsourcetypesTable" :
         """CREATE TABLE IF NOT EXISTS public.sourcetypes (
                 stype varchar(50) NOT NULL,
                 CONSTRAINT sourcetypes_pk PRIMARY KEY (stype)
         )""",
-    "createCitiesTable" :
+    "createcitiesTable" :
         """CREATE TABLE IF NOT EXISTS public.cities (
                 cityname varchar(50) NOT NULL,
                 username varchar(50) NOT NULL,
@@ -70,59 +71,59 @@ NEW_STATEMENTS = {
                     ON DELETE CASCADE
                     ON UPDATE CASCADE
         )""",
-    "createCityBaseProductionsTable" :
-        """CREATE TABLE IF NOT EXISTS public.CityBaseProductions (
+    "createcitybaseproductionsTable" :
+        """CREATE TABLE IF NOT EXISTS public.citybaseproductions (
                 cityname varchar(50) NOT NULL,
                 wood bigint NOT NULL,
                 stone bigint NOT NULL,
                 food bigint NOT NULL,
                 metal bigint NOT NULL,
                 population bigint NOT NULL,
-                CONSTRAINT CityBaseProductions_pk PRIMARY KEY (cityname),
+                CONSTRAINT citybaseproductions_pk PRIMARY KEY (cityname),
                 FOREIGN KEY (cityname) REFERENCES public.cities(cityname)
                     ON DELETE CASCADE
                     ON UPDATE CASCADE
         )""",
-    "createCityBaseLimitsTable" :
-        """CREATE TABLE IF NOT EXISTS public.CityBaseLimits (
+    "createcitybaselimitsTable" :
+        """CREATE TABLE IF NOT EXISTS public.citybaselimits (
                 cityname varchar(50) NOT NULL,
                 wood bigint NOT NULL,
                 stone bigint NOT NULL,
                 food bigint NOT NULL,
                 metal bigint NOT NULL,
                 population bigint NOT NULL,
-                CONSTRAINT CityBaseLimits_pk PRIMARY KEY (cityname),
+                CONSTRAINT citybaselimits_pk PRIMARY KEY (cityname),
                 FOREIGN KEY (cityname) REFERENCES public.cities(cityname)
                     ON DELETE CASCADE
                     ON UPDATE CASCADE
         )""",
-    "createUserProductionsTable" :
-        """CREATE TABLE IF NOT EXISTS public.UserProductions (
+    "createuserproductionsTable" :
+        """CREATE TABLE IF NOT EXISTS public.userproductions (
                 username varchar(50) NOT NULL,
                 wood bigint NOT NULL,
                 stone bigint NOT NULL,
                 food bigint NOT NULL,
                 metal bigint NOT NULL,
                 population bigint NOT NULL,
-                CONSTRAINT UserProductions_pk PRIMARY KEY (username),
+                CONSTRAINT userproductions_pk PRIMARY KEY (username),
                 FOREIGN KEY (username) REFERENCES public.users(username)
                     ON DELETE CASCADE
                     ON UPDATE CASCADE
         )""",
-    "createCityProductionsTable" :
-        """CREATE TABLE IF NOT EXISTS public.CityProductions (
+    "createcityproductionsTable" :
+        """CREATE TABLE IF NOT EXISTS public.cityproductions (
                 cityname varchar(50) NOT NULL,
                 wood bigint NOT NULL,
                 stone bigint NOT NULL,
                 food bigint NOT NULL,
                 metal bigint NOT NULL,
                 population bigint NOT NULL,
-                CONSTRAINT CityProductions_pk PRIMARY KEY (cityname),
+                CONSTRAINT cityproductions_pk PRIMARY KEY (cityname),
                 FOREIGN KEY (cityname) REFERENCES public.cities(cityname)
                     ON DELETE CASCADE
                     ON UPDATE CASCADE
         )""",
-    "createCitySourcesTable" :
+    "createcitysourcesTable" :
         """CREATE TABLE IF NOT EXISTS public.citysources (
                 cityname varchar(50) NOT NULL,
                 wood bigint NOT NULL,
@@ -130,12 +131,12 @@ NEW_STATEMENTS = {
                 food bigint NOT NULL,
                 metal bigint NOT NULL,
                 population bigint NOT NULL,
-                CONSTRAINT CitySources_pk PRIMARY KEY (cityname),
+                CONSTRAINT citysources_pk PRIMARY KEY (cityname),
                 FOREIGN KEY (cityname) REFERENCES public.cities(cityname)
                     ON DELETE CASCADE
                     ON UPDATE CASCADE
         )""",
-    "createCityLimitsTable" :
+    "createcitylimitsTable" :
         """CREATE TABLE IF NOT EXISTS public.citylimits (
                 cityname varchar(50) NOT NULL,
                 wood bigint NOT NULL,
@@ -143,12 +144,12 @@ NEW_STATEMENTS = {
                 food bigint NOT NULL,
                 metal bigint NOT NULL,
                 population bigint NOT NULL,
-                CONSTRAINT CityLimits_pk PRIMARY KEY (cityname),
+                CONSTRAINT citylimits_pk PRIMARY KEY (cityname),
                 FOREIGN KEY (cityname) REFERENCES public.cities(cityname)
                     ON DELETE CASCADE
                     ON UPDATE CASCADE
         )""",
-    "createUserSourcesTable" :
+    "createusersourcesTable" :
         """CREATE TABLE IF NOT EXISTS public.usersources (
                 username varchar(50) NOT NULL,
                 wood bigint NOT NULL,
@@ -156,18 +157,18 @@ NEW_STATEMENTS = {
                 food bigint NOT NULL,
                 metal bigint NOT NULL,
                 population bigint NOT NULL,
-                CONSTRAINT UserSources_pk PRIMARY KEY (username),
+                CONSTRAINT usersources_pk PRIMARY KEY (username),
                 FOREIGN KEY (username) REFERENCES public.users(username)
                     ON DELETE CASCADE
                     ON UPDATE CASCADE
         )""",
-    "createBuildingTypesTable" :
+    "createbuildingtypesTable" :
         """CREATE TABLE IF NOT EXISTS public.buildingtypes (
                 buildingname varchar(50) NOT NULL,
                 buildtime bigint NOT NULL,
                 CONSTRAINT buildingtypes_pk PRIMARY KEY (buildingname)
         )""",
-    "createBuildingCostsTable" :
+    "createbuildingcostsTable" :
         """CREATE TABLE IF NOT EXISTS public.buildingcosts (
                 buildingname varchar(50) NOT NULL,
                 wood bigint NOT NULL,
@@ -181,8 +182,8 @@ NEW_STATEMENTS = {
                     ON UPDATE CASCADE
         )""",
 
-    "createBuildingLimitEffectsTable" :
-        """CREATE TABLE IF NOT EXISTS public.BuildingLimitEffects (
+    "createbuildinglimiteffectsTable" :
+        """CREATE TABLE IF NOT EXISTS public.buildinglimiteffects (
                 buildingname varchar(50) NOT NULL,
                 wood bigint NOT NULL,
                 stone bigint NOT NULL,
@@ -195,8 +196,8 @@ NEW_STATEMENTS = {
                     ON UPDATE CASCADE
         )""",
 
-    "createBuildingIncrementEffectsTable" :
-        """CREATE TABLE IF NOT EXISTS public.BuildingIncrementEffects (
+    "createbuildingincrementeffectsTable" :
+        """CREATE TABLE IF NOT EXISTS public.buildingincrementeffects (
                 buildingname varchar(50) NOT NULL,
                 wood bigint NOT NULL,
                 stone bigint NOT NULL,
@@ -208,7 +209,7 @@ NEW_STATEMENTS = {
                     ON DELETE CASCADE
                     ON UPDATE CASCADE
         )""",
-    "createBuildingsTable" :
+    "createbuildingsTable" :
         """CREATE TABLE IF NOT EXISTS public.buildings (
                 buildingid serial primary key,
                 cityname varchar(50) NOT NULL,
@@ -221,8 +222,8 @@ NEW_STATEMENTS = {
                     ON DELETE CASCADE
                     ON UPDATE CASCADE
         )""",
-    "createPendingBuildingsTable" :
-        """CREATE TABLE IF NOT EXISTS public.PendingBuildings (
+    "creatependingbuildingsTable" :
+        """CREATE TABLE IF NOT EXISTS public.pendingbuildings (
                 buildingid int primary key,
                 level bigint not null,
                 remainingBuildTime bigint not null,
@@ -233,25 +234,25 @@ NEW_STATEMENTS = {
 }
 
 INIT_STATEMENTS_ORDER = [
-    "createUsersTable",
-    "createFriendsTable",
-    "createFriendRequestsTable",
-    "createMessagesTable",
-    "createSourceTypesTable",
-    "createCitiesTable",
-    "createCitySourcesTable",
-    "createUserSourcesTable",
-    "createCityBaseProductionsTable",
-    "createCityBaseLimitsTable",
-    "createUserProductionsTable",
-    "createCityProductionsTable",
-    "createCityLimitsTable",
-    "createBuildingTypesTable",
-    "createBuildingLimitEffectsTable",
-    "createBuildingIncrementEffectsTable",
-    "createBuildingCostsTable",
-    "createBuildingsTable",
-    "createPendingBuildingsTable",
+    "createusersTable",
+    "createfriendsTable",
+    "createfriendRequestsTable",
+    "createmessagesTable",
+    "createsourceTypesTable",
+    "createcitiesTable",
+    "createcitysourcesTable",
+    "createusersourcesTable",
+    "createcitybaseproductionsTable",
+    "createbitybaselimitsTable",
+    "createuserproductionsTable",
+    "createcityproductionsTable",
+    "createcitylimitsTable",
+    "createbuildingtypesTable",
+    "createbuildinglimiteffectsTable",
+    "createbuildingincrementeffectsTable",
+    "createbuildingcostsTable",
+    "createbuildingsTable",
+    "creatependingbuildingsTable",
 ]
 
 def drop_all_tables(cursor):
@@ -267,27 +268,16 @@ def insert_user(cursor,username, password, email):
     INSERT INTO users VALUES(
     %s,
     %s,
-    %s
+    %s,
+    0,
+    0,
+    0
     )
     """,(username, password, email))
 
-    set_base_limits_of_user(cursor, username)
-
-    for so in sources:
-        cursor.execute("""
-        INSERT INTO sources VALUES(
-        %s,
-        %s,
-        %s
-        )
-        """,(username, so, 0))
-        cursor.execute("""
-        INSERT INTO limits VALUES(
-        %s,
-        %s,
-        %s
-        )
-        """,(username, so, 1000))
+    CRUD.initializer(cursor, "userproductions", username)
+    CRUD.initializer(cursor, "usersources", username)
+     
 
 
 def insert_city(cursor, city_name, user_name, xcoordinate, ycoordinate, buildinglimit, buildingcount):
@@ -298,12 +288,17 @@ def insert_city(cursor, city_name, user_name, xcoordinate, ycoordinate, building
     %s,
     %s,
     %s,
+    %s,
     %s
     )
-    """,(city_name, user_name, xcoordinate, ycoordinate, buildinglimit, buildingcount))
+    """,(city_name, user_name, xcoordinate, ycoordinate, buildinglimit, buildingcount, "0"))
 
-    set_baseproductions_of_city(cursor, city_name)
-    set_baselimits_of_city(cursor, city_name)
+    set_base_productions_of_city(cursor, city_name)
+    set_base_limits_of_city(cursor, city_name)
+    CRUD.initializer(cursor, "CityProductions", username)
+    CRUD.initializer(cursor, "CitySources", username)
+    CRUD.initializer(cursor, "CityLimits", username)
+
 
 
 def friend_request(cursor, sender, receiver):
@@ -443,8 +438,8 @@ def get_sources_of_user(cursor, username):
 #return building ids
 
 
-def get_baseproductions_of_city(cursor, city):
-    cursor.execute("""select stype, value from public.baseproductions
+def get_base_productions_of_city(cursor, city):
+    cursor.execute("""select stype, value from public.citybaseproductions
                         where cityname=%s""", (cityname,))
     baseproductions = cursor.fetchall()
     baseproductionsDict = { }
@@ -454,9 +449,9 @@ def get_baseproductions_of_city(cursor, city):
 
     return baseproductionsDict
 
-def set_baseproductions_of_city(cursor, cityname):
+def set_base_productions_of_city(cursor, cityname):
         cursor.execute("""
-    INSERT INTO baseproduntions (wood, stone, metal, food, population) VALUES(
+    INSERT INTO citybaseproductions (wood, stone, metal, food, population) VALUES(
     %s,
     %s,
     %s,
@@ -464,7 +459,7 @@ def set_baseproductions_of_city(cursor, cityname):
     %s,
     %s
     )
-    """,(city_name, random()%50+50, random()%50+50, random()%50+50, random()%50+50 ,random()%50+50))
+    """,(cityname, int(random()%50+50), int(random()%50+50), int(random()%50+50), int(random()%50+50) ,int(random()%50+50)))
 
 def get_base_building_productions(cursor, buildingname):
     cursor.execute("""select stype, value from public.BuildingEffects
@@ -490,7 +485,7 @@ def set_base_limits_of_city(cursor, username):
     %s,
     %s
     )
-    """,(username, random()%50+50, random()%50+50, random()%50+50, random()%50+50 ,random()%50+50))
+    """,(username, int(random()%50+50), int(random()%50+50), int(random()%50+50), int(random()%50+50) ,int(random()%50+50)))
 
 LEVEL_EFFECT = 10 #percent
 def get_building_limits(cursor, buildingid):
