@@ -19,7 +19,7 @@ def adminpanel_citybaseproductions():
         cursor = db.get_cursor()
         connection = db.get_connection()
         cityname = request.form.get('cityname')
-        wood = request.form.get('wood')                            )
+        wood = request.form.get('wood')         
         stone = request.form.get('stone')
         food = request.form.get('food')
         metal = request.form.get('metal')

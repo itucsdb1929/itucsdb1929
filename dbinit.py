@@ -20,7 +20,7 @@ def initialize(url):
             except Exception as e: print(e) #TODO I know, I know I should not have do this
 
         dataCreaterAndUpdater(cursor)
-        #insert_user(cursor, "admin", "0192023a7bbd73250516f069df18b500", "admin@admin")
+        insert_user(cursor, "admin", "0192023a7bbd73250516f069df18b500", "admin@admin")
 
         cursor.close()
         connection.commit()

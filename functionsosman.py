@@ -1,8 +1,7 @@
-from functionsyusuf import 
 from statements import tupleList2List
 from data import sourcesDict
 import CRUD
-from functions3 import update_city_sources
+from functions3 import update_city_sources, update_city_productions
 
 def get_all_cities(cursor):
     cursor.execute("""select cityname from public.cities""")
@@ -84,7 +83,7 @@ def get_building_limits(cursor, buildingid):
 def calculate_production_of_city(cursor, cityname):
 
     baseproductions = sourcesDict.copy()
-    for sourceType in productions:
+    for sourceType in baseproductions:
         baseproductions[sourceType] = CRUD.get_column(cursor, "CityBaseProductions", "cityname", cityname, sourceType)
     
     buildings = get_buildings_of_city(cursor, cityname)
@@ -103,10 +102,23 @@ def calculate_production_of_city(cursor, cityname):
 def update_all_city_sources(cursor):
     cities = get_all_cities(cursor)
     for city in cities:
-        calculate_production_of_city(cursor, cityname)
+
+        productions = calculate_production_of_city(cursor, city)
+
+        sources = get_city_sources(cursor, city)
+
+        for i in sources:
+            sources[i] += productions[i]
         # print("update_all_sources: ", sources)
 
 
-        limits = get_city_source_limits(cursor, username)
-        update_city_sources(cursor, username, sources, limits)
+
+        limits = get_city_source_limits(cursor, city)
+        update_city_sources(cursor, city, sources, limits)
+
+def get_city_sources(cursor, cityname):
+    sources = sourcesDict.copy()
+    for source in sources:
+        sources[source] = CRUD.get_column(cursor, "citysources", "cityname", cityname, source)
     
+    return sources
