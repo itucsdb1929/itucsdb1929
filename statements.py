@@ -293,7 +293,6 @@ def delete_message(cursor, val):
 def delete_friend(cursor, username, friend):
     cursor.execute("""select username,friend from friends where(username=%s and friend=%s)""",(username, friend))
     if cursor.fetchone() is None:
-        Print("Friend delete no friend")
         return False
     cursor.execute("""delete from friends where (username=%s and friend=%s)""",(username, friend))
     cursor.execute(""" delete from friends where(username=%s and friend=%s)""",(friend, username))
