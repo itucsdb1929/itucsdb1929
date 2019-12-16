@@ -102,10 +102,23 @@ def calculate_production_of_city(cursor, cityname):
 def update_all_city_sources(cursor):
     cities = get_all_cities(cursor)
     for city in cities:
-        sources = calculate_production_of_city(cursor, city)
+
+        productions = calculate_production_of_city(cursor, city)
+
+        sources = get_city_sources(cursor, city)
+
+        for i in sources:
+            sources[i] += productions[i]
         # print("update_all_sources: ", sources)
+
 
 
         limits = get_city_source_limits(cursor, city)
         update_city_sources(cursor, city, sources, limits)
+
+def get_city_sources(cursor, cityname):
+    sources = sourcesDict.copy()
+    for source in sources:
+        sources[source] = CRUD.get_column(cursor, "citysources", "cityname", cityname, source)
     
+    return sources
