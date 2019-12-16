@@ -6,23 +6,60 @@
 
 {% block page_content %}
 
-<table class="table table-dark">
-  <thead>
-    <tr>
-      <th scope="col">City Major</th>
-      <th scope="col">City Name</th>
-      <th scope="col">City Location</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for city_major, city_name, city_location in cities %}
-    <tr>
-      <th scope="row">city_major</th>
-      <td>city_name</td>
-      <td>city_location</td>
-    </tr>
-    {% endfor %}
-  </tbody>
-</table>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.4/popper.min.js"></script>
+
+<div class="row">
+  <div class="col">
+  <h1 align="center"> Game Panel </h1>
+  </div>
+</div>
+
+<div class="row">
+
+  
+
+{% for i in range(5) %}
+
+{% if (i%2)==0 %}
+  {% if i!=0 %}
+  </div>
+  {% endif %}
+  <div class="row">
+{% endif %}
+
+ <div class="card" style="margin: 5px 5px 5px 5px;">
+  <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcRsUSoYCw0PWQFncdpyCeJ54hBEoAhJaH32ZjfamS-SBP3nN8ph" class="card-img-top" alt="City image" style="object-fit: cover;">
+
+  <div class="card-header"> 
+    <ul class="nav nav-tabs card-header-tabs pull-right"  id="myTab" role="tablist">
+      <li class="nav-item">
+       <a class="nav-link active" id="home-tab{{i}}" data-toggle="tab" href="#home{{i}}" role="tab" aria-controls="home{{i}}" aria-selected="true">Home</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" id="profile-tab{{i}}" data-toggle="tab" href="#profile{{i}}" role="tab" aria-controls="profile{{i}}" aria-selected="false">Profile</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" id="contact-tab{{i}}" data-toggle="tab" href="#contact{{i}}" role="tab" aria-controls="contact{{i}}" aria-selected="false">Contact</a>
+      </li>
+    </ul>
+  </div>
+  <div class="card-body">
+    <h5 class="card-title">Card title{{i}}</h5>
+
+   <div class="tab-content" id="myTabContent">
+    <div class="tab-pane fade show active" id="home{{i}}" role="tabpanel" aria-labelledby="home-tab{{i}}">this is 1</div>
+  <div class="tab-pane fade" id="profile{{i}}" role="tabpanel" aria-labelledby="profile-tab{{i}}">this is 2</div>
+  <div class="tab-pane fade" id="contact{{i}}" role="tabpanel" aria-labelledby="contact-tab{{i}}">this is 3</div>
+  </div>
+  </div>
+</div>
+
+
+{% endfor %}
+
+
+</div>
+
+
 
 {% endblock %}
