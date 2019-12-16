@@ -13,6 +13,66 @@ adminpanel = Blueprint('adminpanel', __name__,
 def adminpanel_func():
     return render_template('adminpanel.html')
 
+@adminpanel.route("/adminpanel/citybaseproductions", methods=['POST'])
+def adminpanel_citybaseproductions():
+    cityname = request.form.get('cityname')
+    wood = request.form.get('wood')
+    stone = request.form.get('stone')
+    food = request.form.get('food')
+    metal = request.form.get('metal')
+    population = request.form.get('population')
+    return redirect(url_for('adminpanel.adminpanel_func'))
+
+@adminpanel.route("/adminpanel/citybaselimits", methods=['POST'])
+def adminpanel_citybaselimits():
+    cityname = request.form.get('cityname')
+    wood = request.form.get('wood')
+    stone = request.form.get('stone')
+    food = request.form.get('food')
+    metal = request.form.get('metal')
+    population = request.form.get('population')
+    return redirect(url_for('adminpanel.adminpanel_func'))
+
+@adminpanel.route("/adminpanel/buildingcost", methods=['POST'])
+def adminpanel_buildingcosts():
+    buildingname = request.form.get('buildingname')
+    wood = request.form.get('wood')
+    stone = request.form.get('stone')
+    food = request.form.get('food')
+    metal = request.form.get('metal')
+    gold = request.form.get('gold')
+    return redirect(url_for('adminpanel.adminpanel_func'))
+
+
+@adminpanel.route("/adminpanel/buildinglimiteffects", methods=['POST'])
+def adminpanel_buildinglimiteffects():
+    buildingname = request.form.get('buildingname')
+    wood = request.form.get('wood')
+    stone = request.form.get('stone')
+    food = request.form.get('food')
+    metal = request.form.get('metal')
+    gold = request.form.get('population')
+    return redirect(url_for('adminpanel.adminpanel_func'))
+
+@adminpanel.route("/adminpanel/buildingincrementeffects", methods=['POST'])
+def adminpanel_buildingincrementeffects():
+    buildingname = request.form.get('buildingname')
+    wood = request.form.get('wood')
+    food = request.form.get('food')
+    stone = request.form.get('stone')
+    metal = request.form.get('metal')
+    gold = request.form.get('population')
+    return redirect(url_for('adminpanel.adminpanel_func'))
+
+@adminpanel.route("/adminpanel/buildingtypes", methods=['POST'])
+def adminpanel_buildingtypes():
+    buildingname = request.form.get('buildingname')
+    buildtime = request.form.get('buildtime')
+    return redirect(url_for('adminpanel.adminpanel_func'))
+
+
+
+
 @adminpanel.route("/adminpanel/addcity", methods=['POST'])
 def adminpanel_add_city():
     with db.dataBaseLock:
