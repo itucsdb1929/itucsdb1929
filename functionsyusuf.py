@@ -1,5 +1,5 @@
 from statements import tupleList2List
-from functionsosman import get_all_cities, get_buildings_of_city
+from functionsosman import get_all_cities, get_buildings_of_city, get_building_limits
 import CRUD
 def get_all_usernames(cursor):
     cursor.execute("""select username from public.users""")

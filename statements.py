@@ -487,19 +487,6 @@ def set_base_limits_of_city(cursor, username):
     )
     """,(username, randint(1000, 1500), randint(1000, 1500), randint(1000, 1500), randint(1000, 1500) ,randint(1000, 1500)))
 
-LEVEL_EFFECT = 10 #percent
-def get_building_limits(cursor, buildingid):
-    global LEVEL_EFFECT
-    level = get_building_level(cursor, buildingid)
-    effect = level * LEVEL_EFFECT
-
-    for key in limits:
-        limits[key] += (limits[key] * effect) // 100
-
-    return limits
-
-
-
 def change_city_major(cursor, username, cityname):
     cursor.execute("""
     UPDATE public.cities
