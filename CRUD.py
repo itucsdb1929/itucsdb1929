@@ -1,9 +1,13 @@
+from data import sourcesDict
 def get_column(cursor, tablename, keyname, key, column):
     cursor.execute("""
         select """+ column+ """ from """+ tablename + """
         where """+ keyname +"""=%s
         """ , (key, ))
-    column = cursor.fetchone()
+    column= cursor.fetchone()
+    if column==None:
+        blank = 0
+        return blank
     column = column[0]
     return column
 

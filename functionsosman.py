@@ -26,8 +26,7 @@ def get_buildingname(cursor, buildingid):
     (buildingname,) = cursor.fetchone()
     return buildingname
 
-def get_base_building_increment(cursor, buildingid):
-    buildingname = get_buildingname(cursor, buildingid)
+def get_base_building_increment(cursor, buildingname):
     baseincrement = sourcesDict.copy()
     for sourceType in baseincrement:
         baseincrement[sourceType] = CRUD.get_column(cursor, "BuildingIncrementEffects",
@@ -35,13 +34,13 @@ def get_base_building_increment(cursor, buildingid):
                     sourceType)
     return baseincrement
 
-def get_base_building_limit(cursor, buildingid):
-    buildingname = get_buildingname(cursor, buildingid)
+def get_base_building_limits(cursor, buildingname):
     baselimits = sourcesDict.copy()
+    print("baselimits", baselimits)
     for sourceType in baselimits:
         baselimits[sourceType] = CRUD.get_column(cursor, "BuildingLimitEffects",
-                    "buildingname", buildingname,
-                    sourceType)
+                    "buildingname", buildingname, sourceType)
+    print("returning limits", baselimits)               
     return baselimits
 
 def get_city_source_limits(cursor, cityname):
@@ -71,8 +70,8 @@ def get_building_limits(cursor, buildingid):
     level = get_building_level(cursor, buildingid)
     effect = level * LEVEL_EFFECT
     build_name = get_buildingname(cursor, buildingid)
-    limits = get_base_building_limit(cursor, build_name)
-
+    limits = get_base_building_limits(cursor, build_name)
+    print("limits", limits)
     for key in limits:
         limits[key] += (limits[key] * effect) // 100
 
