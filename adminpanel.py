@@ -1,10 +1,10 @@
 from flask import Flask, render_template, request, redirect, url_for, session, Blueprint, flash
-from statements import insert_city
+from statements import insert_city, insert_user
 from functions3 import new_building, level_up_building
 from dbinit import initialize
 from statements import INIT_STATEMENTS_ORDER, NEW_STATEMENTS, drop_all_tables
 import db, os
-
+import data
 
 adminpanel = Blueprint('adminpanel', __name__,
                         template_folder='templates')
@@ -12,6 +12,66 @@ adminpanel = Blueprint('adminpanel', __name__,
 @adminpanel.route("/adminpanel", methods = ['GET'])
 def adminpanel_func():
     return render_template('adminpanel.html')
+
+@adminpanel.route("/adminpanel/citybaseproductions", methods=['POST'])
+def adminpanel_citybaseproductions():
+    cityname = request.form.get('cityname')
+    wood = request.form.get('wood')
+    stone = request.form.get('stone')
+    food = request.form.get('food')
+    metal = request.form.get('metal')
+    population = request.form.get('population')
+    return redirect(url_for('adminpanel.adminpanel_func'))
+
+@adminpanel.route("/adminpanel/citybaselimits", methods=['POST'])
+def adminpanel_citybaselimits():
+    cityname = request.form.get('cityname')
+    wood = request.form.get('wood')
+    stone = request.form.get('stone')
+    food = request.form.get('food')
+    metal = request.form.get('metal')
+    population = request.form.get('population')
+    return redirect(url_for('adminpanel.adminpanel_func'))
+
+@adminpanel.route("/adminpanel/buildingcost", methods=['POST'])
+def adminpanel_buildingcosts():
+    buildingname = request.form.get('buildingname')
+    wood = request.form.get('wood')
+    stone = request.form.get('stone')
+    food = request.form.get('food')
+    metal = request.form.get('metal')
+    gold = request.form.get('gold')
+    return redirect(url_for('adminpanel.adminpanel_func'))
+
+
+@adminpanel.route("/adminpanel/buildinglimiteffects", methods=['POST'])
+def adminpanel_buildinglimiteffects():
+    buildingname = request.form.get('buildingname')
+    wood = request.form.get('wood')
+    stone = request.form.get('stone')
+    food = request.form.get('food')
+    metal = request.form.get('metal')
+    gold = request.form.get('population')
+    return redirect(url_for('adminpanel.adminpanel_func'))
+
+@adminpanel.route("/adminpanel/buildingincrementeffects", methods=['POST'])
+def adminpanel_buildingincrementeffects():
+    buildingname = request.form.get('buildingname')
+    wood = request.form.get('wood')
+    food = request.form.get('food')
+    stone = request.form.get('stone')
+    metal = request.form.get('metal')
+    gold = request.form.get('population')
+    return redirect(url_for('adminpanel.adminpanel_func'))
+
+@adminpanel.route("/adminpanel/buildingtypes", methods=['POST'])
+def adminpanel_buildingtypes():
+    buildingname = request.form.get('buildingname')
+    buildtime = request.form.get('buildtime')
+    return redirect(url_for('adminpanel.adminpanel_func'))
+
+
+
 
 @adminpanel.route("/adminpanel/addcity", methods=['POST'])
 def adminpanel_add_city():
@@ -69,6 +129,9 @@ def adminpanel_db_init():
         for statement in INIT_STATEMENTS_ORDER:
             print(statement)
             cursor.execute(NEW_STATEMENTS[statement])
+        
+        data.dataCreaterAndUpdater(cursor)
+        insert_user(cursor, "admin", "0192023a7bbd73250516f069df18b500", "admin@admin")
         connection.commit()
     return redirect(url_for('adminpanel.adminpanel_func'))
 

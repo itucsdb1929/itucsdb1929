@@ -56,14 +56,14 @@ def level_up_building(cursor, buildingid):
     global LEVEL_EFFECT
     cursor.execute("""
     select * from buildings where(buildingid=%s)
-     """,(buildingid))
+     """,(buildingid, ))
     building = cursor.fetchone()
     city_name = building[1]
     buildingname = building[2]
     level = building[3]
     cursor.execute("""
     select buildtime from buildingtypes where(buildingname=%s)
-    """, (buildingname))
+    """, (buildingname,))
 
     base_time = cursor.fetchone()
     base_time = base_time[0]

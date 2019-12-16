@@ -33,13 +33,15 @@
     <body>
 
     <script>
-    $.get("/api/notifications", function(data) {
+$(document).ready(function(){
+        $.get("/api/notifications", function(data) {
             if(data['notifications']) {
                  $('.toast').toast('show');
             } else {
                 $('.toast').remove()
             }
         });
+});    
         function goProfile() {
              window.location.href="/profile";
         }
