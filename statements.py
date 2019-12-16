@@ -441,10 +441,7 @@ def get_sources_of_user(cursor, username):
 
 
 #return building ids
-def get_buildings_of_city(cursor, cityname):
-    cursor.execute("""select buildingid from public.buildings
-                        where cityname=%s""", (cityname,))
-    return tupleList2List(cursor.fetchall())
+
 
 def get_baseproductions_of_city(cursor, city):
     cursor.execute("""select stype, value from public.baseproductions
@@ -495,35 +492,6 @@ def set_base_limits_of_city(cursor, username):
     )
     """,(username, random()%50+50, random()%50+50, random()%50+50, random()%50+50 ,random()%50+50))
 
-
-def get_buildingname(cursor, buildingid):
-    cursor.execute("""select buildingname from public.buildings
-                        where buildingid=%s""", (buildingid,))
-
-    (buildingname,) = cursor.fetchone()
-    return buildingname
-
-def get_building_level(cursor, buildingid):
-    cursor.execute("""select level from public.buildings
-                        where buildingid=%s""", (buildingid,))
-
-    (level,) = cursor.fetchone()
-    return level
-
-
-LEVEL_EFFECT = 10 #percent
-def get_building_productions(cursor, buildingid):
-    global LEVEL_EFFECT
-    level = get_building_level(cursor, buildingid)
-    effect = level * LEVEL_EFFECT
-    build_name = get_buildingname(cursor, buildingid)
-    productions = get_base_building_productions(cursor, build_name)
-
-    for key in productions:
-        productions[key] += (productions[key] * effect) // 100
-
-    return productions
-
 LEVEL_EFFECT = 10 #percent
 def get_building_limits(cursor, buildingid):
     global LEVEL_EFFECT
@@ -535,25 +503,6 @@ def get_building_limits(cursor, buildingid):
 
     return limits
 
-def get_production_of_city(cursor, cityname):
-
-    productions = sourcesDict.copy()
-
-    factors = sourcesDict.copy()
-
-    buildings = get_buildings_of_city(cursor, cityname)
-
-    for building in buildings:
-        prods = get_building_productions(cursor, building)
-        for prod in prods:
-            productions[prod] += prods[prod]
-        #endfor
-
-    get_baseproductions_of_city(cursor, cityname)
-
-    #endfor
-    update_city_productions(cursor, cityname, productions)
-    return productions
 
 
 def change_city_major(cursor, username, cityname):
