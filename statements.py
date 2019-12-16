@@ -225,6 +225,7 @@ NEW_STATEMENTS = {
         """CREATE TABLE IF NOT EXISTS public.PendingBuildings (
                 buildingid int primary key,
                 level bigint not null,
+                remainingBuildTime bigint not null,
                 FOREIGN KEY (buildingid) REFERENCES public.buildings(buildingid)
                     ON DELETE CASCADE
                     ON UPDATE CASCADE
