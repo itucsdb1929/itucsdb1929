@@ -1,13 +1,13 @@
 
 LEVEL_EFFECT = 10
 
-def update_city_production(cursor, cityname, production):
-    for key, values in productions:
+def update_city_productions(cursor, cityname, productions):
+    for key in productions:
         cursor.execute("""
         UPDATE productions
         SET value=%s
         WHERE (cityname=%s and stype=%s)
-        """,(value, cityname, key))
+        """,(productions[key], cityname, key))
 
 
 def new_building(cursor, cityname, buildingname):

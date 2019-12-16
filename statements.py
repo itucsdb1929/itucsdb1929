@@ -1,5 +1,5 @@
 from data import sources, sourcesDict
-
+from functions3 import update_city_productions
 
 NEW_STATEMENTS = {
     "createUsersTable" :
