@@ -101,7 +101,7 @@
   <div class="tab-pane fade" id="build{{i}}" role="tabpanel" aria-labelledby="build-tab{{i}}">
 
     <ul class="list-group">
-          {% for j in buildingnames %}
+          {% for j in buildingnames[cities[i]['cityname']] %}
             <li class="list-group-item"><span class="font-weight-bold">Building Name:</span> {{j[0]}} (level 1)
             {% if j[1] %}
             <button type="button" id="buttonbuild{{j[0]}}" class="btn btn-primary btn-sm" onclick="buildbuilding('{{cities[i]['cityname']}}', '{{j[0]}}')">Build</button>

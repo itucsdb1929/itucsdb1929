@@ -72,7 +72,7 @@ def cities_page():
             }
         ]
     }
-    buildingnames = [("field", True), ("depository", False), ("mill", True)]
+    buildingnames = {'Istanbul': [("field", True), ("depository", False), ("mill", True)]}
     cities = []
     cities.append(example_city)
     cities.append(example_city)
