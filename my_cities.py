@@ -7,12 +7,22 @@ my_cities = Blueprint('city', __name__,
 
 @my_cities.route("/my_cities")
 def cities_page():
-    # username = session['username']
-    # cursor = db.get_cursor()
-    # cursor.execute("""
-    # SELECT * FROM CITY WHERE (CITY_MAJOR = %s)
-    # """, (username,))
-    # cities = cursor.fetchall()
-
+    username = session['username']
+    example_city = {
+        'cityname': 'Istanbul',
+        'xcoordinate': 5,
+        'ycoordinate': 5,
+        'food': 50,
+        'wood': 50,
+        'stone': 50,
+        'gold': 50,
+        'metal': 50,
+        'soldiers': 0,
+        'woodlimit': 1000,
+        'foodlimit': 1000,
+        'stonelimit': 1000,
+        'metallimit': 1000
+    }
     cities = []
-    return render_template("cities.html", cities=cities)
+    cities.append(example_city)
+    return render_template("cities.html", cities=cities, citycount=len(cities))
