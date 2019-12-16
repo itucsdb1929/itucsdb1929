@@ -6,23 +6,125 @@
 
 {% block page_content %}
 
-<table class="table table-dark">
-  <thead>
-    <tr>
-      <th scope="col">City Major</th>
-      <th scope="col">City Name</th>
-      <th scope="col">City Location</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for city_major, city_name, city_location in cities %}
-    <tr>
-      <th scope="row">city_major</th>
-      <td>city_name</td>
-      <td>city_location</td>
-    </tr>
-    {% endfor %}
-  </tbody>
-</table>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.4/popper.min.js"></script>
+
+<script>
+  function levelupbuilding(buildingid) {
+    // TODO send post request to API
+    $.post( "/api/city/levelupbuilding", { building_id: buildingid } );
+    location.reload();
+  }
+
+  function buildbuilding(cityname, buildingname) {
+    $.post("/api/city/buildbuilding", {city_name: cityname, building_name: buildingname} );
+    location.reload();
+  }
+
+</script>
+
+<div class="row">
+  <div class="col">
+  <h1 align="center"> Game Panel </h1>
+  </div>
+</div>
+
+<div class="row">
+
+{% for i in range(citycount) %}
+
+{% if (i%2)==0 %}
+  {% if i!=0 %}
+  </div>
+  {% endif %}
+  <div class="row">
+{% endif %}
+
+ <div class="card" style="margin: 9px 9px 9px 9px;">
+  <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcRsUSoYCw0PWQFncdpyCeJ54hBEoAhJaH32ZjfamS-SBP3nN8ph" class="card-img-top" alt="City image" style="object-fit: cover;">
+
+  <div class="card-header"> 
+    <ul class="nav nav-tabs card-header-tabs pull-right"  id="myTab" role="tablist">
+      <li class="nav-item">
+       <a class="nav-link active" id="home-tab{{i}}" data-toggle="tab" href="#home{{i}}" role="tab" aria-controls="home{{i}}" aria-selected="true">Main</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" id="build-tab{{i}}" data-toggle="tab" href="#build{{i}}" role="tab" aria-controls="build{{i}}" aria-selected="false">Build</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" id="contact-tab{{i}}" data-toggle="tab" href="#contact{{i}}" role="tab" aria-controls="contact{{i}}" aria-selected="false">Contact</a>
+      </li>
+    </ul>
+  </div>
+  <div class="card-body">
+    <h5 class="card-title">{{cities[i]['cityname']}} ({{cities[i]['xcoordinate']}}, {{cities[i]['ycoordinate']}})</h5>
+
+   <div class="tab-content" id="myTabContent">
+    <div class="tab-pane fade show active" id="home{{i}}" role="tabpanel" aria-labelledby="home-tab{{i}}">
+      <div class="row">
+      <div class="col">
+        <ul class="list-group">
+            <li class="list-group-item"><span class="font-weight-bold"><img style="width:20px;"src="https://cdn3.iconfinder.com/data/icons/random-4/96/wood-trunk-log-camping-nature-resource-512.png" alt="wood icon">Wood:</span> {{cities[i]['wood']}} </li>
+            <li class="list-group-item"><span class="font-weight-bold"><img style="width:20px;"src="https://static.thenounproject.com/png/551389-200.png" alt="food icon">Food:</span> {{cities[i]['food']}}</li>
+            <li class="list-group-item"><span class="font-weight-bold"><img style="width:20px;"src="https://cdn2.iconfinder.com/data/icons/valuable-items/200/mine_mineral_pure_rock_silver_stone_treasure-512.png" alt="stone icon">Stone:</span> {{cities[i]['stone']}}</li>
+            <li class="list-group-item"><span class="font-weight-bold"><img style="width:20px;"src="https://cdn3.iconfinder.com/data/icons/business-and-seo-7/48/37-512.png" alt="gold icon">Gold:</span> {{cities[i]['gold']}}</li>
+            <li class="list-group-item"><span class="font-weight-bold"><img style="width:20px;"src="https://cdn1.iconfinder.com/data/icons/elasto-metal-structures-and-products/26/16_i-beam-512.png" alt="metal icon">Metal:</span> {{cities[i]['metal']}}</li>
+            <li class="list-group-item"><span class="font-weight-bold"><img style="width:20px;"src="https://www.freepngimg.com/download/vehicle/82786-army-edition-pocket-soldier-organization-military-minecraft.png" alt="metal icon">Soldiers:</span> {{cities[i]['soldiers']}}</li>
+        </ul>
+      </div>
+      <div class="col">
+        <ul class="list-group">
+            <li class="list-group-item"><span class="font-weight-bold">Wood Limit:</span> {{cities[i]['woodlimit']}} </li>
+            <li class="list-group-item"><span class="font-weight-bold">Food Limit:<i class="fas fa-drumstick-bite"></i></span> {{cities[i]['foodlimit']}}</li>
+            <li class="list-group-item"><span class="font-weight-bold">Stone Limit:</span> {{cities[i]['stonelimit']}}</li>
+            <li class="list-group-item"><span class="font-weight-bold">Metal Limit:</span> {{cities[i]['metallimit']}}</li>
+        </ul>
+      </div>
+    </div>
+
+    <br>
+    <div class="row">
+        <ul class="list-group">
+          {% for j in cities[i]['buildings'] %}
+            <li class="list-group-item"><span class="font-weight-bold">Building Name:</span> {{j['buildingname']}} (level {{j['level']}})
+            {% if j['can_level_up'] %}
+            <button type="button" id="button{{j['buildingid']}}" class="btn btn-primary btn-sm" onclick="levelupbuilding({{j['buildingid']}})">Level Up</button>
+            {% else %}
+            <button type="button" id="button{{j['buildingid']}}" class="btn btn-primary btn-sm" disabled onclick="levelupbuilding({{j['buildingid']}})">Not Enough Sources</button>
+            {% endif %}
+             </li>
+            {% endfor %}
+        </ul>
+
+    </div>
+    
+    </div>
+  <div class="tab-pane fade" id="build{{i}}" role="tabpanel" aria-labelledby="build-tab{{i}}">
+
+    <ul class="list-group">
+          {% for j in buildingnames[cities[i]['cityname']] %}
+            <li class="list-group-item"><span class="font-weight-bold">Building Name:</span> {{j[0]}} (level 1)
+            {% if j[1] %}
+            <button type="button" id="buttonbuild{{j[0]}}" class="btn btn-primary btn-sm" onclick="buildbuilding('{{cities[i]['cityname']}}', '{{j[0]}}')">Build</button>
+            {% else %}
+            <button type="button" id="buttonbuild{{j[0]}}" class="btn btn-primary btn-sm" disabled onclick="buildbuilding('{{cities[i]['cityname']}}', '{{j[0]}}'))">Not Enough Sources</button>
+            {% endif %}
+             </li>
+            {% endfor %}
+        </ul>
+
+  </div>
+
+  <div class="tab-pane fade" id="contact{{i}}" role="tabpanel" aria-labelledby="contact-tab{{i}}">this is 3</div>
+  </div>
+  </div>
+</div>
+
+
+{% endfor %}
+
+
+</div>
+
+
 
 {% endblock %}
