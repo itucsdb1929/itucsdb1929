@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, session, Blueprint, flash, jsonify
 from statements import delete_message
 import db
+from functions2 import user_inform
 
 profile = Blueprint('profile', __name__,
                         template_folder='templates')
@@ -25,6 +26,15 @@ def deleteMessage():
     delete_message(cursor, message_id)
     connection.commit()
     return jsonify({'result': 'success'})
+
+@profile.route("/api/user_api/<username>", methods=['GET'])
+def userApi(username):
+    cursor = db.get_cursor()
+    connection = db.get_connection()
+    res = user_inform(cursor, username)
+    connection.commit()
+    print("res", res)
+    return jsonify(res)
 
 @profile.route("/profile")
 def profileFuncMe():

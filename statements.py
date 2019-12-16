@@ -1,6 +1,6 @@
 from data import sources, sourcesDict
 from functions3 import update_city_productions
-
+from random import random
 NEW_STATEMENTS = {
     "createUsersTable" :
         """CREATE TABLE IF NOT EXISTS public.users (
@@ -234,6 +234,9 @@ def insert_user(cursor,username, password, email):
     %s
     )
     """,(username, password, email))
+
+    set_base_limits_of_user(cursor, username)
+
     for so in sources:
         cursor.execute("""
         INSERT INTO sources VALUES(
@@ -262,6 +265,8 @@ def insert_city(cursor, city_name, user_name, xcoordinate, ycoordinate, building
     %s
     )
     """,(city_name, user_name, xcoordinate, ycoordinate, buildinglimit, buildingcount))
+
+    set_baseproductions_of_city(cursor, city_name)
 
 
 def friend_request(cursor, sender, receiver):
@@ -419,6 +424,18 @@ def get_baseproductions_of_city(cursor, city):
 
     return baseproductionsDict
 
+def set_baseproductions_of_city(cursor, cityname):
+        cursor.execute("""
+    INSERT INTO baseproduntions (wood, stone, metal, food, population) VALUES(
+    %s,
+    %s,
+    %s,
+    %s,
+    %s,
+    %s
+    )
+    """,(city_name, random()%50+50, random()%50+50, random()%50+50, random()%50+50 ,random()%50+50))
+
 def get_base_building_productions(cursor, buildingname):
     cursor.execute("""select stype, value from public.BuildingEffects
                         where buildingname=%s and etype='inc'""", (buildingname,))
@@ -430,8 +447,34 @@ def get_base_building_productions(cursor, buildingname):
 
     return baseproductionsDict
 
-def get_base_limits():
-    return base_limits
+def get_base_limits_of_user(username):
+    cursor.execute("""select wood, stone, metal, food, population from public.baselimits
+                        where username=%s""", (username,))
+    res = cursor.fetchone()
+ 
+    lmts = {
+        "wood": res[0],
+        "stone": res[1],
+        "metal": res[2],
+        "food": res[3],
+        "population": res[4]   
+    }
+
+    return lmts
+
+
+def set_base_limits_of_user(cursor, username):
+    cursor.execute("""
+    INSERT INTO baselimits VALUES(
+    %s,
+    %s,
+    %s,
+    %s,
+    %s,
+    %s
+    )
+    """,(username, random()%50+50, random()%50+50, random()%50+50, random()%50+50 ,random()%50+50))
+
 
 def get_buildingname(cursor, buildingid):
     cursor.execute("""select buildingname from public.buildings
@@ -485,6 +528,8 @@ def get_production_of_city(cursor, cityname):
         for prod in prods:
             productions[prod] += prods[prod]
         #endfor
+
+    get_baseproductions_of_city(cursor, cityname)
 
     #endfor
     update_city_productions(cursor, cityname, productions)
