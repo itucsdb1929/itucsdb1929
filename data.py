@@ -25,12 +25,20 @@ buildings = [
         "buildingname": "field",
         "buildTime": 20,
         "costs": {
-            "wood": 20,
-            "stone": 20,
+            "wood":20,
+            "stone":20,
+            "food":0,
+            "metal":0,
+            "population":0,
+            "gold": 0,
         },
         "effects": {
             "inc": {
-                "food": 5,
+                "wood":0,
+                "stone":0,
+                "food":5,
+                "metal":0,
+                "population":0,
             },
         },
     },
@@ -40,13 +48,18 @@ buildings = [
         "costs": {
             "wood": 30,
             "stone": 30,
+            "food":0,
             "metal": 10,
+            "population":0,
+            "gold": 0,
         },
         "effects": {
             "limit": {
                 "wood": 400,
                 "stone": 400,
+                "food":0,
                 "metal": 400,
+                "population":0,
             },
         },
     },
@@ -56,11 +69,18 @@ buildings = [
         "costs": {
             "wood": 40,
             "stone": 20,
+            "food":0,
             "metal": 10,
+            "population":0,
+            "gold": 0,
         },
         "effects": {
             "inc": {
+                "wood":0,
+                "metal": 0,
+                "stone": 0,
                 "food" : 100,
+                "population":0,
             },
         },
     },
@@ -72,6 +92,8 @@ buildings = [
             "stone": 99,
             "metal": 99,
             "food": 99,
+            "population":0,
+            "gold": 0,
         },
         "effects": {
             "limit": {
@@ -79,12 +101,14 @@ buildings = [
                 "metal" : 9,
                 "stone" : 9,
                 "wood" : 9,
+                "population":0,
             },
             "inc": {
                 "food" : 9,
                 "metal" : 9,
                 "stone" : 9,
                 "wood" : 9,
+                "population":0,
             },
         },
     },
@@ -100,10 +124,6 @@ def dataCreaterAndUpdater(cursor):
         cursor.execute("""insert into sourceTypes(stype) values(%s) 
             ON CONFLICT ON CONSTRAINT sourceTypes_pk DO UPDATE SET stype = %s""", (source,source))
 
-    for effect in effects:
-        cursor.execute("""insert into effectTypes(etype) values(%s) 
-            ON CONFLICT ON CONSTRAINT effectTypes_pk DO UPDATE SET etype = %s""", (effect,effect))
-
     for building in buildings:
         cursor.execute("""insert into buildingTypes(buildingName,buildTime) values(%s,%s)
             ON CONFLICT ON CONSTRAINT buildingTypes_pk DO UPDATE SET 
@@ -111,18 +131,47 @@ def dataCreaterAndUpdater(cursor):
             (building["buildingname"], building["buildTime"],
             building["buildingname"], building["buildTime"]))
 
-        for source in building["costs"]:
-            cursor.execute("""insert into buildingCosts(buildingName,costsource,cost) 
-                values(%s,%s,%s) ON CONFLICT ON CONSTRAINT buildingCosts_pk DO UPDATE
-                SET buildingName = %s, costsource = %s, cost = %s""", 
-                    (building["buildingname"], source, building["costs"][source], 
-                    building["buildingname"], source, building["costs"][source]))
+        
+        wood = building["costs"]["wood"]
+        stone = building["costs"]["stone"]
+        metal = building["costs"]["metal"]
+        food = building["costs"]["food"]
+        gold = building["costs"]["gold"]
+
+        cursor.execute("""insert into buildingCosts(buildingName,wood, stone, food, metal ,gold) 
+                values(%s, %s, %s, %s ,%s,%s) ON CONFLICT ON CONSTRAINT buildingCosts_pk DO UPDATE
+                SET buildingName = %s, wood = %s,  stone = %s,  food = %s,  metal = %s, gold = %s""", 
+                    (building["buildingname"], wood, stone, metal, food, gold, 
+                    building["buildingname"], wood, stone, metal, food, gold ))
         
         for effect in building["effects"]:
-            for source in building["effects"][effect]:
-                cursor.execute("""insert into buildingEffects(buildingName,stype,etype,value) 
-                values(%s,%s,%s,%s) ON CONFLICT ON CONSTRAINT buildingEffects_pk DO UPDATE
-                SET buildingName = %s, stype = %s, etype = %s, value = %s""", 
-                    (building["buildingname"], source, effect, building["effects"][effect][source],
-                    building["buildingname"], source, effect, building["effects"][effect][source]))
+            if effect == "inc":
+                for source in building["effects"][effect]:
+                    print(building)
+                    wood = building["effects"][effect]["wood"]
+                    print("after")
+                    stone = building["effects"][effect]["stone"]
+                    metal = building["effects"][effect]["metal"]
+                    food = building["effects"][effect]["food"]
+                    gold = building["effects"][effect]["population"]
+                    cursor.execute("""insert into buildingIncrementEffects(buildingName,wood, stone, food, metal, population) 
+                    values(%s,%s,%s,%s, %s, %s) ON CONFLICT ON CONSTRAINT buildingIncrementEffects_pk DO UPDATE
+                    SET buildingName = %s, wood = %s, stone = %s, food = %s,metal = %s,population = %s""", 
+                    (building["buildingname"], wood, stone, metal, food, gold ,
+                        building["buildingname"], wood, stone, metal, food, gold ))
+            elif effect == "limit":
+                for source in building["effects"][effect]:
+                    wood = building["effects"][effect]["wood"]
+                    stone = building["effects"][effect]["stone"]
+                    metal = building["effects"][effect]["metal"]
+                    food = building["effects"][effect]["food"]
+                    gold = building["effects"][effect]["population"]
+                    cursor.execute("""insert into buildingLimitEffects(buildingName,wood, stone, food, metal, population) 
+                    values(%s,%s,%s,%s, %s, %s) ON CONFLICT ON CONSTRAINT buildingLimitEffects_pk DO UPDATE
+                    SET buildingName = %s, wood = %s, stone = %s, food = %s,metal = %s,population = %s""", 
+                    (building["buildingname"], wood, stone, metal, food, gold ,
+                        building["buildingname"], wood, stone, metal, food, gold ))
+        
+
+
     pass

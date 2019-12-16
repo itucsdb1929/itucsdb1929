@@ -15,6 +15,7 @@ def initialize(url):
         cursor = connection.cursor()
         for statement in INIT_STATEMENTS_ORDER:
             try:
+                print("statement", statement)
                 cursor.execute(NEW_STATEMENTS[statement])
             except Exception as e: print(e) #TODO I know, I know I should not have do this
 
