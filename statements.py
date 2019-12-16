@@ -378,10 +378,6 @@ def tupleList2List(tupleList):
         normalList.append(i)
     return normalList
 
-def get_all_usernames(cursor):
-    cursor.execute("""select username from public.users""")
-    x = cursor.fetchall()
-    return tupleList2List(x)
 
 def get_all_cities(cursor):
     cursor.execute("""select cityname from public.cities""")
@@ -419,13 +415,13 @@ def update_all_sources(cursor):
         username = get_user_of_city(cursor, city)
         sources = get_sources_of_user(cursor, username)
         # print("update_all_sources: ", sources)
-        
+
 
         for key in city_production:
             sources[key] +=city_production[key]
 
         limits = get_user_source_limits(cursor, username)
-        
+
         update_user_sources(cursor, username, sources, limits)
 
 
@@ -481,20 +477,7 @@ def get_base_building_productions(cursor, buildingname):
 
     return baseproductionsDict
 
-def get_base_limits_of_user(username):
-    cursor.execute("""select wood, stone, metal, food, population from public.baselimits
-                        where username=%s""", (username,))
-    res = cursor.fetchone()
- 
-    lmts = {
-        "wood": res[0],
-        "stone": res[1],
-        "metal": res[2],
-        "food": res[3],
-        "population": res[4]   
-    }
 
-    return lmts
 
 
 def set_base_limits_of_city(cursor, username):
@@ -549,4 +532,3 @@ def update_user_sources(cursor, username, sour, limit):
         SET value=%s
         WHERE (username=%s and stype=%s)
         """,(value, username, key))
-
