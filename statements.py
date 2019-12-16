@@ -243,7 +243,7 @@ INIT_STATEMENTS_ORDER = [
     "createcitysourcesTable",
     "createusersourcesTable",
     "createcitybaseproductionsTable",
-    "createbitybaselimitsTable",
+    "createcitybaselimitsTable",
     "createuserproductionsTable",
     "createcityproductionsTable",
     "createcitylimitsTable",
@@ -295,9 +295,9 @@ def insert_city(cursor, city_name, user_name, xcoordinate, ycoordinate, building
 
     set_base_productions_of_city(cursor, city_name)
     set_base_limits_of_city(cursor, city_name)
-    CRUD.initializer(cursor, "CityProductions", username)
-    CRUD.initializer(cursor, "CitySources", username)
-    CRUD.initializer(cursor, "CityLimits", username)
+    CRUD.initializer(cursor, "CityProductions", city_name)
+    CRUD.initializer(cursor, "CitySources", city_name)
+    CRUD.initializer(cursor, "CityLimits", city_name)
 
 
 
@@ -451,7 +451,7 @@ def get_base_productions_of_city(cursor, city):
 
 def set_base_productions_of_city(cursor, cityname):
         cursor.execute("""
-    INSERT INTO citybaseproductions (wood, stone, metal, food, population) VALUES(
+    INSERT INTO citybaseproductions (cityname, wood, stone, metal, food, population) VALUES(
     %s,
     %s,
     %s,
@@ -477,7 +477,7 @@ def get_base_building_productions(cursor, buildingname):
 
 def set_base_limits_of_city(cursor, username):
     cursor.execute("""
-    INSERT INTO baselimits VALUES(
+    INSERT INTO citybaselimits VALUES(
     %s,
     %s,
     %s,

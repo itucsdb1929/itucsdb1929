@@ -8,7 +8,7 @@ def update_city_productions(cursor, cityname, production):
     metal = production["metal"]
     population = production["population"]
     cursor.execute("""
-        UPDATE productions
+        UPDATE cityproductions
         SET
         wood=%s,
         stone=%s,

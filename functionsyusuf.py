@@ -26,7 +26,7 @@ def update_all_user_sources(cursor):
             """, (total_source, user))
 
 def get_base_limits_of_city(cursor, cityname):
-    cursor.execute("""select wood, stone, metal, food, population from public.baselimits
+    cursor.execute("""select wood, stone, metal, food, population from public.citybaselimits
                         where cityname=%s""", (cityname,))
     res = cursor.fetchone()
     lmts = {
@@ -50,4 +50,4 @@ def update_all_city_limits(cursor):
             for key in buildlims:
                 bases[key] += buildlims[key]
         for key in bases:
-            CRUD.update_column(cursor, "cities","cityname", city ,key , bases[key])
+            CRUD.update_column(cursor, "citylimits","cityname", city ,key , bases[key])
