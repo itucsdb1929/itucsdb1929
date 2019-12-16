@@ -21,7 +21,7 @@ def update_city_productions(cursor, cityname, production):
 
 def new_building(cursor, cityname, buildingname):
     cursor.execute("""
-    INSERT INTO buildings values(cityname, buildingname, level)(
+    INSERT INTO buildings (cityname, buildingname, level) values(
     %s,
     %s,
     %s
@@ -37,6 +37,8 @@ def new_building(cursor, cityname, buildingname):
     cursor.execute("""select (wood, stone, food, metal,population) from buildinglimiteffects
                       where(buildingname=%s) """,(buildingname,))
     limit_inc_dic = cursor.fetchone()
+    if limit_inc_dic == None:
+        return False
     lim_wood = limit_inc_dic[0]
     lim_stone = limit_inc_dic[1]
     lim_food = limit_inc_dic[2]

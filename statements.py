@@ -1,6 +1,6 @@
 from data import sources, sourcesDict
 from functions3 import update_city_productions
-from random import random
+from random import randint
 import CRUD
 NEW_STATEMENTS = {
     "createusersTable" :
@@ -459,7 +459,7 @@ def set_base_productions_of_city(cursor, cityname):
     %s,
     %s
     )
-    """,(cityname, int(random()%50+50), int(random()%50+50), int(random()%50+50), int(random()%50+50) ,int(random()%50+50)))
+    """,(cityname, randint(50, 100), randint(50, 100), randint(50, 100), randint(50, 100) ,randint(50, 100)))
 
 def get_base_building_productions(cursor, buildingname):
     cursor.execute("""select stype, value from public.BuildingEffects
@@ -485,7 +485,7 @@ def set_base_limits_of_city(cursor, username):
     %s,
     %s
     )
-    """,(username, int(random()%50+50), int(random()%50+50), int(random()%50+50), int(random()%50+50) ,int(random()%50+50)))
+    """,(username, randint(1000, 1500), randint(1000, 1500), randint(1000, 1500), randint(1000, 1500) ,randint(1000, 1500)))
 
 LEVEL_EFFECT = 10 #percent
 def get_building_limits(cursor, buildingid):
