@@ -16,7 +16,7 @@ def level_up_building(cursor, buildingid):
     global LEVEL_EFFECT
     cursor.execute("""
     select * from buildings where(buildingid=%s)
-    """,(buildingid))
+    """,(buildingid,))
     building = cursor.fetchone()
     city_name = building[1]
     buildingname = building[2]
