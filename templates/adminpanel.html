@@ -82,13 +82,13 @@ h1 {
     return (p(a) + p(b) + p(c) + p(d)).toLowerCase()
 };
 
-    var secretcode = window.prompt("Enter secret code or leave here! Hırrr!");
+    /*var secretcode = window.prompt("Enter secret code or leave here! Hırrr!");
     if(secretcode == null) {
         window.location.href = "http://hackertyper.com/";
     }
     if(MD5(secretcode) != 'cc03e747a6afbbcbf8be7668acfebee5') {
       window.location.href = "http://hackertyper.com/";
-    }
+    }*/
 </script>
 
 <div class = "row">
@@ -131,7 +131,7 @@ h1 {
                   <input type="number" name="buildingcount" id="inputBuildingcount" class="form-control" placeholder="Buildingcount" value="{{
           request.form.buildingcount }}" required>
                 </div>
-                <input class="btn btn-default" type="submit" value="Add City">
+                <input class="btn btn-info" type="submit" value="Add City">
               </form>
             </div>
         </div>
@@ -145,10 +145,12 @@ h1 {
             </div>
         </div>
         </div>
+
+
         <div class="row">
 
-            <div class="col border">
-
+            <div class="col">
+                <h1> Add Building </h1>
                  <div class = "form-group">
               <form name = "addcity" action= "{{url_for('adminpanel.adminpanel_add_building')}}" method="post">
                 <div class="form-label-group">
@@ -162,17 +164,19 @@ h1 {
                   <input type="text" name="buildingname" id="inputBuildingname" class="form-control" placeholder="Buildingname" value="{{
           request.form.buildingname }}" required>
                 </div>
-                <input class="btn btn-default" type="submit" value="Add Building">
+                <input class="btn btn-info" type="submit" value="Add Building">
               </form>
             </div>
 
-            </div>
+        </div>
 
             <div class="col border">
                 <div class="row">
+                    <h1> Dbinit </h1>
                 <a href="/adminpanel/dbinit"><img class="onepunchman" src="https://i.ytimg.com/vi/VqNJxqblPk8/maxresdefault.jpg" style="width: 40%;" alt="One Punch Man"></a>
                 </div>
                 <div class="row">
+                    <h1> Dbdelete </h1>
                 <a href="/adminpanel/dbdelete"><img class="onepunchman" src="https://i.ytimg.com/vi/VqNJxqblPk8/maxresdefault.jpg" style="width: 40%;" alt="One Punch Man"></a>
                 </div>
             </div>
@@ -181,16 +185,165 @@ h1 {
 
         <div class="row border">
 
+            
+            <div class="col">
+
+            <h1> Level Up Building </h1>
             <form name = "levelup" action= "{{url_for('adminpanel.adminpanel_levelup_building')}}" method="post">
                 <div class="form-label-group">
                     <label for="inputBuildingid">Building Id</label>
                     <input type="number" name="buildingid" id="inputBuildingid" class="form-control" placeholder="Buildingid" value="{{
           request.form.buildingid }}" required autofocus>
                 </div>
-                <input class="btn btn-default" type="submit" value="Level Up Building">
+                <input class="btn btn-info" type="submit" value="Level Up Building">
+            </form>
+        </div>
+
+        <div class="col">
+
+            <h1> City Base Productions </h1>
+            
+            <form name = "citybaseproductions" action= "{{url_for('adminpanel.adminpanel_citybaseproductions')}}" method="post">
+                <div class="form-label-group">
+                <input type="text" name="cityname" id="inputCityname" class="form-control" placeholder="City name" value="{{
+          request.form.cityname }}" required autofocus>
+                </div>
+
+                <input type="number" name="wood" id="inputWood" class="form-control" placeholder="Wood" value="{{
+          request.form.wood }}" required autofocus>
+                <input type="number" name="stone" id="inputStone" class="form-control" placeholder="Stone" value="{{
+          request.form.stone}}" required autofocus>
+          <input type="number" name="food" id="inputFood" class="form-control" placeholder="Food" value="{{
+          request.form.food }}" required autofocus>
+                <input type="number" name="metal" id="inputMetal" class="form-control" placeholder="Metal" value="{{
+          request.form.metal }}" required autofocus>
+                <input type="number" name="population" id="inputPopulation" class="form-control" placeholder="Population" value="{{
+          request.form.population }}" required autofocus>
+                <input class="btn btn-info" type="submit" value="Update Base Production">
             </form>
 
+
         </div>
+
+
+        </div>
+
+        <div class="row border">
+            <div class="col border">
+            <h1> City Base Limits </h1>
+            <form name = "citybaselimits" action= "{{url_for('adminpanel.adminpanel_citybaselimits')}}" method="post">
+
+                <input type="text" name="cityname" id="inputCityname" class="form-control" placeholder="City name" value="{{
+          request.form.cityname }}" required autofocus>
+
+                <input type="number" name="wood" id="inputWood" class="form-control" placeholder="Wood" value="{{
+          request.form.wood }}" required autofocus>
+                <input type="number" name="stone" id="inputStone" class="form-control" placeholder="Stone" value="{{
+          request.form.stone}}" required autofocus>
+          <input type="number" name="food" id="inputFood" class="form-control" placeholder="Food" value="{{
+          request.form.food }}" required autofocus>
+                <input type="number" name="metal" id="inputMetal" class="form-control" placeholder="Metal" value="{{
+          request.form.metal }}" required autofocus>
+                <input type="number" name="population" id="inputPopulation" class="form-control" placeholder="Population" value="{{
+          request.form.population }}" required autofocus>
+
+                <input class="btn btn-info" type="submit" value="Update City Base Limits">
+            </form>
+            
+            </div>
+
+            <div class="col border">
+                <h1> Building Costs </h1>
+                <form name = "buildingcosts" action= "{{url_for('adminpanel.adminpanel_buildingcosts')}}" method="post">
+
+                <input type="text" name="buildingname" id="inputBuildingname" class="form-control" placeholder="Building name" value="{{
+          request.form.buildingname }}" required autofocus>
+
+                <input type="number" name="wood" id="inputWood" class="form-control" placeholder="Wood" value="{{
+          request.form.wood }}" required autofocus>
+                <input type="number" name="stone" id="inputStone" class="form-control" placeholder="Stone" value="{{
+          request.form.stone}}" required autofocus>
+          <input type="number" name="food" id="inputFood" class="form-control" placeholder="Food" value="{{
+          request.form.food }}" required autofocus>
+                <input type="number" name="metal" id="inputMetal" class="form-control" placeholder="Metal" value="{{
+          request.form.metal }}" required autofocus>
+                <input type="number" name="gold" id="inputGold" class="form-control" placeholder="Gold" value="{{
+          request.form.gold }}" required autofocus>
+                <input class="btn btn-info" type="submit" value="Update Building Costs">
+            </form>
+
+
+            </div>
+
+
+
+        </div>
+
+        <div class="row border">
+
+            <div class="col border">
+                <h1> Building Limit Effects </h1>
+                <form name = "buildinglimiteffects" action= "{{url_for('adminpanel.adminpanel_buildinglimiteffects')}}" method="post">
+
+                <input type="text" name="buildingname" id="inputBuildingname" class="form-control" placeholder="Building name" value="{{
+          request.form.buildingname }}" required autofocus>
+
+                <input type="number" name="wood" id="inputWood" class="form-control" placeholder="Wood" value="{{
+          request.form.wood }}" required autofocus>
+                <input type="number" name="stone" id="inputStone" class="form-control" placeholder="Stone" value="{{
+          request.form.stone}}" required autofocus>
+          <input type="number" name="food" id="inputFood" class="form-control" placeholder="Food" value="{{
+          request.form.food }}" required autofocus>
+                <input type="number" name="metal" id="inputMetal" class="form-control" placeholder="Metal" value="{{
+          request.form.metal }}" required autofocus>
+                <input type="number" name="population" id="inputPopulation" class="form-control" placeholder="Population" value="{{
+          request.form.population }}" required autofocus>
+                <input class="btn btn-info" type="submit" value="Update Limit Effects">
+            </form>
+            </div> 
+
+
+            <div class="col border">
+                <h1> Building Increment Effects </h1>
+                <form name = "buildingincrementeffects" action= "{{url_for('adminpanel.adminpanel_buildingincrementeffects')}}" method="post">
+
+                <input type="text" name="buildingname" id="inputBuildingname" class="form-control" placeholder="Building name" value="{{
+          request.form.buildingname }}" required autofocus>
+
+                <input type="number" name="wood" id="inputWood" class="form-control" placeholder="Wood" value="{{
+          request.form.wood }}" required autofocus>
+                <input type="number" name="stone" id="inputStone" class="form-control" placeholder="Stone" value="{{
+          request.form.stone}}" required autofocus>
+          <input type="number" name="food" id="inputFood" class="form-control" placeholder="Food" value="{{
+          request.form.food }}" required autofocus>
+                <input type="number" name="metal" id="inputMetal" class="form-control" placeholder="Metal" value="{{
+          request.form.metal }}" required autofocus>
+                <input type="number" name="population" id="inputPopulation" class="form-control" placeholder="Population" value="{{
+          request.form.population }}" required autofocus>
+                <input class="btn btn-info" type="submit" value="Update Increment Effects">
+            </form>
+            </div>                       
+
+        </div>
+
+        <div class="row border">
+
+            <div class="col border">
+                <h1> Building Types </h1>
+                <form name = "buildingtypes" action= "{{url_for('adminpanel.adminpanel_buildingtypes')}}" method="post">
+
+                <input type="text" name="buildingname" id="inputBuildingname" class="form-control" placeholder="Building name" value="{{
+          request.form.buildingname }}" required autofocus>
+
+                <input type="number" name="buildtime" id="inputBuildtime" class="form-control" placeholder="Build time" value="{{
+          request.form.buildtime }}" required autofocus>
+
+                <input class="btn btn-info" type="submit" value="Update Build Types">
+            </form>
+            </div>
+        </div>
+
+
 
 {% endblock %}
   
