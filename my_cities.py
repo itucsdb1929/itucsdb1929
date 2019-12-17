@@ -81,5 +81,5 @@ def cities_page():
         }
         buildingnames = get_user_building_build(cursor, username)
         cities = get_cities_of_user_api(cursor, username)
-        cities.append(example_city)
+        # cities.append(example_city)
     return render_template("cities.html", cities=cities, citycount=len(cities), buildingnames = buildingnames)
