@@ -289,9 +289,7 @@ def insert_user(cursor,username, password, email):
     CRUD.initializer(cursor, "userproductions", username)
     CRUD.initializer(cursor, "usersources", username)
 
-    cityname = md5
-
-    insert_city(cursor, username + "_city", randint(1,13), randint(1,13), 20, 0)
+    insert_city(cursor, username + "_city", username, randint(1,13), randint(1,13), 20, 0)
 
 
 def insert_city(cursor, city_name, user_name, xcoordinate, ycoordinate, buildinglimit, buildingcount):
