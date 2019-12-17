@@ -1,6 +1,6 @@
 from flask import render_template, Blueprint, session, redirect, url_for, jsonify, request
 from functions3 import level_up_building
-
+from statements import get_cities_of_user
 #Write this, check excel.
 #from apifuncs import level_up_building_api, build_building_in_city_api
 
@@ -73,7 +73,7 @@ def cities_page():
         ]
     }
     buildingnames = {'Istanbul': [("field", True), ("depository", False), ("mill", True)]}
-    cities = []
-    cities.append(example_city)
+    cities = get_cities_of_user_api(username)
+    cities.append(cities)
     cities.append(example_city)
     return render_template("cities.html", cities=cities, citycount=len(cities), buildingnames = buildingnames)

@@ -414,21 +414,21 @@ def get_user_source_limits(cursor, username):
 
 
 
-def update_all_sources(cursor):
-    cities = get_all_cities(cursor)
-    for city in cities:
-        city_production = get_production_of_city(cursor, city)
-        username = get_user_of_city(cursor, city)
-        sources = get_sources_of_user(cursor, username)
-        # print("update_all_sources: ", sources)
+# def update_all_sources(cursor):
+#     cities = get_all_cities(cursor)
+#     for city in cities:
+#         city_production = get_production_of_city(cursor, city)
+#         username = get_user_of_city(cursor, city)
+#         sources = get_sources_of_user(cursor, username)
+#         # print("update_all_sources: ", sources)
 
 
-        for key in city_production:
-            sources[key] +=city_production[key]
+#         for key in city_production:
+#             sources[key] +=city_production[key]
 
-        limits = get_user_source_limits(cursor, username)
+#         limits = get_user_source_limits(cursor, username)
 
-        update_user_sources(cursor, username, sources, limits)
+#         update_user_sources(cursor, username, sources, limits)
 
 
 def get_sources_of_user(cursor, username):
