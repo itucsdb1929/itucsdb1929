@@ -75,7 +75,7 @@ def get_building_costs(cursor, buildingname):
     cursor.execute(""" select (wood, stone, food, metal, population) from buildingcosts
     where(buildingname =%s) """,(buildingname))
     costs = cursor.fetcone()
-    ret_dict = {"wood":costs[0], "stone":costs[1], "food": costs[2], "metal": costs[3]:"population":costs[4]}
+    ret_dict = {"wood":costs[0], "stone":costs[1], "food": costs[2], "metal": costs[3], "population":costs[4]}
     return ret_dict
 def build_building_in_city_api(cursor, cityname, buildingname):
     new_building(cursor, cityname, buildingname)
