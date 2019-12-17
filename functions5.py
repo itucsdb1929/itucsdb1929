@@ -1,5 +1,5 @@
 from statements import tupleList2List
-from functionsosman import get_all_cities, get_buildings_of_city, get_building_limits
+from functions4 import get_all_cities, get_buildings_of_city, get_building_limits
 import CRUD
 def get_all_usernames(cursor):
     cursor.execute("""select username from public.users""")
@@ -11,6 +11,7 @@ def update_all_user_sources(cursor):
     usernames = get_all_usernames(cursor)
     sources = ["wood", "stone", "food", "metal", "population"]
     for user in usernames:
+        sdict = {}
         for source in sources:
             cursor.execute("""
             select sum("""+source+""") from citysources join cities on (citysources.cityname=cities.cityname)
@@ -24,6 +25,11 @@ def update_all_user_sources(cursor):
             set """+source+ """ = %s
             where(username = %s)
             """, (total_source, user))
+
+            sdict[source] = total_source
+
+
+
 
 def update_all_user_productions(cursor):
     usernames = get_all_usernames(cursor)
