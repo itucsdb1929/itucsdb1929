@@ -1,7 +1,31 @@
 from statements import tupleList2List
 from data import sourcesDict
+from pazar import get_building_costs
 import CRUD
 from functions3 import update_city_sources, update_city_productions
+def get_city(cursor, cityname):
+    cityname, username,	xcoordinate, ycoordinate, buildingLimit, 
+    buildingCount, createdAt
+    cursor.execute("""select cityname, username, xcoordinate, ycoordinate, buildingLimit, 
+    buildingCount, createdAt from public.cities
+                        where cityname=%s""", (cityname,))
+    city = cursor.fetchone()
+    cityDict = {
+        "cityname": cityname,
+        "username": username,
+        "xcoordinate": xcoordinate,
+        "ycoordinate": ycoordinate,
+        "buildingLimit": buildingLimit,
+        "buildingCount": buildingCount,
+        "createdAt": createdAt,
+    }
+    return cityDict
+
+def get_user_gold(cursor, username):
+    gold = CRUD.get_column(cursor, "users",
+                    "username", username,
+                    "gold")
+    return gold
 
 def get_all_cities(cursor):
     cursor.execute("""select cityname from public.cities""")
@@ -19,6 +43,18 @@ def get_building_level(cursor, buildingid):
 
     (level,) = cursor.fetchone()
     return level
+
+def get_level_up_cost(cursor, buildingid):
+    LEVEL_EFFECT = 10 #percent
+    level = get_building_level(cursor, buildingid)
+    effect = (level + 1) * LEVEL_EFFECT
+    build_name = get_buildingname(cursor, buildingid)
+    costs = get_building_costs(cursor, buildingname)
+    print("costs", costs)
+    for key in costs:
+        costs[key] += (costs[key] * effect) // 100
+
+    return costs
 
 def get_buildingname(cursor, buildingid):
     cursor.execute("""select buildingname from public.buildings
@@ -51,9 +87,8 @@ def get_city_source_limits(cursor, cityname):
                     sourceType)
     return limit
 
-LEVEL_EFFECT = 10 #percent
 def get_building_productions(cursor, buildingid):
-    global LEVEL_EFFECT
+    LEVEL_EFFECT = 10 #percent
     level = get_building_level(cursor, buildingid)
     effect = level * LEVEL_EFFECT
     build_name = get_buildingname(cursor, buildingid)
@@ -64,9 +99,8 @@ def get_building_productions(cursor, buildingid):
 
     return productions
 
-LEVEL_EFFECT = 10 #percent
 def get_building_limits(cursor, buildingid):
-    global LEVEL_EFFECT
+    LEVEL_EFFECT = 10 #percent
     level = get_building_level(cursor, buildingid)
     effect = level * LEVEL_EFFECT
     build_name = get_buildingname(cursor, buildingid)
@@ -79,7 +113,7 @@ def get_building_limits(cursor, buildingid):
 
 
 
-def calculate_production_of_city(cursor, cityname):
+def update_all_city_productions(cursor, cityname):
 
     baseproductions = sourcesDict.copy()
     for sourceType in baseproductions:
@@ -96,13 +130,20 @@ def calculate_production_of_city(cursor, cityname):
         #endfor
     #endfor
     update_city_productions(cursor, cityname, productions)
+
+def get_productions_of_city(cursor, cityname):
+
+    productions = sourcesDict.copy()
+    for sourceType in productions:
+        productions[sourceType] = CRUD.get_column(cursor, "CityProductions", "cityname", cityname, sourceType)
+
     return productions
 
 def update_all_city_sources(cursor):
     cities = get_all_cities(cursor)
     for city in cities:
 
-        productions = calculate_production_of_city(cursor, city)
+        productions = get_productions_of_city(cursor, city)
 
         sources = get_city_sources(cursor, city)
 
@@ -110,12 +151,10 @@ def update_all_city_sources(cursor):
             sources[i] += productions[i]
         # print("update_all_sources: ", sources)
 
-
-
         limits = get_city_source_limits(cursor, city)
         update_city_sources(cursor, city, sources, limits)
 
-def get_city_sources(cursor, cityname):
+def get_sources_of_city(cursor, cityname):
     sources = sourcesDict.copy()
     for source in sources:
         sources[source] = CRUD.get_column(cursor, "citysources", "cityname", cityname, source)
