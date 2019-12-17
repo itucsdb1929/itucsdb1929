@@ -34,25 +34,7 @@ def new_building(cursor, cityname, buildingname):
     where(cityname=%s)
     """, (cityname, ))
 
-    cursor.execute("""select (wood, stone, food, metal,population) from buildinglimiteffects
-                      where(buildingname=%s) """,(buildingname,))
-    limit_inc_dic = cursor.fetchone()
-    if limit_inc_dic == None:
-        return False
-    lim_wood = limit_inc_dic[0]
-    lim_stone = limit_inc_dic[1]
-    lim_food = limit_inc_dic[2]
-    lim_metal = limit_inc_dic[3]
-    lim_population = limit_inc_dic[4]
-    cursor.execute("""Update citylimits
-                      set
-                      wood = wood + %s,
-                      stone = stone + %s,
-                      food = food + %s,
-                      metal = metal + %s,
-                      population = population + %s
-                      where(cityname=%s)
-                    """, (lim_wood, lim_stone, lim_food, lim_metal, lim_population, cityname))
+
 
 def level_up_building(cursor, buildingid):
     global LEVEL_EFFECT
@@ -76,11 +58,9 @@ def level_up_building(cursor, buildingid):
                      INSERT INTO PendingBuildings values(
                      %s,
                      %s,
-                     %s,
-                     %s,
                      %s
                      )
-                     """,(buildingid, city_name, buildingname, new_level, remaining_time))
+                     """,(buildingid, new_level, remaining_time))
 
 def updateBuildings(cursor):
     cursor.execute("""Select * from PendingBuildings """)
@@ -88,11 +68,11 @@ def updateBuildings(cursor):
     for i in tups:
         buildingid = i[0]
         level = i[1]
-        if(i[2] == 0):
+        if(i[2] <= 1):
             cursor.execute("""DElete from PendingBuildings where(buildingid=%s) """,(buildingid,))
             cursor.execute("""update  buildings
                               Set level=level+1
-                              where(buildingid=%s)""",(buildingid))
+                              where(buildingid=%s)""",(buildingid,))
     cursor.execute("""Update PendingBuildings
                       SET remainingbuildtime = remainingbuildtime-1""")
 
