@@ -1,31 +1,26 @@
-from statements import tupleList2List
+from statements import tupleList2List, get_sources_of_city, get_user_gold
 from data import sourcesDict
 from pazar import get_building_costs
 import CRUD
 from functions3 import update_city_sources, update_city_productions
 def get_city(cursor, cityname):
-    cityname, username,	xcoordinate, ycoordinate, buildingLimit, 
-    buildingCount, createdAt
     cursor.execute("""select cityname, username, xcoordinate, ycoordinate, buildingLimit, 
     buildingCount, createdAt from public.cities
                         where cityname=%s""", (cityname,))
     city = cursor.fetchone()
+   
     cityDict = {
         "cityname": cityname,
-        "username": username,
-        "xcoordinate": xcoordinate,
-        "ycoordinate": ycoordinate,
-        "buildingLimit": buildingLimit,
-        "buildingCount": buildingCount,
-        "createdAt": createdAt,
+        "username": city[1],
+        "xcoordinate": city[2],
+        "ycoordinate": city[3],
+        "buildingLimit": city[4],
+        "buildingCount": city[5],
+        "createdAt": city[6],
     }
     return cityDict
 
-def get_user_gold(cursor, username):
-    gold = CRUD.get_column(cursor, "users",
-                    "username", username,
-                    "gold")
-    return gold
+
 
 def get_all_cities(cursor):
     cursor.execute("""select cityname from public.cities""")
@@ -48,7 +43,7 @@ def get_level_up_cost(cursor, buildingid):
     LEVEL_EFFECT = 10 #percent
     level = get_building_level(cursor, buildingid)
     effect = (level + 1) * LEVEL_EFFECT
-    build_name = get_buildingname(cursor, buildingid)
+    buildingname = get_buildingname(cursor, buildingid)
     costs = get_building_costs(cursor, buildingname)
     print("costs", costs)
     for key in costs:
@@ -113,23 +108,26 @@ def get_building_limits(cursor, buildingid):
 
 
 
-def update_all_city_productions(cursor, cityname):
+def update_all_city_productions(cursor):
 
-    baseproductions = sourcesDict.copy()
-    for sourceType in baseproductions:
-        baseproductions[sourceType] = CRUD.get_column(cursor, "CityBaseProductions", "cityname", cityname, sourceType)
-    
-    buildings = get_buildings_of_city(cursor, cityname)
+    all_cities = get_all_cities(cursor)
+    for cityname in all_cities:
+        baseproductions = sourcesDict.copy()
+        for sourceType in baseproductions:
+            baseproductions[sourceType] = CRUD.get_column(cursor, "CityBaseProductions", "cityname", cityname, sourceType)
+        
+        buildings = get_buildings_of_city(cursor, cityname)
 
-    productions = baseproductions
+        productions = baseproductions
 
-    for building in buildings:
-        prods = get_building_productions(cursor, building)
-        for prod in prods:
-            productions[prod] += prods[prod]
+        for building in buildings:
+            prods = get_building_productions(cursor, building)
+            for prod in prods:
+                productions[prod] += prods[prod]
+            #endfor
         #endfor
-    #endfor
-    update_city_productions(cursor, cityname, productions)
+        update_city_productions(cursor, cityname, productions)
+
 
 def get_productions_of_city(cursor, cityname):
 
@@ -145,7 +143,7 @@ def update_all_city_sources(cursor):
 
         productions = get_productions_of_city(cursor, city)
 
-        sources = get_city_sources(cursor, city)
+        sources = get_sources_of_city(cursor, city)
 
         for i in sources:
             sources[i] += productions[i]
@@ -153,10 +151,3 @@ def update_all_city_sources(cursor):
 
         limits = get_city_source_limits(cursor, city)
         update_city_sources(cursor, city, sources, limits)
-
-def get_sources_of_city(cursor, cityname):
-    sources = sourcesDict.copy()
-    for source in sources:
-        sources[source] = CRUD.get_column(cursor, "citysources", "cityname", cityname, source)
-    
-    return sources

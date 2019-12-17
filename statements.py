@@ -247,7 +247,7 @@ NEW_STATEMENTS = {
 INIT_STATEMENTS_ORDER = [
     "createusersTable",
     "createfriendsTable",
-    "createfriendRequestsTable",
+    "createfriendrequestsTable",
     "createmessagesTable",
     "createsourceTypesTable",
     "createcitiesTable",
@@ -280,7 +280,7 @@ def insert_user(cursor,username, password, email):
     %s,
     %s,
     %s,
-    0,
+    500,
     0,
     0
     )
@@ -289,6 +289,9 @@ def insert_user(cursor,username, password, email):
     CRUD.initializer(cursor, "userproductions", username)
     CRUD.initializer(cursor, "usersources", username)
 
+    cityname = md5
+
+    insert_city(cursor, username + "_city", randint(1,13), randint(1,13), 20, 0)
 
 
 def insert_city(cursor, city_name, user_name, xcoordinate, ycoordinate, buildinglimit, buildingcount):
@@ -514,14 +517,16 @@ def get_user_of_city(cursor, cityname):
     return user[0]
 
 
-def update_user_sources(cursor, username, sour, limit):
-    # print("update_user_sources scr", sour)
-    # print("update_user_sources lmt", limit)
-    for key in sour:
-        value = min(limit[key], sour[key])
 
-        cursor.execute("""
-        UPDATE sources
-        SET value=%s
-        WHERE (username=%s and stype=%s)
-        """,(value, username, key))
+def get_sources_of_city(cursor, cityname):
+    sources = sourcesDict.copy()
+    for source in sources:
+        sources[source] = CRUD.get_column(cursor, "citysources", "cityname", cityname, source)
+    
+    return sources
+
+def get_user_gold(cursor, username):
+    gold = CRUD.get_column(cursor, "users",
+                    "username", username,
+                    "gold")
+    return gold

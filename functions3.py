@@ -103,6 +103,8 @@ def update_user_sources(cursor, username, sour):
     food_count = sour["food"]
     metal_count = sour["metal"]
     population_count = sour["population"]
+    print("population_count", population_count)
+    total_count =  wood_count +  stone_count +  food_count+  metal_count +  population_count
     cursor.execute("""
     Update UserSources
     SET
@@ -113,3 +115,18 @@ def update_user_sources(cursor, username, sour):
     population=%s
     where(username=%s)
     """,(wood_count, stone_count, food_count, metal_count, population_count, username))
+
+
+    cursor.execute("""
+    Update users
+    SET
+    gold = gold + %s
+    where(username=%s)
+    """,(population_count//10,  user))
+
+    cursor.execute("""
+    Update users
+    SET
+    score = %s
+    where(username=%s)
+    """,(total_count,  user))    
