@@ -40,40 +40,58 @@ def api_city_build():
 
 @my_cities.route("/my_cities")
 def cities_page():
-    username = session['username']
-    example_city = {
-        'cityname': 'Istanbul',
-        'xcoordinate': 5,
-        'ycoordinate': 5,
-        'food': 50,
-        'wood': 50,
-        'stone': 50,
-        'gold': 50,
-        'metal': 50,
-        'soldiers': 0,
-        'woodlimit': 1000,
-        'foodlimit': 1000,
-        'stonelimit': 1000,
-        'metallimit': 1000,
-        'buildings': [
-            {
-            'buildingid': 10,
+    with db.dataBaseLock:
+
+        username = session['username']
+
+        cursor = db.get_cursor()
+        connection = db.get_connection()
+
+        cursor.execute(""" SELECT cityname, xcoordinate, ycoordinate FROM public.cities WHERE (username=%s) """, (username,))
+        city_list = cursor.fetchall()
+        cities = []
+        for i in city_list:
+            cities.append(i)
+        for i in cities:
+            cityname = i[0]
+            xcoordinate = i[1]
+            ycoordinate = i[2]
+            
+
+
+        example_city = {
             'cityname': 'Istanbul',
-            'buildingname': 'mill',
-            'level': 1,
-            'level_up_cost': {
-                'food': 100,
-                'wood': 50,
-                'stone': 50,
-                'gold': 50,
-                'metal': 50
-                },
-            'can_level_up': True
-            }
-        ]
-    }
-    buildingnames = {'Istanbul': [("field", True), ("depository", False), ("mill", True)]}
-    cities = []
-    cities.append(example_city)
-    cities.append(example_city)
-    return render_template("cities.html", cities=cities, citycount=len(cities), buildingnames = buildingnames)
+            'xcoordinate': 5,
+            'ycoordinate': 5,
+            'food': 50,
+            'wood': 50,
+            'stone': 50,
+            'gold': 50,
+            'metal': 50,
+            'soldiers': 0,
+            'woodlimit': 1000,
+            'foodlimit': 1000,
+            'stonelimit': 1000,
+            'metallimit': 1000,
+            'buildings': [
+                {
+                'buildingid': 10,
+                'cityname': 'Istanbul',
+                'buildingname': 'mill',
+                'level': 1,
+                'level_up_cost': {
+                    'food': 100,
+                    'wood': 50,
+                    'stone': 50,
+                    'gold': 50,
+                    'metal': 50
+                    },
+                'can_level_up': True
+                }
+            ]
+        }
+        buildingnames = {'Istanbul': [("field", True), ("depository", False), ("mill", True)]}
+        cities = []
+        cities.append(example_city)
+        cities.append(example_city)
+        return render_template("cities.html", cities=cities, citycount=len(cities), buildingnames = buildingnames)
