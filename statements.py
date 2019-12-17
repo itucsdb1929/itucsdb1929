@@ -231,6 +231,17 @@ NEW_STATEMENTS = {
                     ON DELETE CASCADE
                     ON UPDATE CASCADE
         )""",
+        "createtradecenterTable":
+            """create table if not exists tradecenter(
+            trade_id serial primary key,
+            seller varchar(80) NOT NULL,
+            source_type varchar(80),
+            count bigint not null,
+            price bigint not null,
+            FOREIGN KEY (seller) REFERENCES public.users(username)
+                ON DELETE CASCADE
+                ON UPDATE CASCADE
+            ) """
 }
 
 INIT_STATEMENTS_ORDER = [
@@ -253,6 +264,7 @@ INIT_STATEMENTS_ORDER = [
     "createbuildingcostsTable",
     "createbuildingsTable",
     "creatependingbuildingsTable",
+    "createtradecenterTable",
 ]
 
 def drop_all_tables(cursor):
