@@ -13,5 +13,5 @@ def map_func():
     cursor.execute("""SELECT xcoordinate, ycoordinate, cityname, username FROM public.cities""")
     x = cursor.fetchall()
     for i in x:
-        cities[i[0]][i[1]] = (i[2], 1, i[3])
+        cities[i[0]-1][i[1]-1] = (i[2], 1, i[3])
     return render_template('map_page.html', cities=cities)
